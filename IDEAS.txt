@@ -1,0 +1,133 @@
+Site integrity checker
+======================
+In the online world, a common way of interaction between an organization and
+their customers is via the web.  Visitors browse the organization's web site
+and may subsequently interact with them via email.
+
+Email is oftenly used for user registration, order updates when shopping online
+or for general inquiries.
+
+These services should support SSL/TLS for both privacy and security reasons,
+to prevent third parties from snooping on online browsing habbits aswell as
+prevent an adversary from messing with data exchanged.
+
+Like most other things on the internet, both web and email relies on DNS.
+DNSSEC is an implentation that hardens DNS by way of cryptographically signing
+DNS queries and responses, making each of them verifiable.
+
+
+This project aims to provide a suite of tests to detect, report and help 
+solve common privacy and security problems in an organization's online 
+services.  The goal is to improve online privacy for everyone.
+
+
+Tests
+=====
+
+Given an input domain name such as 'example.com', a number of tests are run.
+
+- DNS
+-- Check delegation
+-- Check DNSSEC support
+
+- SMTP
+-- List mail exchangers (MX) for the domain
+--- Check each for presence of STARTTLS in EHLO
+---- If present, inspect SSL/TLS properties (see below)
+
+- Web
+-- Fetch frontpage over HTTP
+-- Attempt to identify RSS-feed to discover URLs to subpages (i.e articles)
+   which may have somewhat different content than the frontpage, and therefore
+   may embed additional resources such as comment systems, article specific
+   ads, ..
+--- Compile list of embedded content
+--- Attempt to detect common service providers (Facebook, Google, Disqus,
+    service providers for statistics, ad networks, ..)
+---- Test for common problem in service providers' services (i.e use of 
+     _gat._anonymizeIP in Google Analytics, having a Facebook likebox snooping
+     on visitors, no secure Disqus comments, ..)
+--- List unique domains to embedded content
+---- Attempt to identify domains that do not support SSL/TLS since they may
+     prevent an organization from providing its online content over secure
+     https (mixed content issue)
+
+- SSL/TLS checks (check both https and SMTP STARTTLS)
+-- X.509 cert should be at least 2048 bits
+-- X.509 cert should include the correct hostname
+-- X.509 cert should be trusted by common roots (i.e not self-signed)
+-- SSLv2 should be turned off (deprecated since 1996)
+-- BEAST (CBC) vulnerability should be mitigated
+-- CRIME (compression) vulnerability should be mitigated
+-- Session resumption should be enabled
+-- No weak ciphers should be enabled (i.e, at least PCI compliant)
+-- Cipher suites should include EDH/ECDHE ciphers for forward secrecy
+-- Ciphers with forward secrecy should be preferred by major browsers
+
+
+Requirements
+============
+PhantomJs is headless, scriptable browser that can be used to inspect webpages.
+http://phantomjs.org/download.html
+
+
+
+Google Analytics 
+================
+Google Analytics supports a feature where the IP address of the visitor is
+anonymized by removing/ignoring the last octet of the IP address.
+https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApi_gat#_gat._anonymizeIp
+
+Usage of '_gat._anonymizeIp' may be detected by looking for a "aip=1" query
+parameter in the request to Google Analytics.
+
+Facebook
+========
+Many sites implement a Facebook likebox to advertise the Facebook fan page.
+This implies that Facebook tracks visitors to the sites in questions and
+links the visitor's browsing habbits to their Facebook profile when they 
+log in, if not already logged in to Facebook's service.
+
+If replaced with a simple link to Facebook instead, privacy could be improved.
+
+Disqus
+======
+Disqus is a comment system used on many blogs and media sites. 
+
+Disqus sucks when it comes to privacy and is known to not implement https
+for authentication (exposing email addresses/username and passwords).
+
+They do have some support for fetching and posting comments over https, but
+unfortunately it's hardly ever used.
+
+SMTP
+====
+STARTTLS should be present when connecting to a mail exchange.
+
+$ telnet mail.example.com 25
+...
+Escape character is '^]'.
+< 220 ESMTP
+> EHLO foobar
+< 250-mail.example.com
+< 250-SIZE 805306368
+< 250-STARTTLS
+< 250-8BITMIME
+< 250 DSN
+
+On misconfigured SMTP servers STARTTLS may be present in the 250 response to
+EHLO, but when clients send the STARTTLS command, the server bails out with
+an error message (usually due to broken certificate setups).  It's therefore
+important to actually test STARTTLS properly.
+
+$ openssl s_client -connect mail.example.com:25 -starttls smtp
+
+
+SSL/TLS issues
+==============
+SSL/TLS setups have common problems including:
+- SSLv2 enabled (broken, obsolete since 1996)
+- BEAST attack (CBC issue)
+- CRIME (compression)
+- Weak ciphers
+- Missing support for ephermal DH

@@ -1,0 +1,9 @@
+* IPv6 is required on clients
+* cURL calls may attempt to use IPv6 despite only having IPv4
+
+	$ ./client.py hd.se
+	* Testing domain 'hd.se' and URL 'http://hd.se'
+	* Apex domain: hd.se
+	burn_request: failed with error 'Failed to connect to 2001:67c:1794:7::127: No route to host (7)' after 2 attempts
+
+
