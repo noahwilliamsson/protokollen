@@ -384,6 +384,28 @@ class Protokollen {
 
 		$st->close();
 
+
+		if($row === NULL) {
+			$log = 'HTTP preferences created, preferred URL is: '. $pref;
+			$this->logEntry($svc->service_id, $domain, $log);
+			return $id;
+		}
+
+		$changes = array();
+		if($row->preferred_url !== $pref)
+			$changes[] = "preferred URL ($row->preferred_url -> $pref)";
+		if($row->http_preferred_url !== $http_preferred_url)
+			$changes[] = "preferred HTTP URL ($row->http_preferred_url -> $http_preferred_url)";
+		if($row->https_preferred_url !== $https_preferred_url)
+			$changes[] = "preferred HTTPS URL ($row->https_preferred_url -> $https_preferred_url)";
+		if($row->https_error !== $https_error)
+			$changes[] = "HTTPS error ($row->https_error -> $https_error)";
+
+		if(!empty($changes)) {
+			$log = 'HTTP preferences changed: '. implode(', ', $changes);
+			$this->logEntry($svc->service_id, $domain, $log);
+		}
+
 		return $id;
 	}
 
