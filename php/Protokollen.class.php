@@ -24,7 +24,7 @@ class Protokollen {
 		$m = $this->m;
 		$st = $m->prepare('SELECT entity_id FROM entities WHERE entity_id > 1');
 		if(!$st->execute()) {
-			$err = "ERR: Failed to list entities: $m->error\n";
+			$err = "List entities failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -42,7 +42,7 @@ class Protokollen {
 		$m = $this->m;
 		$st = $m->prepare('SELECT domain FROM entities WHERE entity_id > 1');
 		if(!$st->execute()) {
-			$err = "ERR: Failed to list entities: $m->error\n";
+			$err = "List entity domains failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -55,13 +55,13 @@ class Protokollen {
 
 		return $arr;
 	}
-	
+
 	function getEntityById($entityId) {
 		$m = $this->m;
 		$st = $m->prepare('SELECT * FROM entities WHERE entity_id=?');
 		$st->bind_param('s', $entityId);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to lookup entity by ID $entityId: $m->error\n";
+			$err = "Entity lookup ($entityId) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -78,7 +78,7 @@ class Protokollen {
 		$st = $m->prepare('SELECT * FROM entities WHERE domain=?');
 		$st->bind_param('s', $domain);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to lookup entity by domain $domain: $m->error\n";
+			$err = "Entity lookup ($domain) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -90,12 +90,12 @@ class Protokollen {
 		return $row;
 	}
 
-	function getServiceById($serviceId) {
+	function getServiceById($svcId) {
 		$m = $this->m;
 		$st = $m->prepare('SELECT * FROM entity_services WHERE service_id=?');
-		$st->bind_param('i', $serviceId);
+		$st->bind_param('i', $svcId);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to fetch service with ID $serviceId: $m->error\n";
+			$err = "Service ($svcId) lookup failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -107,12 +107,13 @@ class Protokollen {
 		return $row;
 	}
 
-	function listServicesByType($entityId, $serviceType) {
+	function listServicesByType($entityId, $svcType) {
 		$m = $this->m;
-		$st = $m->prepare('SELECT * FROM entity_services WHERE entity_id=? AND service_type=?');
-		$st->bind_param('is', $entityId, $serviceType);
+		$st = $m->prepare('SELECT * FROM entity_services
+					WHERE entity_id=? AND service_type=?');
+		$st->bind_param('is', $entityId, $svcType);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to list services with entity_id=$entityId AND service_name=$serviceName: $m->error\n";
+			$err = "List services ($entityId, $svcType) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -126,12 +127,15 @@ class Protokollen {
 		return $arr;
 	}
 
-	function getServiceByName($entityId, $serviceType, $serviceName) {
+	function getServiceByName($entityId, $svcType, $svcName) {
 		$m = $this->m;
-		$st = $m->prepare('SELECT * FROM entity_services WHERE entity_id=? AND service_type=? AND service_name=?');
-		$st->bind_param('iss', $entityId, $serviceType, $serviceName);
+		$st = $m->prepare('SELECT * FROM entity_services
+					WHERE entity_id=? AND service_type=?
+					AND service_name=?');
+		$st->bind_param('iss', $entityId, $svcType, $svcName);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to fetch service with entity_id=$entityId AND service_name=$serviceName: $m->error\n";
+			$err = "Service lookup ($entityId, $svcType, $svcName)"
+					." failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -143,18 +147,19 @@ class Protokollen {
 		return $row;
 	}
 
-	function addService($entityId, $serviceType, $serviceName, $serviceDesc = NULL) {
+	function addService($entityId, $svcType, $svcName, $svcDesc = NULL) {
 		$m = $this->m;
 		$e = $this->getEntityById($entityId);
 		$st = $m->prepare('INSERT INTO entity_services
-							SET entity_id=?, entity_domain=?,
-							service_type=?, service_name=?,
-							service_desc=?, created=NOW()');
+					SET entity_id=?, entity_domain=?,
+					service_type=?, service_name=?,
+					service_desc=?, created=NOW()');
 		$st->bind_param('issss', $entityId, $e->domain,
-						$serviceType, $serviceName, $serviceDesc);
+				$svcType, $svcName, $svcDesc);
 		$id = NULL;
 		if(!$st->execute()) {
-			$err = "ERR: Failed to add service: $m->error\n";
+			$err = "Add service ($entityId, $svcType, $svcName) failed:"
+					." $m->error";
 			throw new Exception($err);
 		}
 
@@ -163,18 +168,21 @@ class Protokollen {
 		return $this->getServiceById($id);
 	}
 
-	function addServiceHostname($serviceId, $hostname) {
+	function addServiceHostname($svcId, $hostname) {
 		$m = $this->m;
 
-		$svc = $this->getServiceById($serviceId);
+		$svc = $this->getServiceById($svcId);
 		if($svc === NULL)
-			throw new Exception("ERR: Unknown service $serviceId");
+			throw new Exception(__METHOD__ .": Unknown service ($svcId)");
 
-		$st = $m->prepare('INSERT INTO service_hostnames SET service_id=?, entity_id=?, service_type=?, hostname=?, created=NOW()');
-		$st->bind_param('iiss', $svc->service_id, $svc->entity_id, $svc->service_type, $hostname);
+		$st = $m->prepare('INSERT INTO service_hostnames
+					SET service_id=?, entity_id=?,
+					service_type=?, hostname=?, created=NOW()');
+		$st->bind_param('iiss', $svc->service_id, $svc->entity_id,
+				$svc->service_type, $hostname);
 		$id = NULL;
 		if(!$st->execute()) {
-			$err = "ERR: Service $serviceId: Failed to add service hostname '$hostname': $m->error\n";
+			$err = "Add service hostname ($svcId, $hostname) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -184,12 +192,12 @@ class Protokollen {
 		return $id;
 	}
 
-	function listServiceHostnames($serviceId) {
+	function listServiceHostnames($svcId) {
 		$m = $this->m;
 		$st = $m->prepare('SELECT * FROM service_hostnames WHERE service_id=?');
-		$st->bind_param('i', $serviceId);
+		$st->bind_param('i', $svcId);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to fetch service hostname for service with ID $serviceId: $m->error\n";
+			$err = "List service ($svcId) hostnames failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -203,14 +211,15 @@ class Protokollen {
 		return $arr;
 	}
 
-	function addJson($serviceId, $json) {
+	function addJson($svcId, $json) {
 		$m = $this->m;
 		$hash = hash('sha256', $json);
 
-		$st = $m->prepare('SELECT id FROM json WHERE service_id=? AND json_sha256=?');
-		$st->bind_param('is', $serviceId, $hash);
+		$st = $m->prepare('SELECT id FROM json
+					WHERE service_id=? AND json_sha256=?');
+		$st->bind_param('is', $svcId, $hash);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to lookup JSON for service_id=$serviceId AND json_sha256=$hash: $m->error\n";
+			$err = "JSON lookup ($svcId, $hash) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -223,10 +232,12 @@ class Protokollen {
 			$id = $row->id;
 		}
 		else {
-			$st = $m->prepare('INSERT INTO json SET service_id=?, json_sha256=?, json=?, created=NOW()');
-			$st->bind_param('iss', $serviceId, $hash, $json);
+			$st = $m->prepare('INSERT INTO json
+						SET service_id=?, json_sha256=?,
+						json=?, created=NOW()');
+			$st->bind_param('iss', $svcId, $hash, $json);
 			if(!$st->execute()) {
-				$err = "ERR: Failed to add JSON for service_id=$serviceId AND json_sha256=$hash: $m->error\n";
+				$err = "JSON add ($svcId, $hash) failed: $m->error";
 				throw new Exception($err);
 			}
 
@@ -250,14 +261,21 @@ class Protokollen {
 			$temp = $arr[1];
 			$e = $this->getEntityByDomain($temp);
 			if($e === NULL)
-				throw new Exception("Unable to identify entity for domain '$domain' (tried: $temp)");
+				throw new Exception(__METHOD__ .": Entity lookup for domain"
+							." $domain failed (also tried: $temp)");
 		}
 
-		$svc = $this->getServiceByName($e->entity_id, Protokollen::SERVICE_TYPE_HTTP, $domain);
+		$svc = $this->getServiceByName($e->entity_id,
+						Protokollen::SERVICE_TYPE_HTTP,
+						$domain);
 		if($svc === NULL)
-			throw new Exception("Unable to identify service for domain '$domain' and entity $e->entity_id");
+			$svc = $this->getServiceByName($e->entity_id,
+							Protokollen::SERVICE_TYPE_WEBMAIL,
+							$domain);
+		if($svc === NULL)
+			throw new Exception(__METHOD__ .": Unknown service"
+						." ($e->entity_id, HTTP, $domain)");
 
-	
 		$pref = null;
 		$title = null;
 		$http_preferred = null;
@@ -270,7 +288,7 @@ class Protokollen {
 			if(!empty($result->preferred->title))
 				$title = $result->preferred->title;
 		}
-	
+
 		$arr = array();
 		foreach($result->http as $res) {
 			if($res->error || $res->status != 200)
@@ -281,7 +299,7 @@ class Protokollen {
 		sort($arr);
 		if(!empty($arr))
 			$http_preferred = $arr[0];
-	
+
 		$arr = array();
 		$arr_err = array();
 		foreach($result->https as $res) {
@@ -301,14 +319,13 @@ class Protokollen {
 
 		$json = json_encode($result);
 		$hash = hash('sha256', $json);
-		$st = $m->prepare('SELECT id FROM service_http_preferences
-							WHERE service_id=?
-							AND json_sha256=?
-							AND entry_type=?');
+		$st = $m->prepare('SELECT * FROM service_http_preferences
+					WHERE service_id=?  AND json_sha256=?
+					AND entry_type=?');
 		$entry_type = 'current';
 		$st->bind_param('iss', $svc->service_id, $hash, $entry_type);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to lookup HTTP pref for service ID $svc->service_id: $m->error\n";
+			$err = "HTTP pref lookup ($svc->service_id) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -320,15 +337,15 @@ class Protokollen {
 		if($row !== NULL) {
 			/* Update timestamp */
 			$st = $m->prepare('UPDATE service_http_preferences
-								SET title=?, preferred_url=?,
-								http_preferred_url=?,
-								https_preferred_url=?,
-								https_error=?, updated=NOW()
-								WHERE id=?');
-			$st->bind_param('sssssi', $title, $pref,
-							$http_preferred, $https_preferred, $https_error, $row->id);
+						SET title=?, preferred_url=?,
+						http_preferred_url=?,
+						https_preferred_url=?,
+						https_error=?, updated=NOW()
+						WHERE id=?');
+			$st->bind_param('sssssi', $title, $pref, $http_preferred,
+					$https_preferred, $https_error, $row->id);
 			if(!$st->execute()) {
-				$err = "ERR: Failed to update HTTP pref for service ID $svc->service_id: $m->error\n";
+				$err = "HTTP pref update ($svc->service_id) failed: $m->error";
 				throw new Exception($err);
 			}
 
@@ -337,33 +354,31 @@ class Protokollen {
 
 		$jsonId = $this->addJson($svc->service_id, $json);
 		$st = $m->prepare('INSERT INTO service_http_preferences
-							SET service_id=?, entry_type=?, domain=?, title=?,
-							preferred_url=?, http_preferred_url=?,
-							https_preferred_url=?, https_error=?,
-							json_id=?, json_sha256=?, created=NOW()');
+					SET service_id=?, entry_type=?, domain=?, title=?,
+					preferred_url=?, http_preferred_url=?,
+					https_preferred_url=?, https_error=?,
+					json_id=?, json_sha256=?, created=NOW()');
 		$entry_type = 'current';
 		$st->bind_param('isssssssis', $svc->service_id, $entry_type,
-						$result->domain, $title, $pref,
-						$http_preferred, $https_preferred, $https_error,
-						$jsonId, $hash);
+				$result->domain, $title, $pref,
+				$http_preferred, $https_preferred, $https_error,
+				$jsonId, $hash);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to insert new HTTP pref for service ID $svc->service_id: $m->error\n";
+			$err = "HTTP pref add ($svc->service_id) failed: $m->error";
 			throw new Exception($err);
 		}
 
 		$id = $st->insert_id;
 		$st->close();
 
-
 		$st = $m->prepare('UPDATE service_http_preferences
-							SET entry_type=?, updated=updated
-							WHERE service_id=? AND id!=?');
+					SET entry_type=?, updated=updated
+					WHERE service_id=? AND id!=?');
 		$entry_type = 'revision';
 		$st->bind_param('sii', $entry_type, $svc->service_id, $id);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to mark previous HTTP prefs"
-					." as 'revision' for service ID $svc->service_id:"
-					." $m->error\n";
+			$err = "HTTP ref revision update ($svc->service_id) failed:"
+					." $m->error";
 			throw new Exception($err);
 		}
 
@@ -372,7 +387,7 @@ class Protokollen {
 		return $id;
 	}
 
-	function addTlsStatusJson($serviceId, $filename) {
+	function addTlsStatusJson($svcId, $filename) {
 		$m = $this->m;
 
 		$data = file_get_contents($filename);
@@ -380,10 +395,10 @@ class Protokollen {
 		if(empty($probes))
 			return NULL;
 
-		$svc = $this->getServiceById($serviceId);
+		$svc = $this->getServiceById($svcId);
 		if($svc === NULL)
 			throw new Exception("Unable to identify service for"
-								." service_id '$serviceId'");
+						." service_id '$svcId'");
 		$e = $this->getEntityById($svc->service_id);
 
 		$numIps = 0;
@@ -420,23 +435,23 @@ class Protokollen {
 		}
 
 		if(!is_object($hostname)) {
+			/* Not found */
 			echo "ERROR: Hostname '$hostname' not found in"
-				." service with ID '$serviceId'\n";
+				." service with ID '$svcId'\n";
 			return null;
 		}
 
-		
+
 		/* Lookup current entry */
 		$st = $m->prepare('SELECT * FROM service_tls_statuses
-							WHERE service_id=? AND hostname_id=?
-							AND entry_type=?');
+					WHERE service_id=? AND hostname_id=?
+					AND entry_type=?');
 		$entry_type = 'current';
 		$st->bind_param('iis', $svc->service_id,
-								$hostname->hostname_id, $entry_type);
+				$hostname->hostname_id, $entry_type);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to lookup TLS status for"
-					." service ID $svc->service_id and"
-					." hostname ID $hostname->hostname_id: $m->error\n";
+			$err = "TLS status lookup ($svc->service_id,"
+				." $hostname->hostname_id) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -451,12 +466,11 @@ class Protokollen {
 		if($row !== NULL && $row->json_sha256 === $hash) {
 			/* Update timestamp if nothing changed */
 			$st = $m->prepare('UPDATE service_tls_statuses
-								SET updated=NOW() WHERE id=?');
+						SET updated=NOW() WHERE id=?');
 			$st->bind_param('i', $row->id);
 			if(!$st->execute()) {
-				$err = "ERR: Failed to update TLS status for"
-						." service ID $svc->service_id and"
-						." hostname ID $hostname->hostname_id: $m->error\n";
+				$err = "TLS status update ($svc->service_id,"
+					." $hostname->hostname_id) failed: $m->error";
 				throw new Exception($err);
 			}
 
@@ -467,20 +481,19 @@ class Protokollen {
 		/* Add new row */
 		$jsonId = $this->addJson($svc->service_id, $json);
 		$st = $m->prepare('INSERT INTO service_tls_statuses
-							SET service_id=?, hostname_id=?, entry_type=?,
-							hostname=?, num_ips=?,
-							sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?, tlsv1_2=?,
-							json_id=?, json_sha256=?, created=NOW()');
+					SET service_id=?, hostname_id=?, entry_type=?,
+					hostname=?, num_ips=?,
+					sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?, tlsv1_2=?,
+					json_id=?, json_sha256=?, created=NOW()');
 		$entry_type = 'current';
 		$st->bind_param('iissiiiiiiis', $svc->service_id,
-						$hostname->hostname_id, $entry_type,
-						$hostname->hostname, $numIps,
-						$sslv2, $sslv3, $tlsv1, $tlsv1_1, $tlsv1_2,
-						$jsonId, $hash);
+				$hostname->hostname_id, $entry_type,
+				$hostname->hostname, $numIps,
+				$sslv2, $sslv3, $tlsv1, $tlsv1_1, $tlsv1_2,
+				$jsonId, $hash);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to insert new TLS status for"
-					." service ID $svc->service_id and"
-					." hostname ID $hostname->hostname_id: $m->error\n";
+			$err = "TLS status add ($svc->service_id, $hostname->hostname_id)"
+				." failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -489,38 +502,44 @@ class Protokollen {
 
 
 		$st = $m->prepare('UPDATE service_tls_statuses
-							SET entry_type=?, updated=updated
-							WHERE service_id=? AND hostname_id=? AND id!=?');
+					SET entry_type=?, updated=updated
+					WHERE service_id=? AND hostname_id=? AND id!=?');
 		$entry_type = 'revision';
 		$st->bind_param('siii', $entry_type,
-						$svc->service_id, $hostname->hostname_id, $id);
+				$svc->service_id, $hostname->hostname_id, $id);
 		if(!$st->execute()) {
-			$err = "ERR: Failed to mark previous TLS statuses as 'revision'"
-					." for service ID $svc->service_id and"
-					." hostname ID $hostname->hostname_id: $m->error\n";
+			$err = "TLS status revision update ($svc->service_id,"
+				." $hostname->hostname_id) failed: $m->error";
 			throw new Exception($err);
 		}
 
 		$st->close();
 
 
+		if($row === NULL) {
+			$log = 'TLS status created';
+			$this->logEntry($svc->service_id, $hostname->hostname, $log);
+			return $id;
+		}
+
 		$changes = array();
+		if($row->sslv2 != $sslv2)
+			$changes[] = "SSLv2 ($row->sslv2 -> $sslv2)";
+		if($row->sslv3 != $sslv3)
+			$changes[] = "SSLv3 ($row->sslv3 -> $sslv3)";
+		if($row->tlsv1 != $tlsv1)
+			$changes[] = "TLSv1 ($row->tlsv1 -> $tlsv1)";
+		if($row->tlsv1_1 != $tlsv1_1)
+			$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_1)";
+		if($row->tlsv1_2 != $tlsv1_2)
+			$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_2)";
+	
 		if($row->num_ips != $numIps) {
+			/* overwrite */
+			$changes = array();
 			$changes[] = "number of IPs ($row->num_ips -> $numIps)";
 		}
-		else {
-			if($row->sslv2 != $sslv2)
-					$changes[] = "SSLv2 ($row->sslv2 -> $sslv2)";
-			if($row->sslv3 != $sslv3)
-					$changes[] = "SSLv3 ($row->sslv3 -> $sslv3)";
-			if($row->tlsv1 != $tlsv1)
-					$changes[] = "TLSv1 ($row->tlsv1 -> $tlsv1)";
-			if($row->tlsv1_1 != $tlsv1_1)
-					$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_1)";
-			if($row->tlsv1_2 != $tlsv1_2)
-					$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_2)";
-		}
-	
+
 		if(!empty($changes)) {
 			$log = 'TLS status changed: '. implode(', ', $changes);
 			$this->logEntry($svc->service_id, $hostname->hostname, $log);
@@ -529,17 +548,17 @@ class Protokollen {
 		return $id;
 	}
 
-	function logEntry($serviceId, $hostname, $msg) {
+	function logEntry($svcId, $hostname, $msg) {
 		$m = $this->m;
-		$svc = $this->getServiceById($serviceId);
+		$svc = $this->getServiceById($svcId);
 		$st = $m->prepare('INSERT INTO logs
-							SET service_id=?, hostname=?, 
-							service=?, `log`=?, created=NOW()');
-		$st->bind_param('isss', $serviceId, $hostname,
-						$svc->service_name, $msg);
+					SET service_id=?, hostname=?,
+					service=?, `log`=?, created=NOW()');
+		$st->bind_param('isss', $svcId, $hostname,
+				$svc->service_name, $msg);
 		$id = NULL;
 		if(!$st->execute()) {
-			$err = "ERR: Failed to add log entry: $m->error\n";
+			$err = "Log entry add ($svcId, $hostname) failed: $m->error";
 			throw new Exception($err);
 		}
 
