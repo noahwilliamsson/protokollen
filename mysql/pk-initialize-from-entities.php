@@ -4,7 +4,7 @@
  * Protokollen - create services and add hostnames from entity definitions
  */
 
-require_once('../php/Pk.class.php');
+require_once('../php/Protokollen.class.php');
 
 
 $p = new Protokollen();
