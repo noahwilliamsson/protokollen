@@ -20,12 +20,12 @@ if($argc == 5)
 $p = new Protokollen();
 $e = $p->getEntityByDomain($domain);
 
-$svc = $p->getServiceByName($e->entity_id, $serviceType, $serviceName);
+$svc = $p->getServiceByName($e->id, $serviceType, $serviceName);
 if($svc === NULL) {
-	$svc = $p->addService($e->entity_id, $serviceType, $serviceName);
-	echo "Added new service '$serviceName' with type $serviceType and ID: $svc->service_id\n";
+	$svc = $p->addService($e->id, $serviceType, $serviceName);
+	echo "Added new service '$serviceName' with type $serviceType and ID: $svc->id\n";
 }
-$hostnames = $p->listServiceHostnames($svc->service_id);
+$hostnames = $p->listServiceHostnames($svc->id);
 $found = FALSE;
 foreach($hostnames as $h) {
 	if(!strcasecmp($h->hostname, $hostname)) {
@@ -36,6 +36,6 @@ foreach($hostnames as $h) {
 }
 
 if(!$found) {
-	$id = $p->addServiceHostname($svc->service_id, $hostname);
-	echo "Hostname '$hostname' added as ID $id as child under domain '$domain' (entity id: $e->entity_id)\n";
+	$id = $p->addServiceHostname($svc->id, $hostname);
+	echo "Hostname '$hostname' added as ID $id as child under domain '$domain' (entity id: $e->id)\n";
 }

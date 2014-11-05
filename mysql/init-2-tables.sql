@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.28, for osx10.6 (i386)
 --
--- Host: 127.1    Database: pk
+-- Host: 127.1    Database: pk3
 -- ------------------------------------------------------
 -- Server version	5.5.40-0ubuntu1
 
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `entities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entities` (
-  `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `org` varchar(255) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL DEFAULT '',
   `org_short` varchar(255) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
   `org_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
@@ -34,30 +34,8 @@ CREATE TABLE `entities` (
   `version` int(10) unsigned NOT NULL DEFAULT '1',
   `created` datetime NOT NULL DEFAULT '2013-06-20 00:00:00',
   `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`entity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `entity_services`
---
-
-DROP TABLE IF EXISTS `entity_services`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entity_services` (
-  `service_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `entity_id` int(11) unsigned NOT NULL,
-  `entity_domain` varchar(255) NOT NULL DEFAULT '',
-  `service_type` varchar(16) NOT NULL DEFAULT 'HTTP',
-  `service_name` varchar(64) NOT NULL DEFAULT '',
-  `service_desc` varchar(255) DEFAULT '',
-  `created` datetime NOT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`service_id`),
-  UNIQUE KEY `entity_id` (`entity_id`,`service_type`,`service_name`),
-  CONSTRAINT `entity_services_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=990 DEFAULT CHARSET=utf8mb4 COMMENT='List of services: HTTP, SMTP, IMAP, Webmail, ..';
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=utf8 COMMENT='Makt- och internetkollen: Lista över organisationer';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,8 +55,8 @@ CREATE TABLE `json` (
   PRIMARY KEY (`id`),
   KEY `json_sha256` (`json_sha256`,`service_id`),
   KEY `service_id` (`service_id`),
-  CONSTRAINT `json_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `entity_services` (`service_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `json_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1784 DEFAULT CHARSET=utf8mb4 COMMENT='JSON store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,8 +75,8 @@ CREATE TABLE `logs` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `service_id` (`service_id`),
-  CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `entity_services` (`service_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8mb4 COMMENT='Log messages from scans';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,20 +87,19 @@ DROP TABLE IF EXISTS `service_hostnames`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `service_hostnames` (
-  `hostname_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
   `entity_id` int(11) unsigned NOT NULL,
-  `zone_id` int(10) unsigned NOT NULL DEFAULT '0',
   `service_type` varchar(16) NOT NULL DEFAULT '',
   `hostname` varchar(255) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`hostname_id`),
+  PRIMARY KEY (`id`),
   KEY `service_id` (`service_id`),
   KEY `entity_id` (`entity_id`),
-  CONSTRAINT `service_hostnames_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `entity_services` (`service_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `service_hostnames_ibfk_2` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1489 DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `service_hostnames_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `service_hostnames_ibfk_2` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1492 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,8 +125,8 @@ CREATE TABLE `service_http_preferences` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `service_id` (`service_id`),
-  CONSTRAINT `service_http_preferences_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `entity_services` (`service_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  CONSTRAINT `service_http_preferences_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=681 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,11 +153,33 @@ CREATE TABLE `service_tls_statuses` (
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `service_id` (`service_id`),
   KEY `hostname_id` (`hostname_id`),
-  CONSTRAINT `service_tls_statuses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `entity_services` (`service_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `service_tls_statuses_ibfk_2` FOREIGN KEY (`hostname_id`) REFERENCES `service_hostnames` (`hostname_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  KEY `service_id` (`service_id`),
+  CONSTRAINT `service_tls_statuses_ibfk_2` FOREIGN KEY (`hostname_id`) REFERENCES `service_hostnames` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `service_tls_statuses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1289 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `services` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `entity_id` int(11) unsigned NOT NULL,
+  `entity_domain` varchar(255) NOT NULL DEFAULT '',
+  `service_type` varchar(16) NOT NULL DEFAULT 'HTTP',
+  `service_name` varchar(64) NOT NULL DEFAULT '',
+  `service_desc` varchar(255) DEFAULT '',
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `entity_id` (`entity_id`,`service_type`,`service_name`),
+  CONSTRAINT `services_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=998 DEFAULT CHARSET=utf8mb4 COMMENT='List of services: HTTP, SMTP, IMAP, Webmail, ..';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -192,4 +191,4 @@ CREATE TABLE `service_tls_statuses` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-04 19:50:42
+-- Dump completed on 2014-11-05 21:26:25

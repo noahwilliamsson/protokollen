@@ -15,4 +15,4 @@ $filename = $argv[2];
 
 $p = new Protokollen();
 $svc = $p->getServiceById($serviceId);
-$id = $p->addTlsStatusJson($svc->service_id, $filename);
+$id = $p->addTlsStatusJson($svc->id, $filename);
