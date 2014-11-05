@@ -322,9 +322,9 @@ class Protokollen {
 			$https_error = $arr_err[0];
 
 		$st = $m->prepare('SELECT * FROM service_http_preferences
-					WHERE service_id=?  AND entry_type=?');
+					WHERE service_id=? AND entry_type=?');
 		$entry_type = 'current';
-		$st->bind_param('iss', $svc->id, $hash, $entry_type);
+		$st->bind_param('is', $svc->id, $entry_type);
 		if(!$st->execute()) {
 			$err = "HTTP pref lookup ($svc->id) failed: $m->error";
 			throw new Exception($err);
