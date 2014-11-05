@@ -248,6 +248,7 @@ class Protokollen {
 		return $id;
 	}
 
+	/* XXX: This API needs to change */
 	function addHttpPreferenceJson($filename) {
 		$m = $this->m;
 
@@ -268,10 +269,13 @@ class Protokollen {
 		$svc = $this->getServiceByName($e->id,
 						Protokollen::SERVICE_TYPE_HTTP,
 						$domain);
-		if($svc === NULL)
+		if($svc === NULL) {
+			/* Kludge: retry with SERVICE_TYPE_WEBAIL */
 			$svc = $this->getServiceByName($e->id,
 							Protokollen::SERVICE_TYPE_WEBMAIL,
 							$domain);
+		}
+
 		if($svc === NULL)
 			throw new Exception(__METHOD__ .": Unknown service"
 						." ($e->id, HTTP, $domain)");
@@ -317,11 +321,8 @@ class Protokollen {
 		else if(!empty($arr_err))
 			$https_error = $arr_err[0];
 
-		$json = json_encode($result);
-		$hash = hash('sha256', $json);
 		$st = $m->prepare('SELECT * FROM service_http_preferences
-					WHERE service_id=?  AND json_sha256=?
-					AND entry_type=?');
+					WHERE service_id=?  AND entry_type=?');
 		$entry_type = 'current';
 		$st->bind_param('iss', $svc->id, $hash, $entry_type);
 		if(!$st->execute()) {
@@ -334,16 +335,14 @@ class Protokollen {
 		$r->close();
 		$st->close();
 
-		if($row !== NULL) {
-			/* Update timestamp */
+
+		$json = json_encode($result);
+		$hash = hash('sha256', $json);
+		if($row !== NULL && $row->json_sha256 === $hash) {
+			/* Just update timestamp if nothing changed */
 			$st = $m->prepare('UPDATE service_http_preferences
-						SET title=?, preferred_url=?,
-						http_preferred_url=?,
-						https_preferred_url=?,
-						https_error=?, updated=NOW()
-						WHERE id=?');
-			$st->bind_param('sssssi', $title, $pref, $http_preferred,
-					$https_preferred, $https_error, $row->id);
+						SET updated=NOW() WHERE id=?');
+			$st->bind_param('i', $row->id);
 			if(!$st->execute()) {
 				$err = "HTTP pref update ($svc->id) failed: $m->error";
 				throw new Exception($err);
@@ -385,6 +384,7 @@ class Protokollen {
 		$st->close();
 
 
+		/* Log changes */
 		if($row === NULL) {
 			$log = 'HTTP preferences created, preferred URL is: '. $pref;
 			$this->logEntry($svc->id, $domain, $log);
@@ -409,6 +409,7 @@ class Protokollen {
 		return $id;
 	}
 
+	/* XXX: This API needs to change */
 	function addTlsStatusJson($svcId, $filename) {
 		$m = $this->m;
 
@@ -486,7 +487,7 @@ class Protokollen {
 		$json = json_encode($probes);
 		$hash = hash('sha256', $json);
 		if($row !== NULL && $row->json_sha256 === $hash) {
-			/* Update timestamp if nothing changed */
+			/* Just update timestamp if nothing changed */
 			$st = $m->prepare('UPDATE service_tls_statuses
 						SET updated=NOW() WHERE id=?');
 			$st->bind_param('i', $row->id);
@@ -538,6 +539,7 @@ class Protokollen {
 		$st->close();
 
 
+		/* Log changes */
 		if($row === NULL) {
 			$log = 'TLS status created';
 			$this->logEntry($svc->id, $hostname->hostname, $log);
@@ -555,7 +557,7 @@ class Protokollen {
 			$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_1)";
 		if($row->tlsv1_2 != $tlsv1_2)
 			$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_2)";
-	
+
 		if($row->num_ips != $numIps) {
 			/* overwrite */
 			$changes = array();
