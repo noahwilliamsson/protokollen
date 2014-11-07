@@ -121,7 +121,7 @@ class Protokollen {
 		else {
 			$st = $m->prepare('SELECT * FROM services
 					WHERE entity_id=? ORDER BY service_type');
-			$st->bind_param('i');
+			$st->bind_param('i', $entityId);
 		}
 
 		if(!$st->execute()) {
