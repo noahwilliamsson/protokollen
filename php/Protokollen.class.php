@@ -20,6 +20,10 @@ class Protokollen {
 		$this->m->set_charset(DB_CHARSET);
 	}
 
+	function getMySQLHandle() {
+		return $this->m;
+	}
+
 	function listEntityIds() {
 		$m = $this->m;
 		$st = $m->prepare('SELECT id FROM entities WHERE id > 1');
