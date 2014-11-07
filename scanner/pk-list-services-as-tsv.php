@@ -8,6 +8,8 @@ require_once('../php/Protokollen.class.php');
 
 $p = new Protokollen();
 $entities = $p->listEntityIds();
+/* Randomize order */
+shuffle($entities);
 foreach($entities as $entityId) {
 	$httpServices = $p->listServices($entityId, Protokollen::SERVICE_TYPE_HTTP);
 	foreach($httpServices as $svc) {
