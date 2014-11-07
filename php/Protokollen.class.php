@@ -111,11 +111,19 @@ class Protokollen {
 		return $row;
 	}
 
-	function listServicesByType($entityId, $svcType) {
+	function listServices($entityId, $svcType = NULL) {
 		$m = $this->m;
-		$st = $m->prepare('SELECT * FROM services
+		if($svcType) {
+			$st = $m->prepare('SELECT * FROM services
 					WHERE entity_id=? AND service_type=?');
-		$st->bind_param('is', $entityId, $svcType);
+			$st->bind_param('is', $entityId, $svcType);
+		}
+		else {
+			$st = $m->prepare('SELECT * FROM services
+					WHERE entity_id=? ORDER BY service_type');
+			$st->bind_param('i');
+		}
+
 		if(!$st->execute()) {
 			$err = "List services ($entityId, $svcType) failed: $m->error";
 			throw new Exception($err);
