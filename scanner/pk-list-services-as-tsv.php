@@ -9,7 +9,7 @@ require_once('../php/Protokollen.class.php');
 $p = new Protokollen();
 $entities = $p->listEntityIds();
 foreach($entities as $entityId) {
-	$httpServices = $p->listServicesByType($entityId, Protokollen::SERVICE_TYPE_HTTP);
+	$httpServices = $p->listServices($entityId, Protokollen::SERVICE_TYPE_HTTP);
 	foreach($httpServices as $svc) {
 		$hostnames = $p->listServiceHostnames($svc->id);
 		$withoutWww = array();
@@ -19,7 +19,7 @@ foreach($entities as $entityId) {
 		echo sprintf("%d\t%d\t%s\t%s\n", $entityId, $svc->id, $svc->service_type, implode(', ', $hostnames));
 	}
 
-	$httpServices = $p->listServicesByType($entityId, Protokollen::SERVICE_TYPE_WEBMAIL);
+	$httpServices = $p->listServices($entityId, Protokollen::SERVICE_TYPE_WEBMAIL);
 	foreach($httpServices as $svc) {
 		$hostnames = $p->listServiceHostnames($svc->id);
 		$withoutWww = array();
