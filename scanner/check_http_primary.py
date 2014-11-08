@@ -145,7 +145,7 @@ for scheme in schemes:
 obj = {}
 for scheme in final_res:
 	for res in final_res[scheme]:
-		if res['error'] or res['status'] != 200:
+		if res['error']:
 			continue
 	
 		last_url = res['location']
