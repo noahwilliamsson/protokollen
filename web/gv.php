@@ -15,19 +15,39 @@
 require_once('../php/Protokollen.class.php');
 
 
-$domain = 'aftonbladet.se';
-if(isset($argc) && $argc > 1)
-	$domain = $argv[1];
-else if(isset($_GET['domain']))
-	$domain = $_GET['domain'];
-$p = new Protokollen();
+if(isset($argc)) {
+	$domain = 'aftonbladet.se';
+	if($argc > 1)
+		$domain = $argv[1];
+
+	$svg = svgForDomain($domain);
+	die($svg);
+}
 
 
-ob_start();
+if(function_exists('headers_sent') && !headers_sent()) {
+	if(isset($_GET['d'])) {
+		header('Content-Type: image/svg+xml');
+		$svg = svgForDomain($_GET['d']);
+		die($svg);
+	}
+}
+
+
+/**
+ * Generate SVG for entity
+ */
+function svgForDomain($domain) {
+
+	$p = new Protokollen();
+	$e = $p->getEntityByDomain($domain);
+
+	ob_start();
 
 echo "digraph g {\n";
+echo "charset=utf8;\n";
 /* Go left-right instead of top-down */
-echo "  rankdir = LR;\n";
+echo "  rankdir=LR;\n";
 
 /**
  * Rounded record type: Mrecord (as opposed to: record)
@@ -36,7 +56,7 @@ echo "  rankdir = LR;\n";
  */
 echo "  node [ shape=Mrecord fontsize=10 fontname=\"helvetica\" ];\n";
 
-$e = $p->getEntityByDomain($domain);
+
 echo "ent_$e->id [ label=\"$e->org\" ];\n";
 foreach($p->listServices($e->id /*, Protokollen::SERVICE_TYPE_HTTP*/) as $svc) {
 		$label = array('<f0>'. $svc->service_type, '<f1>'. $svc->service_name);
@@ -53,7 +73,7 @@ foreach($p->listServices($e->id /*, Protokollen::SERVICE_TYPE_HTTP*/) as $svc) {
 			$rows[] = sprintf('<tr><td colspan="2"><b>%s</b>%s</td></tr>', 'Webbplats', !empty($prefs->preferred_url)? '<br/>'. $prefs->preferred_url: '');
 			if(!empty($prefs->http_preferred_url))
 				$rows[] = sprintf('<tr><td>%s</td><td href="%s">%s</td></tr>',
-								'HTTP ', $prefs->http_preferred_url,
+								'HTTP', $prefs->http_preferred_url,
 								$prefs->http_preferred_url);
 			if(!empty($prefs->https_preferred_url))
 				$rows[] = sprintf('<tr><td bgcolor="lightgreen">%s</td><td href="%s">%s</td></tr>',
@@ -76,15 +96,24 @@ foreach($p->listServices($e->id /*, Protokollen::SERVICE_TYPE_HTTP*/) as $svc) {
 echo "}\n";
 
 
-$dot = ob_get_contents();
-ob_end_clean();
+	$dot = ob_get_contents();
+	ob_end_clean();
 
-$filename = tempnam(sys_get_temp_dir(), 'graphviz');
-file_put_contents($filename, $dot);
+	/* Dump .dot file to temporary file */
+	$filename = tempnam(sys_get_temp_dir(), 'graphviz');
+	file_put_contents($filename, $dot);
 
-$args = array('dot', '-Gdpi=72', '-Gsize=12,15', '-Tsvg');
-$args[] = escapeshellarg($filename);
-$command = implode(' ', $args);
-header('Content-Type: image/svg+xml');
-passthru($command);
-unlink($filename);
+	/* Generate SVG */
+	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=12,15', '-Tsvg');
+	$args[] = escapeshellarg($filename);
+	$command = implode(' ', $args);
+
+	ob_start();
+	passthru($command);
+	$svg = ob_get_contents();
+	ob_end_clean();
+
+	// unlink($filename);
+
+	return $svg;
+}

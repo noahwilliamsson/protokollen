@@ -79,7 +79,25 @@ padding-bottom: 20px;
 		</div>
 	</div>
 	<div class="container">
-		<img src="gv.php?domain=<?php echo rawurlencode($domain) ?>" alt="" />
+		<!--
+		This works but gives no clickable links..
+		-->
+		<img src="gv.php?d=<?php echo rawurlencode($domain) ?>" alt="" />
+
+		<?php
+		/**
+		 * Using an <object> tag gives clickable links but unfortunately
+		 * dot(1) messes up SVG output if the input text contained
+		 * non-ASCII characters.. 
+		 */
+		if(0):
+			require_once('gv.php');
+			$svg = svgForDomain($domain);
+		?>
+		<object type="image/svg+xml" data="data:image/svg+xml;base64,<?php echo base64_encode($svg) ?>"></object>
+		<?php
+		endif;
+		?>
 	</div>
 	<div class="container">
 		<?php
