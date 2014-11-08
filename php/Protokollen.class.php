@@ -487,7 +487,7 @@ class Protokollen {
 		$m = $this->m;
 
 		$probes = json_decode($json);
-		if(!is_array($result))
+		if(!is_array($probes))
 			throw new Exception(__METHOD__ .": Invalid JSON for"
 						." for service $svcId");
 		if(empty($probes))
