@@ -1,9 +1,16 @@
 <?php
 require_once('../php/Protokollen.class.php');
-$p = new Protokollen();
+
+if(!isset($_GET['domain'])) {
+	header('Location: /');
+	die;
+}
 
 $domain = $_GET['domain'];
+
+$p = new Protokollen();
 $ent = $p->getEntityByDomain($domain);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +58,7 @@ padding-bottom: 20px;
 					<li class="active"><a href="/">Hem</a></li>
 					<li><a href="#medier">Medier</a></li>
 					<li><a href="#myndigheter">Myndigheter</a></li>
-					<li><a href="#about">Om tjänsten</a></li>
+					<li><a href="https://github.com/noahwilliamsson/protokollen">Om tjänsten</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -60,10 +67,9 @@ padding-bottom: 20px;
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron">
 		<div class="container">
-			<h1>Visa sajt</h1>
 			<p>Visa stödet för SSL/TLS på en sajt genom att skriva in domänen i rutan nedan.</p>
 
-			<form class="form-inline" role="form" method="post" action="/view.php">
+			<form class="form-inline" role="form" method="get" action="/view.php">
 				<div class="form-group">
 					<label for="domain">Domän</label>
 					<input type="text" class="form-control" id="domain" name="domain" placeholder="example.se">
@@ -71,6 +77,9 @@ padding-bottom: 20px;
 				<button type="submit" class="btn btn-primary">Visa</button>
 			</form>
 		</div>
+	</div>
+	<div class="container">
+		<img src="gv.php?domain=<?php echo rawurlencode($domain) ?>" alt="" />
 	</div>
 	<div class="container">
 		<?php

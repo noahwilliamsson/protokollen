@@ -49,7 +49,7 @@ padding-bottom: 20px;
 					<li class="active"><a href="/">Hem</a></li>
 					<li><a href="#medier">Medier</a></li>
 					<li><a href="#myndigheter">Myndigheter</a></li>
-					<li><a href="#about">Om tjänsten</a></li>
+					<li><a href="https://github.com/noahwilliamsson/protokollen">Om tjänsten</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -58,7 +58,9 @@ padding-bottom: 20px;
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron">
 		<div class="container">
+			<!--
 			<h1>Visa sajt</h1>
+			-->
 			<p>Visa stödet för SSL/TLS på en sajt genom att skriva in domänen i rutan nedan.</p>
 
 			<form class="form-inline" role="form" method="get" action="/view.php">
@@ -125,8 +127,39 @@ foreach($categories as $cat):
 
 	<h2><?php echo htmlspecialchars($cat, ENT_NOQUOTES) ?></h2>
 	<p>Antal unika IP-adresser: <?php echo count($uniqueIps) ?></p>
-	<div id="tls-status-1-<?php echo $hash ?>" style="width:300px;height:300px;float:left"></div>
-	<div id="tls-status-2-<?php echo $hash ?>" style="width:300px;height:300px;float:left"></div>
+	<div id="tls-status-1-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
+	<div id="tls-status-2-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
+	<table class="table table-condensed" style="float:left; width:400px">
+		<thead>
+			<tr>
+				<th>Org.</th>
+				<th>Domän</th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php
+		for($i = 0, $j = 0; $i < count($entityIds) && $j < 10; $i++):
+			$e = $p->getEntityById($entityIds[$i]);
+			$services = $p->listServices($e->id, Protokollen::SERVICE_TYPE_HTTP);
+			foreach($services as $svc):
+				$m = $p->getMySQLHandle();
+				$q = 'SELECT https_preferred_url AS url FROM service_http_preferences WHERE service_id="'. $m->escape_string($svc->id) .'" AND entry_type="current" AND https_error IS NULL';
+				$r = $m->query($q);
+				while(($row = $r->fetch_object()) && $j < 10):
+					$j++;
+					$title = mb_substr($row->url, 0, 40);
+					if(mb_strlen($row->url) > 40) $title .= '…';
+		?>
+			<tr>
+				<td><?php echo htmlspecialchars($e->org, ENT_NOQUOTES) ?></td>
+				<td><a href="/view.php?domain=<?php echo urlencode($e->domain); ?>"><?php echo htmlspecialchars($title, ENT_NOQUOTES) ?></a></td>
+			</tr>
+				<?php endwhile; ?>
+			<?php endforeach; ?>
+		<?php endfor; ?>
+		<?php if($j == 10): ?><tr><td colspan="2">...</td></tr><?php endif; ?>
+		</tbody>
+	</table>
 	<hr style="clear:both"/>
 	<script>
 
