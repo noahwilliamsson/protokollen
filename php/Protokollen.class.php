@@ -438,7 +438,7 @@ class Protokollen {
 		/* Log changes */
 		if($row === NULL) {
 			$log = 'HTTP preferences created, preferred URL is: '. $pref;
-			$this->logEntry($svc->id, $domain, $log);
+			$this->logEntry($svc->id, $svc->service_name, $log);
 			return $id;
 		}
 
@@ -454,7 +454,7 @@ class Protokollen {
 
 		if(!empty($changes)) {
 			$log = 'HTTP preferences changed: '. implode(', ', $changes);
-			$this->logEntry($svc->id, $domain, $log);
+			$this->logEntry($svc->id, $svc->service_name, $log);
 		}
 
 		return $id;
