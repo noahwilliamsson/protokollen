@@ -438,7 +438,7 @@ class Protokollen {
 		/* Log changes */
 		if($row === NULL) {
 			$log = 'HTTP preferences created, preferred URL is: '. $pref;
-			$this->logEntry($svc->id, $svc->service_name, $log);
+			$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
 			return $id;
 		}
 
@@ -454,7 +454,7 @@ class Protokollen {
 
 		if(!empty($changes)) {
 			$log = 'HTTP preferences changed: '. implode(', ', $changes);
-			$this->logEntry($svc->id, $svc->service_name, $log);
+			$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
 		}
 
 		return $id;
@@ -616,7 +616,7 @@ class Protokollen {
 		/* Log changes */
 		if($row === NULL) {
 			$log = 'TLS status created';
-			$this->logEntry($svc->id, $hostname->hostname, $log);
+			$this->logEntry($svc->id, $hostname->hostname, $log, $jsonId);
 			return $id;
 		}
 
@@ -640,20 +640,30 @@ class Protokollen {
 
 		if(!empty($changes)) {
 			$log = 'TLS status changed: '. implode(', ', $changes);
-			$this->logEntry($svc->id, $hostname->hostname, $log);
+			$this->logEntry($svc->id, $hostname->hostname, $log, $jsonId);
 		}
 
 		return $id;
 	}
 
-	function logEntry($svcId, $hostname, $msg) {
+	function logEntry($svcId, $hostname, $msg, $jsonId = NULL) {
 		$m = $this->m;
 		$svc = $this->getServiceById($svcId);
-		$st = $m->prepare('INSERT INTO logs
+		if($jsonId) {
+			$st = $m->prepare('INSERT INTO logs
+					SET service_id=?, json_id=?, hostname=?,
+					service=?, `log`=?, created=NOW()');
+			$st->bind_param('iisss', $svcId, $jsonId, $hostname,
+					$svc->service_name, $msg);
+		}
+		else {
+			$st = $m->prepare('INSERT INTO logs
 					SET service_id=?, hostname=?,
 					service=?, `log`=?, created=NOW()');
-		$st->bind_param('isss', $svcId, $hostname,
-				$svc->service_name, $msg);
+			$st->bind_param('isss', $svcId, $hostname,
+					$svc->service_name, $msg);
+		}
+
 		$id = NULL;
 		if(!$st->execute()) {
 			$err = "Log entry add ($svcId, $hostname) failed: $m->error";
