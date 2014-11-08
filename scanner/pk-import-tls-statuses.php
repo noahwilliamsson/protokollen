@@ -13,6 +13,10 @@ if($argc != 3)
 $serviceId = $argv[1];
 $filename = $argv[2];
 
+$json = file_get_contents($filename);
+if($json === FALSE)
+	die("ERROR: File not found: $filename\n");
+
 $p = new Protokollen();
 $svc = $p->getServiceById($serviceId);
-$id = $p->addTlsStatusJson($svc->id, $filename);
+$id = $p->addTlsStatusJson($svc->id, $json);

@@ -223,6 +223,42 @@ class Protokollen {
 		return $arr;
 	}
 
+	function getJsonById($jsonId) {
+		$m = $this->m;
+
+		$st = $m->prepare('SELECT * FROM json WHERE id=?');
+		$st->bind_param('i', $jsonId);
+		if(!$st->execute()) {
+			$err = "JSON lookup ($jsonId) failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
+	function getJsonByHash($sha256) {
+		$m = $this->m;
+
+		$st = $m->prepare('SELECT * FROM json WHERE json_sha256=?');
+		$st->bind_param('s', $sha256);
+		if(!$st->execute()) {
+			$err = "JSON lookup ($sha256) failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
 	function addJson($svcId, $json) {
 		$m = $this->m;
 		$hash = hash('sha256', $json);
@@ -260,37 +296,40 @@ class Protokollen {
 		return $id;
 	}
 
-	/* XXX: This API needs to change */
-	function addHttpPreferenceJson($filename) {
+	function getHttpPreferences($svcId) {
 		$m = $this->m;
 
-		$data = file_get_contents($filename);
-		$result = json_decode($data);
-		$domain = $result->domain;
-
-		$e = $this->getEntityByDomain($domain);
-		if($e === NULL) {
-			$arr = explode('.', $domain, 2);
-			$temp = $arr[1];
-			$e = $this->getEntityByDomain($temp);
-			if($e === NULL)
-				throw new Exception(__METHOD__ .": Entity lookup for domain"
-							." $domain failed (also tried: $temp)");
+		$st = $m->prepare('SELECT * FROM service_http_preferences
+					WHERE service_id=?
+					ORDER BY entry_type, created DESC');
+		$st->bind_param('i', $svcId);
+		if(!$st->execute()) {
+			$err = "HTTP prefs lookup ($svcId) failed: $m->error";
+			throw new Exception($err);
 		}
 
-		$svc = $this->getServiceByName($e->id,
-						Protokollen::SERVICE_TYPE_HTTP,
-						$domain);
-		if($svc === NULL) {
-			/* Kludge: retry with SERVICE_TYPE_WEBAIL */
-			$svc = $this->getServiceByName($e->id,
-							Protokollen::SERVICE_TYPE_WEBMAIL,
-							$domain);
-		}
+		$arr = array();
+		$r = $st->get_result();
+		while($row = $r->fetch_object())
+			$arr[] = $row;
+		$r->close();
+		$st->close();
 
+		return $arr;
+	}
+
+	function addHttpPreferenceJson($svcId, $json) {
+		$m = $this->m;
+
+		$svc = $this->getServiceById($svcId);
 		if($svc === NULL)
 			throw new Exception(__METHOD__ .": Unknown service"
-						." ($e->id, HTTP, $domain)");
+						." $svcId");
+
+		$result = json_decode($json);
+		if(!is_object($result))
+			throw new Exception(__METHOD__ .": Invalid JSON for"
+						." for service $svcId");
 
 		$pref = null;
 		$title = null;
@@ -421,20 +460,43 @@ class Protokollen {
 		return $id;
 	}
 
-	/* XXX: This API needs to change */
-	function addTlsStatusJson($svcId, $filename) {
+	function getTlsStatuses($svcId, $hostnameId) {
 		$m = $this->m;
 
-		$data = file_get_contents($filename);
-		$probes = json_decode($data);
+		$st = $m->prepare('SELECT * FROM service_tls_statuses
+					WHERE service_id=? AND hostname_id=?
+					ORDER BY entry_type, created DESC');
+		$st->bind_param('ii', $svcId, $hostnameId);
+		if(!$st->execute()) {
+			$err = "TLS status lookup ($svcId, $hostnameId)"
+				." failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$arr = array();
+		$r = $st->get_result();
+		while($row = $r->fetch_object())
+			$arr[] = $row;
+		$r->close();
+		$st->close();
+
+		return $arr;
+	}
+
+	function addTlsStatusJson($svcId, $json) {
+		$m = $this->m;
+
+		$probes = json_decode($json);
+		if(!is_array($result))
+			throw new Exception(__METHOD__ .": Invalid JSON for"
+						." for service $svcId");
 		if(empty($probes))
 			return NULL;
 
 		$svc = $this->getServiceById($svcId);
 		if($svc === NULL)
-			throw new Exception("Unable to identify service for"
-						." service_id '$svcId'");
-		$e = $this->getEntityById($svc->id);
+			throw new Exception(__METHOD__ .": Unknown service"
+						." $svcId");
 
 		$numIps = 0;
 		$sslv2 = 0;

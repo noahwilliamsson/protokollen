@@ -8,6 +8,7 @@ require_once('../php/Protokollen.class.php');
 
 $p = new Protokollen();
 $entities = $p->listEntityIds();
+
 /* Randomize order */
 shuffle($entities);
 foreach($entities as $entityId) {
