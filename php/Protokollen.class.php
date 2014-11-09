@@ -223,6 +223,11 @@ class Protokollen {
 		return $arr;
 	}
 
+	/**
+	 * Lookup JSON by primary key
+	 * @param $jsonId Id of entry in json table
+	 * @return Row (object) from JSON table, throws on error
+	 */
 	function getJsonById($jsonId) {
 		$m = $this->m;
 
@@ -241,13 +246,20 @@ class Protokollen {
 		return $row;
 	}
 
-	function getJsonByHash($sha256) {
+	/**
+	 * Lookup JSON by service ID and SHA-256 hash
+	 * @param $svcId Service ID
+	 * @param $sha256 SHA-256 hash of JSON
+	 * @return Row (object) from JSON table, throws on error
+	 */
+	function getJsonByHash($svcId, $sha256) {
 		$m = $this->m;
 
-		$st = $m->prepare('SELECT * FROM json WHERE json_sha256=?');
-		$st->bind_param('s', $sha256);
+		$q = 'SELECT * FROM json WHERE service_id=? AND json_sha256=?';
+		$st = $m->prepare($q);
+		$st->bind_param('is', $svcId, $sha256);
 		if(!$st->execute()) {
-			$err = "JSON lookup ($sha256) failed: $m->error";
+			$err = "JSON lookup ($svcId, $sha256) failed: $m->error";
 			throw new Exception($err);
 		}
 
@@ -261,46 +273,30 @@ class Protokollen {
 
 	/**
 	 * Add JSON to JSON store
-	 *
 	 * @param $svcId Service ID (must exist)
 	 * @param $json JSON text
-	 *
-	 * @return ID of row in JSON table
+	 * @return ID of row in JSON table, throws on error
 	 */
 	private function addJson($svcId, $json) {
 		$m = $this->m;
-		$hash = hash('sha256', $json);
 
-		$q = 'SELECT id FROM json WHERE service_id=? AND json_sha256=?';
+		$hash = hash('sha256', $json);
+		$row = $this->getJsonByHash($svcId, $hash);
+		if($row !== NULL)
+			return $row->id;
+
+		$q = 'INSERT INTO json SET service_id=?, json_sha256=?,
+			service=?, json=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('is', $svcId, $hash);
+		$st->bind_param('isss', $svcId, $hash,
+			$svc->service_name, $json);
 		if(!$st->execute()) {
-			$err = "JSON lookup ($svcId, $hash) failed: $m->error";
+			$err = "JSON add ($svcId, $hash) failed: $m->error";
 			throw new Exception($err);
 		}
 
-		$r = $st->get_result();
-		$row = $r->fetch_object();
-		$r->close();
+		$id = $st->insert_id;
 		$st->close();
-
-		if($row !== NULL) {
-			$id = $row->id;
-		}
-		else {
-			$q = 'INSERT INTO json SET service_id=?, json_sha256=?,
-				service=?, json=?, created=NOW()';
-			$st = $m->prepare($q);
-			$st->bind_param('isss', $svcId, $hash,
-				$svc->service_name, $json);
-			if(!$st->execute()) {
-				$err = "JSON add ($svcId, $hash) failed: $m->error";
-				throw new Exception($err);
-			}
-
-			$id = $st->insert_id;
-			$st->close();
-		}
 
 		return $id;
 	}
