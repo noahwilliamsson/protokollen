@@ -668,9 +668,9 @@ class Protokollen {
 		if($row->tlsv1 != $tlsv1)
 			$changes[] = "TLSv1 ($row->tlsv1 -> $tlsv1)";
 		if($row->tlsv1_1 != $tlsv1_1)
-			$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_1)";
+			$changes[] = "TLSv1.1 ($row->tlsv1_1 -> $tlsv1_1)";
 		if($row->tlsv1_2 != $tlsv1_2)
-			$changes[] = "TLSv1 ($row->tlsv1_1 -> $tlsv1_2)";
+			$changes[] = "TLSv1.2 ($row->tlsv1_1 -> $tlsv1_2)";
 
 		if($row->num_ips != $numIps) {
 			/* overwrite */
