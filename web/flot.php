@@ -112,6 +112,7 @@ function makeFlots($entityIds) {
 	$r->close();
 	$uniqueIps = array_unique($uniqueIps);
 
+
 	$flot2 = array();
 	foreach($protocols as $key => $value) {
 		$obj = new stdClass();
@@ -120,6 +121,31 @@ function makeFlots($entityIds) {
 		$flot2[] = $obj;
 	}
 
-	$arr = array($flot, $flot2, $uniqueIps);
+
+	$flot3 = array();
+	ksort($protocols, SORT_FLAG_CASE);
+	$idx = 0;
+	foreach($protocols as $key => $value) {
+		$key = strtoupper($key);
+		$key = str_replace(' ', 'v', $key);
+		switch($key) {
+		case 'NONE': $color = 'black'; break;
+		case 'SSLv2.0':
+		case 'SSLv3.0': $color = 'red'; break;
+		case 'TLSv1.0':
+		case 'TLSv1.1': $color = 'yellow'; break;
+		case 'TLSv1.2': $color = 'green'; break;
+		}
+
+		$obj = new stdClass();
+		$obj->data[] = array($idx, $value);
+		$obj->color = $color;
+		$flot3[$key] = $obj;
+		$idx++;
+	}
+
+
+
+	$arr = array($flot, $flot2, $uniqueIps, $flot3);
 	return $arr;
 }

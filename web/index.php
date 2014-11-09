@@ -24,6 +24,7 @@ $m = $p->getMySQLHandle();
 	<script src="js/bootstrap.min.js"></script>
 	<script src="flot/jquery.flot.js"></script>
 	<script src="flot/jquery.flot.pie.js"></script>
+	<script src="flot/jquery.flot.valuelabels.js"></script>
 <style type="text/css">
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
@@ -75,29 +76,47 @@ padding-bottom: 20px;
 
 	<div class="container">
 	<script>
-	var pieOpts = {
-    series: {
-        pie: {
-            show: true,
-            radius: 3/4,
-            label: {
-                show: true,
-                radius: 3/4,
-                formatter: labelFormatter,
-                background: {
-                    opacity: 0.5,
-                    color: '#000'
-                }
-            }
-        }
-    },
-    legend: {
-        show: false
-    }
-	}
 	function labelFormatter(label, series) {
 		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label.toUpperCase().replace('V','v').replace('_','.') + "<br/>" + Math.round(series.percent) + "% (n=" + series.data[0][1] +")</div>";
 	}
+
+	var pieOpts = {
+    series: {
+	pie: {
+	    show: true,
+	    radius: 3/4,
+	    label: {
+		show: true,
+		radius: 3/4,
+		formatter: labelFormatter,
+		background: {
+		    opacity: 0.5,
+		    color: '#000'
+		}
+	    }
+	}
+    },
+    legend: {
+	show: false
+    }
+	}
+
+	var barOpts = {
+		series: {
+			bars: {
+				show: true,
+				barWidth: 0.6,
+				align: "center"
+			},
+			valueLabels: {
+				show: true
+			}	     
+		},
+		xaxis: {
+			tickLength: 0
+		}
+	};
+
 	</script>
 <?php
 
@@ -120,15 +139,18 @@ foreach($categories as $cat):
 	$r->close();
 	
 	$flots = makeFlots($entityIds);
-	list($flot, $flot2, $uniqueIps) = $flots;
+	list($flot, $flot2, $uniqueIps, $flot3) = $flots;
 
 	$hash = substr(md5($cat), 0, 8);
 ?>
 
 	<h2><?php echo htmlspecialchars($cat, ENT_NOQUOTES) ?></h2>
 	<p>Antal unika IP-adresser: <?php echo count($uniqueIps) ?></p>
+	<!--
 	<div id="tls-status-1-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
 	<div id="tls-status-2-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
+	-->
+	<div id="tls-status-3-<?php echo $hash ?>" style="width:350px;height:250px;float:left"></div>
 	<table class="table table-condensed" style="float:left; width:400px">
 		<thead>
 			<tr>
@@ -163,8 +185,19 @@ foreach($categories as $cat):
 	<hr style="clear:both"/>
 	<script>
 
+	<?php
+	$ticks = array();
+	$idx = 0;
+	foreach($flot3 as $key => $unused)
+		$ticks[] = array($idx++, $key);
+	?>
+	barOpts.xaxis.ticks = <?php echo json_encode($ticks) ?>;
+
+	/*
 	jQuery.plot(jQuery('#tls-status-1-<?php echo $hash ?>'), <?php echo json_encode($flot) ?>, pieOpts);
 	jQuery.plot(jQuery('#tls-status-2-<?php echo $hash ?>'), <?php echo json_encode($flot2) ?>, pieOpts);
+	*/
+	jQuery.plot(jQuery('#tls-status-3-<?php echo $hash ?>'), <?php echo json_encode(array_values($flot3)) ?>, barOpts);
 	</script>
 <?php
 endforeach;
