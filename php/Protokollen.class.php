@@ -403,24 +403,34 @@ class Protokollen {
 		$json = json_encode($result);
 		$hash = hash('sha256', $json);
 		if($row !== NULL && $row->json_sha256 === $hash) {
-			/* Just update timestamp if nothing changed */
-			$st = $m->prepare('UPDATE service_http_preferences
-						SET updated=NOW() WHERE id=?');
-			$st->bind_param('i', $row->id);
+			$q = 'UPDATE service_http_preferences
+				SET service_id=?, entry_type=?, domain=?,
+				title=?, preferred_url=?, http_preferred_url=?,
+				https_preferred_url=?, https_error=?,
+				created=NOW()
+				WHERE id=?';
+			$st = $m->prepare($q);
+			$st->bind_param('isssssssi', $svc->id, $entry_type,
+				$result->domain, $title, $pref,
+				$http_preferred, $https_preferred, $https_error,
+				$row->id);
 			if(!$st->execute()) {
-				$err = "HTTP pref update ($svc->id) failed: $m->error";
+				$err = "HTTP pref update ($svc->id) failed:"
+					." $m->error";
 				throw new Exception($err);
 			}
 
+			$st->close();
 			return $row->id;
 		}
 
 		$jsonId = $this->addJson($svc->id, $json);
-		$st = $m->prepare('INSERT INTO service_http_preferences
-					SET service_id=?, entry_type=?, domain=?, title=?,
-					preferred_url=?, http_preferred_url=?,
-					https_preferred_url=?, https_error=?,
-					json_id=?, json_sha256=?, created=NOW()');
+		$q = 'INSERT INTO service_http_preferences
+			SET service_id=?, entry_type=?, domain=?, title=?,
+			preferred_url=?, http_preferred_url=?,
+			https_preferred_url=?, https_error=?,
+			json_id=?, json_sha256=?, created=NOW()';
+		$st = $m->prepare($q);
 		$entry_type = 'current';
 		$st->bind_param('isssssssis', $svc->id, $entry_type,
 				$result->domain, $title, $pref,
