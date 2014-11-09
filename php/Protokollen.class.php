@@ -900,17 +900,38 @@ class Protokollen {
 			throw new Exception($err);
 		}
 
+		if(($ss = $this->getServiceSet($svc->id)) === NULL) {
+			$err = __METHOD__ .": No service set defined for"
+				." service ($svcId, $hostname, $ip)";
+			throw new Exception($err);
+		}
+
+		$jsonRow = $this->getJsonByHash($svc->id, $ss->json_sha256);
+		$hostExistInServiceSet = FALSE;
+		foreach(json_decode($jsonRow->json) as $svcHost) {
+			if(!strcasecmp($svcHost->hostname, $hostname)) {
+				$hostExistInServiceSet = TRUE;
+				break;
+			}
+		}
+
+		if(!$hostExistInServiceSet) {
+			$err = __METHOD__ .": Host not defined in service set"
+				." with ID $ss->id ($svcId, $hostname, $ip)";
+			throw new Exception($err);
+		}
+
 		$nodeId = $this->addNode($ip);
 		$vhost = $this->getServiceVhost($svcId, $hostname);
 		if($vhost && $vhost->nodeId == $nodeId)
 			return $vhost->id;
 
 		$q = 'INSERT INTO service_vhosts SET service_id=?, entity_id=?,
-			node_id=?, entry_type="current", hostname=?,
-			service_type=?, created=NOW()';
+			sevice_set_id=?, node_id=?, entry_type="current",
+			hostname=?, service_type=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('iiiss', $svc->id, $svc->entity_id, $nodeId,
-				$hostname, $svc->service_type);
+		$st->bind_param('iiiiss', $svc->id, $svc->entity_id, $ss->id,
+				$nodeId, $hostname, $svc->service_type);
 
 		if(!$st->execute()) {
 			$err = "Service vhost add ($svcId, $hostname, $ip)"
