@@ -263,29 +263,6 @@ class Protokollen {
 	}
 
 	/**
-	 * Lookup JSON by primary key
-	 * @param $jsonId Id of entry in json table
-	 * @return Row (object) from JSON table, throws on error
-	 */
-	function getJsonById($jsonId) {
-		$m = $this->m;
-
-		$st = $m->prepare('SELECT * FROM json WHERE id=?');
-		$st->bind_param('i', $jsonId);
-		if(!$st->execute()) {
-			$err = "JSON lookup ($jsonId) failed: $m->error";
-			throw new Exception($err);
-		}
-
-		$r = $st->get_result();
-		$row = $r->fetch_object();
-		$r->close();
-		$st->close();
-
-		return $row;
-	}
-
-	/**
 	 * Lookup JSON by service ID and SHA-256 hash
 	 * @param $svcId Service ID
 	 * @param $sha256 SHA-256 hash of JSON
