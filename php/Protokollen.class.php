@@ -182,13 +182,13 @@ class Protokollen {
 				$svcName, $svcDesc);
 		if(!$st->execute()) {
 			$err = "Add service ($entityId, $svcType, $svcName)"
-				." failed: $m->error";
+				." failed: $this->m->error";
 			throw new Exception($err);
 		}
 
 		$id = $st->insert_id;
 		$st->close();
-	
+
 		return $id;
 	}
 
@@ -977,13 +977,12 @@ class Protokollen {
 	}
 
 	function getCertByHash($sha256Hash) {
-		$m = $this->m;
-
 		$q = 'SELECT * FROM certs WHERE pem_sha256=?';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('s', $sha256Hash);
 		if(!$st->execute()) {
-			$err = "Cert lookup ($sha256Hash) failed: $m->error";
+			$err = "Cert lookup ($sha256Hash)"
+				." failed: $this->m->error";
 			throw new Exception($err);
 		}
 
@@ -1002,18 +1001,16 @@ class Protokollen {
 	 */
 	function addCert($pem) {
 		$hash = hash('sha256', $pem);
-
 		$node = $this->getCertByHash($hash);
 		if($node !== NULL)
 			return $node->id;
 
-		$m = $this->m;
 		$q = 'INSERT INTO certs
 			SET pem_sha256=?, x509=?, created=NOW()';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('ss', $hash, $pem);
 		if(!$st->execute()) {
-			$err = "Cert add ($hash) failed: $m->error";
+			$err = "Cert add ($hash) failed: $this->m->error";
 			throw new Exception($err);
 		}
 
@@ -1024,15 +1021,13 @@ class Protokollen {
 	}
 
 	function addCertVhostMapping($certId, $vhostId) {
-
-		$m = $this->m;
 		$q = 'SELECT id FROM service_vhost_certs
 			WHERE cert_id=? AND vhost_id=?';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('ii', $certId, $vhostId);
 		if(!$st->execute()) {
 			$err = "Cert vhost lookup ($certId, $vhostId)"
-				." failed: $m->error";
+				." failed: $this->m->error";
 			throw new Exception($err);
 		}
 
@@ -1040,17 +1035,16 @@ class Protokollen {
 		$row = $r->fetch_object();
 		$r->close();
 		$st->close();
-
 		if($row !== NULL)
 			return $row->id;
 
 		$q = 'INSERT INTO service_vhost_certs
 			SET cert_id=?, vhost_id=?, created=NOW()';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('ii', $certId, $vhostId);
 		if(!$st->execute()) {
 			$err = "Cert vhost add ($certId, $vhostId)"
-				." failed: $m->error";
+				." failed: $this->m->error";
 			throw new Exception($err);
 		}
 
