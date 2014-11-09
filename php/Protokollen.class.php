@@ -346,7 +346,9 @@ class Protokollen {
 
 		$arr = array();
 		foreach($result->http as $res) {
-			if($res->error || $res->status != 200)
+			if(substr($res->error, 0, 22) === 'Could not resolve host')
+				continue;
+			if($res->error)
 				continue;
 			$arr[] = $res->location;
 		}
@@ -358,9 +360,11 @@ class Protokollen {
 		$arr = array();
 		$arr_err = array();
 		foreach($result->https as $res) {
+			if(substr($res->error, 0, 22) === 'Could not resolve host')
+				continue;
 			if($res->error)
 				$arr_err[] = $res->error;
-			if($res->error || $res->status != 200)
+			if($res->error)
 				continue;
 			$arr[] = $res->location;
 		}
