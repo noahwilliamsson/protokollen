@@ -180,26 +180,67 @@ class Protokollen {
 		return $this->getServiceById($id);
 	}
 
+	function getServiceHostname($svcId, $hostname) {
+		$m = $this->m;
+
+		$svc = $this->getServiceById($svcId);
+		if($svc === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
+
+		$q = 'SELECT * FROM service_hostnames WHERE service_id=?
+			AND entry_type=? AND hostname=? ORDER BY created DESC';
+		$st = $m->prepare($q);
+		$st->bind_param('iss', $svc->id, 'current', $hostname);
+		if(!$st->execute()) {
+			$err = "Lookup current service hostname"
+				." ($svcId, $hostname) failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
+	/**
+	 * Add hostname to service
+	 */
 	function addServiceHostname($svcId, $hostname) {
 		$m = $this->m;
 
 		$svc = $this->getServiceById($svcId);
-		if($svc === NULL)
-			throw new Exception(__METHOD__ .": Unknown service ($svcId)");
+		if($svc === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
 
-		$st = $m->prepare('INSERT INTO service_hostnames
-					SET service_id=?, entity_id=?,
-					service_type=?, hostname=?, created=NOW()');
-		$st->bind_param('iiss', $svc->id, $svc->entity_id,
+		$svcHostname = $this->getServiceHostname($svcId, $hostname);
+		if($svcHostname !== NULL)
+			return $svcHostname->id;
+
+		$q = 'INSERT INTO service_hostnames SET service_id=?,
+			entity_id=?, entry_type=?, service_type=?, hostname=?,
+			created=NOW()';
+		$st = $m->prepare($q);
+		$st->bind_param('iiss', $svc->id, $svc->entity_id, 'current',
 				$svc->service_type, $hostname);
 		$id = NULL;
 		if(!$st->execute()) {
-			$err = "Add service hostname ($svcId, $hostname) failed: $m->error";
+			$err = "Add service hostname ($svcId, $hostname)"
+				." failed: $m->error";
 			throw new Exception($err);
 		}
 
 		$id = $st->insert_id;
 		$st->close();
+
+		$log = sprintf('Created service hostname: %s', $hostname);
+		$this->logEntry($svc->id, $svc->service_name, $log);
 
 		return $id;
 	}
