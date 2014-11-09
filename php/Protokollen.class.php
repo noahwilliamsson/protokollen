@@ -189,9 +189,10 @@ class Protokollen {
 		}
 
 		$q = 'SELECT * FROM service_hostnames WHERE service_id=?
-			AND entry_type=? AND hostname=? ORDER BY created DESC';
+			AND entry_type="current" AND hostname=?
+			ORDER BY created DESC';
 		$st = $m->prepare($q);
-		$st->bind_param('iss', $svc->id, 'current', $hostname);
+		$st->bind_param('is', $svc->id, $hostname);
 		if(!$st->execute()) {
 			$err = "Lookup current service hostname"
 				." ($svcId, $hostname) failed: $m->error";
@@ -222,10 +223,10 @@ class Protokollen {
 			return $svcHostname->id;
 
 		$q = 'INSERT INTO service_hostnames SET service_id=?,
-			entity_id=?, entry_type=?, service_type=?, hostname=?,
-			created=NOW()';
+			entity_id=?, entry_type="current", service_type=?,
+			hostname=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('iiss', $svc->id, $svc->entity_id, 'current',
+		$st->bind_param('iiss', $svc->id, $svc->entity_id,
 				$svc->service_type, $hostname);
 		$id = NULL;
 		if(!$st->execute()) {
@@ -402,10 +403,10 @@ class Protokollen {
 		else if(!empty($arr_err))
 			$https_error = $arr_err[0];
 
-		$st = $m->prepare('SELECT * FROM service_http_preferences
-					WHERE service_id=? AND entry_type=?');
-		$entry_type = 'current';
-		$st->bind_param('is', $svc->id, $entry_type);
+		$q = 'SELECT * FROM service_http_preferences
+			WHERE service_id=? AND entry_type="current"';
+		$st = $m->prepare($q);
+		$st->bind_param('i', $svc->id);
 		if(!$st->execute()) {
 			$err = "HTTP pref lookup ($svc->id) failed: $m->error";
 			throw new Exception($err);
@@ -443,16 +444,14 @@ class Protokollen {
 
 		$jsonId = $this->addJson($svc->id, $json);
 		$q = 'INSERT INTO service_http_preferences
-			SET service_id=?, entry_type=?, domain=?, title=?,
-			preferred_url=?, http_preferred_url=?,
+			SET service_id=?, entry_type="current", domain=?,
+			title=?, preferred_url=?, http_preferred_url=?,
 			https_preferred_url=?, https_error=?,
 			json_id=?, json_sha256=?, created=NOW()';
 		$st = $m->prepare($q);
-		$entry_type = 'current';
-		$st->bind_param('isssssssis', $svc->id, $entry_type,
-				$result->domain, $title, $pref,
-				$http_preferred, $https_preferred, $https_error,
-				$jsonId, $hash);
+		$st->bind_param('issssssis', $svc->id, $result->domain, $title,
+				$pref, $http_preferred, $https_preferred,
+				$https_error, $jsonId, $hash);
 		if(!$st->execute()) {
 			$err = "HTTP pref add ($svc->id) failed: $m->error";
 			throw new Exception($err);
@@ -461,11 +460,10 @@ class Protokollen {
 		$id = $st->insert_id;
 		$st->close();
 
-		$st = $m->prepare('UPDATE service_http_preferences
-					SET entry_type=?, updated=updated
-					WHERE service_id=? AND id!=?');
-		$entry_type = 'revision';
-		$st->bind_param('sii', $entry_type, $svc->id, $id);
+		$q = 'UPDATE service_http_preferences SET entry_type="revision",
+			updated=updated WHERE service_id=? AND id!=?';
+		$st = $m->prepare($q);
+		$st->bind_param('ii', $svc->id, $id);
 		if(!$st->execute()) {
 			$err = "HTTP ref revision update ($svc->id) failed:"
 					." $m->error";
@@ -580,12 +578,10 @@ class Protokollen {
 
 
 		/* Lookup current entry */
-		$st = $m->prepare('SELECT * FROM service_tls_statuses
-					WHERE service_id=? AND hostname_id=?
-					AND entry_type=?');
-		$entry_type = 'current';
-		$st->bind_param('iis', $svc->id,
-				$hostname->id, $entry_type);
+		$q = 'SELECT * FROM service_tls_statuses WHERE service_id=?
+			AND hostname_id=? AND entry_type="current"';
+		$st = $m->prepare($q);
+		$st->bind_param('ii', $svc->id, $hostname->id);
 		if(!$st->execute()) {
 			$err = "TLS status lookup ($svc->id,"
 				." $hostname->id) failed: $m->error";
@@ -617,17 +613,14 @@ class Protokollen {
 
 		/* Add new row */
 		$jsonId = $this->addJson($svc->id, $json);
-		$st = $m->prepare('INSERT INTO service_tls_statuses
-					SET service_id=?, hostname_id=?, entry_type=?,
-					hostname=?, num_ips=?,
-					sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?, tlsv1_2=?,
-					json_id=?, json_sha256=?, created=NOW()');
-		$entry_type = 'current';
-		$st->bind_param('iissiiiiiiis', $svc->id,
-				$hostname->id, $entry_type,
-				$hostname->hostname, $numIps,
-				$sslv2, $sslv3, $tlsv1, $tlsv1_1, $tlsv1_2,
-				$jsonId, $hash);
+		$q = 'INSERT INTO service_tls_statuses SET service_id=?,
+			hostname_id=?, entry_type="current", hostname=?,
+			num_ips=?, sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?,
+			tlsv1_2=?, json_id=?, json_sha256=?, created=NOW()';
+		$st = $m->prepare($q);
+		$st->bind_param('iisiiiiiiis', $svc->id, $hostname->id,
+				$hostname->hostname, $numIps, $sslv2, $sslv3,
+				$tlsv1, $tlsv1_1, $tlsv1_2, $jsonId, $hash);
 		if(!$st->execute()) {
 			$err = "TLS status add ($svc->id, $hostname->id)"
 				." failed: $m->error";
@@ -638,12 +631,11 @@ class Protokollen {
 		$st->close();
 
 
-		$st = $m->prepare('UPDATE service_tls_statuses
-					SET entry_type=?, updated=updated
-					WHERE service_id=? AND hostname_id=? AND id!=?');
-		$entry_type = 'revision';
-		$st->bind_param('siii', $entry_type,
-				$svc->id, $hostname->id, $id);
+		$q = 'UPDATE service_tls_statuses
+			SET entry_type="revision", updated=updated
+			WHERE service_id=? AND hostname_id=? AND id!=?';
+		$st = $m->prepare($q);
+		$st->bind_param('iii', $svc->id, $hostname->id, $id);
 		if(!$st->execute()) {
 			$err = "TLS status revision update ($svc->id,"
 				." $hostname->id) failed: $m->error";
@@ -786,12 +778,12 @@ class Protokollen {
 		}
 
 		$jsonId = $this->addJson($svcId, $json);
-
 		$q = 'INSERT INTO service_sets SET service_id=?, entity_id=?,
-			entry_type=?, json_id=?, service_type=?, created=NOW()';
+			entry_type="current", json_id=?, json_sha256=?,
+			service_type=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('iisis', $svc->id, $svc->entity_id,
-				'current', $jsonId, $hash);
+		$st->bind_param('iiiss', $svc->id, $svc->entity_id,
+				$jsonId, $hash, $svc->service_type);
 		if(!$st->execute()) {
 			$err = "Service set add ($svcId) failed: $m->error";
 			throw new Exception($err);
@@ -806,9 +798,10 @@ class Protokollen {
 
 		$log = 'Service set created: ['. implode(', ', $newSs) .']';
 		if($ss) {
-			$q = 'UPDATE service_sets SET entry_type=? WHERE id=?';
+			$q = 'UPDATE service_sets SET entry_type="revision"
+				WHERE id=?';
 			$st = $m->prepare($q);
-			$st->bind_param('si', 'revision', $ss->id);
+			$st->bind_param('i', $ss->id);
 			if(!$st->execute()) {
 				$err = "Service set revision update ($svcId)"
 					." failed: $m->error";
@@ -883,11 +876,11 @@ class Protokollen {
 			return $vhost->id;
 
 		$q = 'INSERT INTO service_vhosts SET service_id=?, entity_id=?,
-			node_id=?, entry_type=?, hostname=?, service_type=?,
-			created=NOW()';
+			node_id=?, entry_type="current", hostname=?,
+			service_type=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('iiisss', $svc->id, $svc->entity_id, $ndoeId,
-				'current', $hostname, $svc->service_type);
+		$st->bind_param('iiiss', $svc->id, $svc->entity_id, $nodeId,
+				$hostname, $svc->service_type);
 
 		if(!$st->execute()) {
 			$err = "Service vhost add ($svcId, $hostname, $ip)"
@@ -900,9 +893,10 @@ class Protokollen {
 
 		$log = sprintf('Created virtual host: %s [%s]', $hostname, $ip);
 		if($vhost) {
-			$q = 'UPDATE service_vhosts SET entry_type=? WHERE id=?';
+			$q = 'UPDATE service_vhosts SET entry_type="revision"
+				WHERE id=?';
 			$st = $m->prepare($q);
-			$st->bind_param('si', 'revision', $vhost->id);
+			$st->bind_param('i', $vhost->id);
 			if(!$st->execute()) {
 				$err = "Service vhost revision update ($svcId)"
 					." failed: $m->error";
