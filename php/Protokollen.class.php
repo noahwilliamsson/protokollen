@@ -785,14 +785,13 @@ class Protokollen {
 		$arr = array();
 		foreach($hostnames as $h) {
 			$tmp = explode(':', $h);
-			if(count($tmp) === 1)
-				$tmp[] = $port;
+			if(count($tmp) === 1) $tmp[] = $port;
 			list($fqdn, $hostport) = $tmp;
 
 			$obj = new stdClass();
 			$obj->hostname = mb_convert_case($fqdn, MB_CASE_LOWER);
 			$obj->port = intval($hostport);
-			$obj->protocol = strtoupper($protocol);
+			$obj->protocol = $protocol;
 
 			$key = sprintf('%s:%s:%05d', $obj->protocol,
 					$obj->hostname, $obj->port);
