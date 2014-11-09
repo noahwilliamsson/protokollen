@@ -693,4 +693,126 @@ class Protokollen {
 		$st->close();
 		return $this;
 	}
+
+	/**
+	 * Get service set associated with service
+	 * @param $svcId Service ID
+	 * @return ID of service_sets entry
+	 */
+	function getServiceSet($svcId) {
+		$m = $this->m;
+
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
+
+		$q = 'SELECT * FROM service_sets
+			WHERE service_id=? AND entry_type="current"';
+		$st = $m->prepare($q);
+		$st->bind_param('i', $svc->id);
+		if(!$st->execute()) {
+			$err = "Service set lookup failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
+	/**
+	 * Add a new set of hostnames to a service
+	 * @param $svcId Service ID
+	 * @param $protocol Internet protocol (DNS, HTTP, HTTPS, SMTP, ..)
+	 * @param $hostnames Array of hostname[:port] strings
+	 * @return ID of service_sets entry
+	 */
+	function addServiceSet($svcId, $protocol, $hostnames, $port) {
+		$m = $this->m;
+
+		/* This will also validate the $svcId */
+		$ss = $this->getServiceSet($svcId);
+
+		/* Create sorted set */
+		$arr = array();
+		foreach($hostnames as $h) {
+			$tmp = explode(':', $h);
+			if(count($tmp) === 1)
+				$tmp[] = $port;
+			list($fqdn, $hostport) = $tmp;
+
+			$obj = new stdClass();
+			$obj->protocol = strtoupper($protocol);
+			$obj->hostname = mb_convert_case($fqdn, MB_CASE_LOWER);
+			$obj->port = intval($hostport);
+
+			$key = sprintf('%s:%s:%05d', $obj->protocol,
+					$obj->hostname, $obj->port);
+
+			$arr[$key] = $obj;
+		}
+
+		ksort($arr);
+		$json = json_encode(array_values($arr));
+		$hash = hash('sha256', $json);
+		if($ss && $ss->json_sha256 === $hash) {
+			/* No changes */
+			return $ss->id;
+		}
+
+		$jsonId = $this->addJson($svcId, $json);
+
+		$q = 'INSERT INTO service_sets SET service_id=?, entity_id=?,
+			entry_type=?, json_id=?, service_type=?, created=NOW()';
+		$st = $m->prepare($q);
+		$st->bind_param('iisis', $svc->id, $svc->entity_id,
+				'current', $jsonId, $hash);
+		if(!$st->execute()) {
+			$err = "Service set add ($svcId) failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$id = $st->insert_id;
+		$st->close();
+
+		if($ss) {
+			$q = 'UPDATE service_sets SET entry_type=? WHERE id=?';
+			$st = $m->prepare($q);
+			$st->bind_param('si', 'revision', $ss->id);
+			if(!$st->execute()) {
+				$err = "Service set revision update ($svcId)"
+					." failed: $m->error";
+				throw new Exception($err);
+			}
+
+			$st->close();
+		}
+
+		/* Log changes */
+		$newSs = array();
+		foreach($json as $s)
+			$newSs[] = $s->hostname .':'. $s->port;
+
+		if(!$ss) {
+			$log = 'Service set created:'
+				.' ['. implode(', ', $newSs) .']';
+		}
+		else {
+			$oldSs = array();
+			foreach($ss as $s)
+				$oldSs[] = $s->hostname .':'. $s->port;
+
+			$log = 'Service set changed:'
+				.' ['. implode(', ', $oldSs) .'] ->'
+				.' ['. implode(', ', $newSs) .']';
+		}
+
+		$this->logEntry($svc->id, $svc->service_name, $log);
+
+		return $id;
+	}
 }
