@@ -183,8 +183,7 @@ class Protokollen {
 	function getServiceHostname($svcId, $hostname) {
 		$m = $this->m;
 
-		$svc = $this->getServiceById($svcId);
-		if($svc === NULL) {
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
 			$err = __METHOD__ .": Unknown service ($svcId)";
 			throw new Exception($err);
 		}
@@ -213,8 +212,7 @@ class Protokollen {
 	function addServiceHostname($svcId, $hostname) {
 		$m = $this->m;
 
-		$svc = $this->getServiceById($svcId);
-		if($svc === NULL) {
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
 			$err = __METHOD__ .": Unknown service ($svcId)";
 			throw new Exception($err);
 		}
@@ -367,10 +365,10 @@ class Protokollen {
 	function addHttpPreferenceJson($svcId, $json) {
 		$m = $this->m;
 
-		$svc = $this->getServiceById($svcId);
-		if($svc === NULL)
-			throw new Exception(__METHOD__ .": Unknown service"
-						." $svcId");
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
 
 		$result = json_decode($json);
 		if(!is_object($result))
@@ -553,10 +551,10 @@ class Protokollen {
 		if(empty($probes))
 			return NULL;
 
-		$svc = $this->getServiceById($svcId);
-		if($svc === NULL)
-			throw new Exception(__METHOD__ .": Unknown service"
-						." $svcId");
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
 
 		$numIps = 0;
 		$sslv2 = 0;
