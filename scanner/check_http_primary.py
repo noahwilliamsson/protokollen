@@ -20,6 +20,11 @@ import json
 import pycurl
 from io import BytesIO
 
+# https://stackoverflow.com/questions/2087370/decode-html-entities-in-python-string
+# NOTE: Requires Python 2
+import HTMLParser
+
+
 userAgentFmt = 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) Safari/534.34 (siteintegrity; {0})'
 
 
@@ -107,6 +112,14 @@ def check_url(url):
 		if matches:
 			title = matches.group(1).strip()
 	buf.close()
+
+	try:
+		h = HTMLParser.HTMLParser()
+		decoded_title = h.unescape(title)
+		if decoded_title:
+			title = decoded_title
+	except:
+		pass
 
 	res = {
 		'charset': charset,
