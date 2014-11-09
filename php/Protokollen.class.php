@@ -296,18 +296,23 @@ class Protokollen {
 	private function addJson($svcId, $json) {
 		$m = $this->m;
 
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
+
 		$hash = hash('sha256', $json);
-		$row = $this->getJsonByHash($svcId, $hash);
+		$row = $this->getJsonByHash($svc->id, $hash);
 		if($row !== NULL)
 			return $row->id;
 
 		$q = 'INSERT INTO json SET service_id=?, json_sha256=?,
 			service=?, json=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('isss', $svcId, $hash,
+		$st->bind_param('isss', $svc->id, $hash,
 			$svc->service_name, $json);
 		if(!$st->execute()) {
-			$err = "JSON add ($svcId, $hash) failed: $m->error";
+			$err = "JSON add ($svc->id, $hash) failed: $m->error";
 			throw new Exception($err);
 		}
 
