@@ -756,7 +756,7 @@ class Protokollen {
 	 * @param $hostnames Array of hostname[:port] strings
 	 * @return ID of service_sets entry
 	 */
-	function addServiceSet($svcId, $protocol, $hostnames, $port) {
+	function addServiceSet($svcId, $protocol, $hostnames) {
 		$m = $this->m;
 
 		if(($svc = $this->getServiceById($svcId)) === NULL) {
@@ -765,6 +765,20 @@ class Protokollen {
 		}
 
 		$ss = $this->getServiceSet($svc->id);
+
+		$protocol = strtoupper($protocol);
+
+		/* Set default port */
+		$port = NULL;
+		switch($protocol) {
+		case 'HTTP': $port = 80; break;
+		case 'HTTPS': $port = 443; break;
+		case 'DNS': $port = 53; break;
+		case 'SMTP': $port = 25; break;
+		default:
+			throw new Exception(__METHOD__ .": Unsupported"
+						." protocol: $protocol");
+		}
 
 		/* Create sorted set */
 		$arr = array();
