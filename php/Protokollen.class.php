@@ -820,6 +820,11 @@ class Protokollen {
 		$id = $st->insert_id;
 		$st->close();
 
+		$newSs = array();
+		foreach($json as $s)
+			$newSs[] = $s->hostname .':'. $s->port;
+
+		$log = 'Service set created: ['. implode(', ', $newSs) .']';
 		if($ss) {
 			$q = 'UPDATE service_sets SET entry_type=? WHERE id=?';
 			$st = $m->prepare($q);
@@ -831,18 +836,7 @@ class Protokollen {
 			}
 
 			$st->close();
-		}
 
-		/* Log changes */
-		$newSs = array();
-		foreach($json as $s)
-			$newSs[] = $s->hostname .':'. $s->port;
-
-		if(!$ss) {
-			$log = 'Service set created:'
-				.' ['. implode(', ', $newSs) .']';
-		}
-		else {
 			$oldSs = array();
 			foreach($ss as $s)
 				$oldSs[] = $s->hostname .':'. $s->port;
