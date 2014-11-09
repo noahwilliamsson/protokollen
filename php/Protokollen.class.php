@@ -710,7 +710,7 @@ class Protokollen {
 	/**
 	 * Get service set associated with service
 	 * @param $svcId Service ID
-	 * @return ID of service_sets entry
+	 * @return Row (object) for service_sets entry
 	 */
 	function getServiceSet($svcId) {
 		$m = $this->m;
