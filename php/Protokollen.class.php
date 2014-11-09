@@ -779,7 +779,7 @@ class Protokollen {
 			throw new Exception($err);
 		}
 
-		$ss = $this->getServiceSet($svc->id);
+		$currentSvcSet = $this->getServiceSet($svc->id);
 
 		$protocol = strtoupper($protocol);
 
@@ -816,10 +816,11 @@ class Protokollen {
 		ksort($arr);
 		$json = json_encode(array_values($arr));
 		$hash = hash('sha256', $json);
-		if($ss && $ss->json_sha256 === $hash) {
+		if($currentSvcSet && $currentSvcSet->json_sha256 === $hash) {
 			/* No changes */
-			return $ss->id;
+			return $currentSvcSet->id;
 		}
+
 
 		$jsonId = $this->addJson($svcId, $json);
 		$q = 'INSERT INTO service_sets SET service_id=?, entity_id=?,
@@ -836,16 +837,16 @@ class Protokollen {
 		$id = $st->insert_id;
 		$st->close();
 
-		$newSs = array();
+		$newHosts = array();
 		foreach(array_values($arr) as $s)
-			$newSs[] = $s->hostname .':'. $s->port;
+			$newHosts[] = $s->hostname .':'. $s->port;
 
-		$log = 'Service set created: ['. implode(', ', $newSs) .']';
-		if($ss) {
+		$log = 'Service set created: ['. implode(', ', $newHosts) .']';
+		if($currentSvcSet !== NULL) {
 			$q = 'UPDATE service_sets SET entry_type="revision"
 				WHERE id=?';
 			$st = $m->prepare($q);
-			$st->bind_param('i', $ss->id);
+			$st->bind_param('i', $currentSvcSet->id);
 			if(!$st->execute()) {
 				$err = "Service set revision update ($svcId)"
 					." failed: $m->error";
@@ -854,13 +855,13 @@ class Protokollen {
 
 			$st->close();
 
-			$oldSs = array();
-			foreach($ss as $s)
-				$oldSs[] = $s->hostname .':'. $s->port;
+			$oldHosts = array();
+			foreach($currentSvcSet as $s)
+				$oldHosts[] = $s->hostname .':'. $s->port;
 
 			$log = 'Service set changed:'
-				.' ['. implode(', ', $oldSs) .'] ->'
-				.' ['. implode(', ', $newSs) .']';
+				.' ['. implode(', ', $oldHosts) .'] ->'
+				.' ['. implode(', ', $newHosts) .']';
 		}
 
 		$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
