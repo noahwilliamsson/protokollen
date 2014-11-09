@@ -763,9 +763,9 @@ class Protokollen {
 			list($fqdn, $hostport) = $tmp;
 
 			$obj = new stdClass();
-			$obj->protocol = strtoupper($protocol);
 			$obj->hostname = mb_convert_case($fqdn, MB_CASE_LOWER);
 			$obj->port = intval($hostport);
+			$obj->protocol = strtoupper($protocol);
 
 			$key = sprintf('%s:%s:%05d', $obj->protocol,
 					$obj->hostname, $obj->port);
