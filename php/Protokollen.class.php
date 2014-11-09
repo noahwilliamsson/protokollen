@@ -9,6 +9,7 @@ require_once(dirname(__FILE__) .'/MySQL.config.php');
 class Protokollen {
 
 	const SERVICE_TYPE_HTTP		= 'HTTP';
+	const SERVICE_TYPE_HTTPS	= 'HTTPS';
 	const SERVICE_TYPE_WEBMAIL	= 'Webmail';
 	const SERVICE_TYPE_SMTP		= 'SMTP';
 	const SERVICE_TYPE_DNS		= 'DNS';
