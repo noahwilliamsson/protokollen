@@ -52,13 +52,15 @@ def check_url(url):
 	http_charset = False
 	try:
 		c.perform()
-		content_type, _, charset = c.getinfo(c.CONTENT_TYPE).partition(';')
-		_, _, charset = charset.partition('=')
-		charset = charset.strip().lower()
-		if len(charset):
-			http_charset = True
-		else:
-		    charset = 'iso-8859-1'
+		ct_header = c.getinfo(c.CONTENT_TYPE);
+		if ct_header:
+			content_type, _, charset = ct_header.partition(';')
+			_, _, charset = charset.partition('=')
+			charset = charset.strip().lower()
+			if len(charset):
+				http_charset = True
+			else:
+			    charset = 'iso-8859-1'
 
 		last_url = c.getinfo(c.EFFECTIVE_URL)
 		status = c.getinfo(c.HTTP_CODE)
