@@ -259,12 +259,20 @@ class Protokollen {
 		return $row;
 	}
 
-	function addJson($svcId, $json) {
+	/**
+	 * Add JSON to JSON store
+	 *
+	 * @param $svcId Service ID (must exist)
+	 * @param $json JSON text
+	 *
+	 * @return ID of row in JSON table
+	 */
+	private function addJson($svcId, $json) {
 		$m = $this->m;
 		$hash = hash('sha256', $json);
 
-		$st = $m->prepare('SELECT id FROM json
-					WHERE service_id=? AND json_sha256=?');
+		$q = 'SELECT id FROM json WHERE service_id=? AND json_sha256=?';
+		$st = $m->prepare($q);
 		$st->bind_param('is', $svcId, $hash);
 		if(!$st->execute()) {
 			$err = "JSON lookup ($svcId, $hash) failed: $m->error";
@@ -280,10 +288,11 @@ class Protokollen {
 			$id = $row->id;
 		}
 		else {
-			$st = $m->prepare('INSERT INTO json
-						SET service_id=?, json_sha256=?,
-						json=?, created=NOW()');
-			$st->bind_param('iss', $svcId, $hash, $json);
+			$q = 'INSERT INTO json SET service_id=?, json_sha256=?,
+				service=?, json=?, created=NOW()';
+			$st = $m->prepare($q);
+			$st->bind_param('isss', $svcId, $hash,
+				$svc->service_name, $json);
 			if(!$st->execute()) {
 				$err = "JSON add ($svcId, $hash) failed: $m->error";
 				throw new Exception($err);
