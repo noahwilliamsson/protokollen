@@ -159,25 +159,37 @@ class Protokollen {
 		return $row;
 	}
 
+	/**
+	 * Add new service to entity
+	 * @param $entityID Entity ID
+	 * @param $svcType Service type (of Protokollen::SERVER_TYPE_*)
+	 * @param $svcName Service name (should be a domain)
+	 * @param $svcDesc Service description
+	 * @return ID of row in services table, throws on error
+	 */
 	function addService($entityId, $svcType, $svcName, $svcDesc = NULL) {
-		$m = $this->m;
 		$e = $this->getEntityById($entityId);
-		$st = $m->prepare('INSERT INTO services
-					SET entity_id=?, entity_domain=?,
+
+		$svc = $this->getServiceByName($entityId, $svcType, $svcName);
+		if($svc !== NULL)
+			return $svc->id;
+
+		$q = 'INSERT INTO services SET entity_id=?, entity_domain=?,
 					service_type=?, service_name=?,
-					service_desc=?, created=NOW()');
-		$st->bind_param('issss', $entityId, $e->domain,
-				$svcType, $svcName, $svcDesc);
-		$id = NULL;
+					service_desc=?, created=NOW()';
+		$st = $this->m->prepare($q);
+		$st->bind_param('issss', $entityId, $e->domain, $svcType,
+				$svcName, $svcDesc);
 		if(!$st->execute()) {
-			$err = "Add service ($entityId, $svcType, $svcName) failed:"
-					." $m->error";
+			$err = "Add service ($entityId, $svcType, $svcName)"
+				." failed: $m->error";
 			throw new Exception($err);
 		}
 
 		$id = $st->insert_id;
 		$st->close();
-		return $this->getServiceById($id);
+	
+		return $id;
 	}
 
 	function getServiceHostname($svcId, $hostname) {

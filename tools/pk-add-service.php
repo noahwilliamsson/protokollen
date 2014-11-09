@@ -22,10 +22,10 @@ $e = $p->getEntityByDomain($domain);
 
 $svc = $p->getServiceByName($e->id, $serviceType, $serviceName);
 if($svc === NULL) {
-	$svc = $p->addService($e->id, $serviceType, $serviceName);
-	echo "Added new service '$serviceName' with type $serviceType and ID: $svc->id\n";
+	$svcId = $p->addService($e->id, $serviceType, $serviceName);
+	echo "Added new service '$serviceName' with type $serviceType and ID: $svcId\n";
 }
-$hostnames = $p->listServiceHostnames($svc->id);
+$hostnames = $p->listServiceHostnames($svcId);
 $found = FALSE;
 foreach($hostnames as $h) {
 	if(!strcasecmp($h->hostname, $hostname)) {
@@ -36,6 +36,6 @@ foreach($hostnames as $h) {
 }
 
 if(!$found) {
-	$id = $p->addServiceHostname($svc->id, $hostname);
+	$id = $p->addServiceHostname($svcId, $hostname);
 	echo "Hostname '$hostname' added as ID $id as child under domain '$domain' (entity id: $e->id)\n";
 }

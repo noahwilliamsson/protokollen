@@ -14,9 +14,9 @@ foreach($p->listEntityDomains() as $domain) {
 	$e = $p->getEntityByDomain($domain);
 
 	/* Add HTTP service */
-	$s = $p->addService($e->id, Protokollen::SERVICE_TYPE_HTTP, $e->domain, 'Webbsajt '. $e->org);
-	$p->addServiceHostname($s->id, $e->domain);
-	$p->addServiceHostname($s->id, 'www.'. $e->domain);
+	$svcId = $p->addService($e->id, Protokollen::SERVICE_TYPE_HTTP, $e->domain, 'Webbsajt '. $e->org);
+	$p->addServiceHostname($svcId, $e->domain);
+	$p->addServiceHostname($svcId, 'www.'. $e->domain);
 
 	/* Add SMTP service */
 	if($e->domain_email === NULL)
@@ -24,5 +24,5 @@ foreach($p->listEntityDomains() as $domain) {
 
 	$s = $p->addService($e->id, Protokollen::SERVICE_TYPE_SMTP, $e->domain_email, 'E-postdomän '. $e->org);
 	/* Not yet implemented - should this be MX pointers instead? */
-	$p->addServiceHostname($s->id, $e->domain_email);
+	$p->addServiceHostname($svcId, $e->domain_email);
 }
