@@ -172,8 +172,22 @@ class Protokollen {
 		$e = $this->getEntityById($entityId);
 
 		$svc = $this->getServiceByName($entityId, $svcType, $svcName);
-		if($svc !== NULL)
+		if($svc !== NULL) {
+			if($svcDesc === NULL)
+				return $svc->id;
+
+			$q = 'UPDATE services SET service_desc=? WHERE id=?';
+			$st = $this->m->prepare($q);
+			$st->bind_param('si', $svcDesc, $svc->id);
+			if(!$st->execute()) {
+				$err = "Update service ($entityId, $svcType,"
+					." $svcName) failed: $this->m->error";
+				throw new Exception($err);
+			}
+			$st->close();
+
 			return $svc->id;
+		}
 
 		$q = 'INSERT INTO services SET entity_id=?, entity_domain=?,
 					service_type=?, service_name=?,
