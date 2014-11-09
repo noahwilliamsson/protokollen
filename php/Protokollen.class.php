@@ -747,8 +747,12 @@ class Protokollen {
 	function addServiceSet($svcId, $protocol, $hostnames, $port) {
 		$m = $this->m;
 
-		/* This will also validate the $svcId */
-		$ss = $this->getServiceSet($svcId);
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
+
+		$ss = $this->getServiceSet($svc->id);
 
 		/* Create sorted set */
 		$arr = array();
@@ -793,7 +797,7 @@ class Protokollen {
 		$st->close();
 
 		$newSs = array();
-		foreach($json as $s)
+		foreach(array_values($arr) as $s)
 			$newSs[] = $s->hostname .':'. $s->port;
 
 		$log = 'Service set created: ['. implode(', ', $newSs) .']';
@@ -819,7 +823,7 @@ class Protokollen {
 				.' ['. implode(', ', $newSs) .']';
 		}
 
-		$this->logEntry($svc->id, $svc->service_name, $log);
+		$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
 
 		return $id;
 	}
