@@ -848,4 +848,139 @@ class Protokollen {
 
 		return $id;
 	}
+
+	/**
+	 * Get current service host associated with service and hostname
+	 * @param $svcId Service ID
+	 * @param $hostname Hostname
+	 * @return Row (object) from service_vhosts table, throws on error
+	 */
+	function getServiceVhost($svcId, $hostname) {
+		$m = $this->m;
+
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
+
+		$q = 'SELECT * FROM service_vhosts WHERE service_id=?
+			AND hostname=? AND entry_type="current"';
+		$st = $m->prepare($q);
+		$st->bind_param('is', $svc->id, $hostname);
+		if(!$st->execute()) {
+			$err = "Service vhost lookup failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
+	/**
+	 * Add service virtual host
+	 * @param $svcId Service ID
+	 * @param $hostname Hostname
+	 * @param $ip IP-address
+	 * @return Service vhost ID, throws on error
+	 */
+	function addServiceVhost($svcId, $hostname, $ip) {
+		$m = $this->m;
+
+		if(($svc = $this->getServiceById($svcId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcId)";
+			throw new Exception($err);
+		}
+
+		$nodeId = $this->addNode($ip);
+		$vhost = $this->getServiceVhost($svcId, $hostname);
+		if($vhost && $vhost->nodeId == $nodeId)
+			return $vhost->id;
+
+		$q = 'INSERT INTO service_vhosts SET service_id=?, entity_id=?,
+			node_id=?, entry_type=?, hostname=?, service_type=?,
+			created=NOW()';
+		$st = $m->prepare($q);
+		$st->bind_param('iiisss', $svc->id, $svc->entity_id, $ndoeId,
+				'current', $hostname, $svc->service_type);
+
+		if(!$st->execute()) {
+			$err = "Service vhost add ($svcId, $hostname, $ip)"
+				." failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$id = $st->insert_id;
+		$st->close();
+
+		$log = sprintf('Created virtual host: %s [%s]', $hostname, $ip);
+		if($vhost) {
+			$q = 'UPDATE service_vhosts SET entry_type=? WHERE id=?';
+			$st = $m->prepare($q);
+			$st->bind_param('si', 'revision', $vhost->id);
+			if(!$st->execute()) {
+				$err = "Service vhost revision update ($svcId)"
+					." failed: $m->error";
+				throw new Exception($err);
+			}
+
+			$st->close();
+			$log = sprintf('Virtual host changed: %s [%s -> %s]',
+					$hostname, $vhost->ip, $ip);
+		}
+
+		$this->logEntry($svc->id, $svc->service_name, $log);
+
+		return $id;
+	}
+
+	/**
+	 * Lookup node by IP-address
+	 * @param $ip IP-address
+	 * @return Row (object) from nodes table, throws on error
+	 */
+	function getNodeByIp($ip) {
+		$m = $this->m;
+
+		$st = $m->prepare('SELECT * FROM nodes WHERE ip=?');
+		$st->bind_param('s', $ip);
+		if(!$st->execute()) {
+			$err = "Node lookup ($ip) failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
+	/**
+	 * Add node
+	 * @param $ip IP-address
+	 */
+	function addNode($ip) {
+		$node = $this->getNodeByIp($ip);
+		if($node !== NULL)
+			return $node->id;
+
+		$m = $this->m;
+		$q = 'INSERT INTO nodes SET ip=?, created=NOW()';
+		$st = $m->prepare($q);
+		$st->bind_param('s', $ip);
+		if(!$st->execute()) {
+			$err = "Node add ($ip) failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$id = $st->insert_id;
+		$st->close();
+
+		return $id;
+	}
 }
