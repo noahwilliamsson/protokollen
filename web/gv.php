@@ -113,7 +113,7 @@ echo "}\n";
 	$svg = ob_get_contents();
 	ob_end_clean();
 
-	// unlink($filename);
+	unlink($filename);
 
 	return $svg;
 }
