@@ -322,25 +322,39 @@ class Protokollen {
 	 * @return ID of row in JSON table, throws on error
 	 */
 	private function addJson($svcId, $json) {
-		$m = $this->m;
-
 		if(($svc = $this->getServiceById($svcId)) === NULL) {
 			$err = __METHOD__ .": Unknown service ($svcId)";
 			throw new Exception($err);
 		}
 
-		$hash = hash('sha256', $json);
-		$row = $this->getJsonByHash($svc->id, $hash);
+		$q = 'SELECT id FROM json WHERE service_id=? AND json_sha256=?';
+		$st = $this->m->prepare($q);
+		$st->bind_param('is', $svcId, $sha256);
+		if(!$st->execute()) {
+			$err = "JSON lookup ($svcId, $sha256)"
+				." failed: $this->m->error";
+			error_log($err);
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
 		if($row !== NULL)
 			return $row->id;
 
+
+		$hash = hash('sha256', $json);
 		$q = 'INSERT INTO json SET service_id=?, json_sha256=?,
 			service=?, json=?, created=NOW()';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('isss', $svc->id, $hash,
 			$svc->service_name, $json);
 		if(!$st->execute()) {
-			$err = "JSON add ($svc->id, $hash) failed: $m->error";
+			$err = "JSON add ($svc->id, $hash)"
+				." failed: $this->m->error";
 			throw new Exception($err);
 		}
 
