@@ -445,18 +445,20 @@ class Protokollen {
 		$st->close();
 
 
+		$e = $this->getEntityById($svc->entity_id);
+
 		$json = json_encode($result);
 		$hash = hash('sha256', $json);
 		if($row !== NULL && $row->json_sha256 === $hash) {
 			$q = 'UPDATE service_http_preferences
-				SET service_id=?, entry_type=?, domain=?,
-				title=?, preferred_url=?, http_preferred_url=?,
+				SET service_id=?, domain=?, title=?,
+				preferred_url=?, http_preferred_url=?,
 				https_preferred_url=?, https_error=?,
 				created=NOW()
 				WHERE id=?';
 			$st = $m->prepare($q);
-			$st->bind_param('isssssssi', $svc->id, $entry_type,
-				$result->domain, $title, $pref,
+			$st->bind_param('issssssi', $svc->id, 
+				$e->domain, $title, $pref,
 				$http_preferred, $https_preferred, $https_error,
 				$row->id);
 			if(!$st->execute()) {
@@ -476,7 +478,7 @@ class Protokollen {
 			https_preferred_url=?, https_error=?,
 			json_id=?, json_sha256=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('issssssis', $svc->id, $result->domain, $title,
+		$st->bind_param('issssssis', $svc->id, $e->domain, $title,
 				$pref, $http_preferred, $https_preferred,
 				$https_error, $jsonId, $hash);
 		if(!$st->execute()) {
