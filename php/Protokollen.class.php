@@ -327,9 +327,10 @@ class Protokollen {
 			throw new Exception($err);
 		}
 
+		$hash = hash('sha256', $json);
 		$q = 'SELECT id FROM json WHERE service_id=? AND json_sha256=?';
 		$st = $this->m->prepare($q);
-		$st->bind_param('is', $svcId, $sha256);
+		$st->bind_param('is', $svcId, $hash);
 		if(!$st->execute()) {
 			$err = "JSON lookup ($svcId, $sha256)"
 				." failed: ". $this->m->error;
@@ -345,8 +346,6 @@ class Protokollen {
 		if($row !== NULL)
 			return $row->id;
 
-
-		$hash = hash('sha256', $json);
 		$q = 'INSERT INTO json SET service_id=?, json_sha256=?,
 			service=?, json=?, created=NOW()';
 		$st = $this->m->prepare($q);
