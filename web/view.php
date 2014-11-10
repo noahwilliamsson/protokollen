@@ -88,7 +88,7 @@ padding-bottom: 20px;
 		/**
 		 * Using an <object> tag gives clickable links but unfortunately
 		 * dot(1) messes up SVG output if the input text contained
-		 * non-ASCII characters.. 
+		 * non-ASCII characters..
 		 */
 		if(0):
 			require_once('gv.php');

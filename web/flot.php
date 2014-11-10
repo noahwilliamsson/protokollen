@@ -123,7 +123,7 @@ function makeFlots($entityIds) {
 
 
 	$flot3 = array();
-	ksort($protocols, SORT_FLAG_CASE);
+	ksort($protocols, SORT_FLAG_CASE|SORT_NATURAL);
 	$idx = 0;
 	foreach($protocols as $key => $value) {
 		$key = strtoupper($key);
@@ -133,7 +133,7 @@ function makeFlots($entityIds) {
 		case 'SSLv2.0':
 		case 'SSLv3.0': $color = 'red'; break;
 		case 'TLSv1.0':
-		case 'TLSv1.1': $color = 'yellow'; break;
+		case 'TLSv1.1': $color = '#FFD700'; break;
 		case 'TLSv1.2': $color = 'green'; break;
 		}
 

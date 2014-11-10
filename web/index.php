@@ -110,7 +110,7 @@ padding-bottom: 20px;
 			},
 			valueLabels: {
 				show: true
-			}	     
+			}
 		},
 		xaxis: {
 			tickLength: 0
@@ -137,7 +137,7 @@ foreach($categories as $cat):
 	while($row = $r->fetch_object())
 		$entityIds[] = $row->id;
 	$r->close();
-	
+
 	$flots = makeFlots($entityIds);
 	list($flot, $flot2, $uniqueIps, $flot3) = $flots;
 
@@ -171,6 +171,7 @@ foreach($categories as $cat):
 					$j++;
 					$title = mb_substr($row->url, 0, 40);
 					if(mb_strlen($row->url) > 40) $title .= '…';
+					if(empty($title)) $title = $e->domain;
 		?>
 			<tr>
 				<td><?php echo htmlspecialchars($e->org, ENT_NOQUOTES) ?></td>
