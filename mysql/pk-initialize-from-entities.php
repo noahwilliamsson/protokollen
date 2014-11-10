@@ -16,7 +16,7 @@ foreach($p->listEntityDomains() as $domain) {
 	/* Add HTTP service */
 	echo "Creating HTTP service: $e->domain\n";
 	$svcId = $p->addService($e->id, Protokollen::SERVICE_TYPE_HTTP,
-				$e->domain, 'Webbsajt '. $e->org .' (HTTP)');
+				$e->domain, 'Webbsajt '. $e->domain .' (HTTP)');
 
 	/* Compile HTTP service set */
 	$hostnames = array();
@@ -39,7 +39,7 @@ foreach($p->listEntityDomains() as $domain) {
 		/* HTTPS may not be supported yet, but we'll keep an eye out */
 		echo "Creating HTTPS service: $e->domain\n";
 		$svcId = $p->addService($e->id, Protokollen::SERVICE_TYPE_HTTPS,
-					$e->domain, 'Webbsajt '. $e->org
+					$e->domain, 'Webbsajt '. $e->domain
 					.' (HTTPS)');
 		$p->addServiceSet($svcId, 'HTTPS', $hostnames);
 		echo "- HTTPS: ". implode(', ', $hostnames) ."\n";
