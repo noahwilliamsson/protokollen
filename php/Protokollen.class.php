@@ -383,7 +383,7 @@ class Protokollen {
 		$result = json_decode($json);
 		if(!is_object($result))
 			throw new Exception(__METHOD__ .": Invalid JSON for"
-						." for service $svcId");
+						." for service $svc->id");
 
 		$pref = null;
 		$title = null;
@@ -737,7 +737,7 @@ class Protokollen {
 	}
 
 	/**
-	 * Get service set associated with service
+	 * Get current service set associated with service
 	 * @param $svcId Service ID
 	 * @return Row (object) for service_sets entry
 	 */
@@ -873,24 +873,23 @@ class Protokollen {
 
 	/**
 	 * Get current service host associated with service and hostname
-	 * @param $svcId Service ID
+	 * @param $svcSetId Service set ID
 	 * @param $hostname Hostname
+	 * @param $nodeId Node ID for the hostname's IP-address
 	 * @return Row (object) from service_vhosts table, throws on error
 	 */
-	function getServiceVhost($svcId, $hostname) {
-		$m = $this->m;
-
-		if(($svc = $this->getServiceById($svcId)) === NULL) {
-			$err = __METHOD__ .": Unknown service ($svcId)";
+	function getServiceVhost($svcSetId, $hostname, $nodeId) {
+		if(($ss = $this->getServiceSetById($svcSetId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcSetId)";
 			throw new Exception($err);
 		}
 
-		$q = 'SELECT * FROM service_vhosts WHERE service_id=?
-			AND hostname=? AND entry_type="current"';
-		$st = $m->prepare($q);
-		$st->bind_param('is', $svc->id, $hostname);
+		$q = 'SELECT * FROM service_vhosts WHERE service_set_id=?
+			AND node_id=? AND hostname=? AND entry_type="current"';
+		$st = $this->m->prepare($q);
+		$st->bind_param('iis', $ss->id, $nodeId, $hostname);
 		if(!$st->execute()) {
-			$err = "Service vhost lookup failed: $m->error";
+			$err = "Service vhost lookup failed: $this->m->error";
 			throw new Exception($err);
 		}
 
@@ -904,24 +903,19 @@ class Protokollen {
 
 	/**
 	 * Add service virtual host
-	 * @param $svcId Service ID
+	 * @param $svcSetId Service set ID
 	 * @param $hostname Hostname
 	 * @param $ip IP-address
 	 * @return Service vhost ID, throws on error
 	 */
-	function addServiceVhost($svcId, $hostname, $ip) {
-		$m = $this->m;
-
-		if(($svc = $this->getServiceById($svcId)) === NULL) {
-			$err = __METHOD__ .": Unknown service ($svcId)";
-			throw new Exception($err);
-		}
-
-		if(($ss = $this->getServiceSet($svc->id)) === NULL) {
+	function addServiceVhost($svcSetId, $hostname, $ip) {
+		if(($ss = $this->getServiceSetById($svcSetId)) === NULL) {
 			$err = __METHOD__ .": No service set defined for"
-				." service ($svcId, $hostname, $ip)";
+				." service ($svcSetId, $hostname, $ip)";
 			throw new Exception($err);
 		}
+
+		$svc = $this->getServiceById($ss->service_id);
 
 		$jsonRow = $this->getJsonByHash($svc->id, $ss->json_sha256);
 		$hostExistInServiceSet = FALSE;
@@ -960,10 +954,10 @@ class Protokollen {
 		$st->close();
 
 		$log = sprintf('Created virtual host: %s [%s]', $hostname, $ip);
-		if($vhost) {
+		if($vhost !== NULL) {
 			$q = 'UPDATE service_vhosts SET entry_type="revision"
 				WHERE id=?';
-			$st = $m->prepare($q);
+			$st = $this->m->prepare($q);
 			$st->bind_param('i', $vhost->id);
 			if(!$st->execute()) {
 				$err = "Service vhost revision update ($svcId)"
