@@ -1057,14 +1057,11 @@ class Protokollen {
 	 * @return ID of service_sets entry
 	 */
 	function addServiceSet($svcId, $protocol, $hostnames) {
-		$m = $this->m;
 
 		if(($svc = $this->getServiceById($svcId)) === NULL) {
 			$err = __METHOD__ .": Unknown service ($svcId)";
 			throw new Exception($err);
 		}
-
-		$currentSvcSet = $this->getServiceSet($svc->id);
 
 		$protocol = strtoupper($protocol);
 
@@ -1101,6 +1098,7 @@ class Protokollen {
 		ksort($arr);
 		$json = json_encode(array_values($arr));
 		$hash = hash('sha256', $json);
+		$currentSvcSet = $this->getServiceSet($svc->id);
 		if($currentSvcSet && $currentSvcSet->json_sha256 === $hash) {
 			/* No changes */
 			return $currentSvcSet->id;
@@ -1111,11 +1109,11 @@ class Protokollen {
 		$q = 'INSERT INTO service_sets SET service_id=?, entity_id=?,
 			entry_type="current", json_id=?, json_sha256=?,
 			service_type=?, created=NOW()';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('iiiss', $svc->id, $svc->entity_id,
 				$jsonId, $hash, $svc->service_type);
 		if(!$st->execute()) {
-			$err = "Service set add ($svcId) failed: $m->error";
+			$err = "Service set add ($svcId) failed: $this->m->error";
 			throw new Exception($err);
 		}
 
@@ -1130,18 +1128,20 @@ class Protokollen {
 		if($currentSvcSet !== NULL) {
 			$q = 'UPDATE service_sets SET entry_type="revision"
 				WHERE id=?';
-			$st = $m->prepare($q);
+			$st = $this->m->prepare($q);
 			$st->bind_param('i', $currentSvcSet->id);
 			if(!$st->execute()) {
 				$err = "Service set revision update ($svcId)"
-					." failed: $m->error";
+					." failed: $this->m->error";
 				throw new Exception($err);
 			}
 
 			$st->close();
 
 			$oldHosts = array();
-			foreach($currentSvcSet as $s)
+			$jsonRow = $this->getJsonByHash($currentSvcSet->json_sha256);
+			$oldSvcHosts = json_decode($jsonRow->json);
+			foreach($oldSvcHosts as $s)
 				$oldHosts[] = $s->hostname .':'. $s->port;
 
 			$log = 'Service set changed:'
@@ -1273,7 +1273,7 @@ class Protokollen {
 			$st->bind_param('i', $vhost->id);
 			if(!$st->execute()) {
 				$err = "Service vhost revision update ($svcId)"
-					." failed: $m->error";
+					." failed: $this->m->error";
 				throw new Exception($err);
 			}
 
