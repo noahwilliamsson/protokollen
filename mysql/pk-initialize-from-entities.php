@@ -50,12 +50,15 @@ foreach($p->listEntityDomains() as $domain) {
 	foreach(dns_get_record($e->domain, DNS_SOA) as $rr) {
 		$svcId = $p->addService($e->id, Protokollen::SERVICE_TYPE_DNS,
 				$e->domain, 'DNS-zon '. $e->domain);
+		echo "Creating DNS service: $e->domain\n";
 
 		$hostnames = array();
 		foreach(dns_get_record($e->domain, DNS_NS) as $rr)
 			$hostnames[] = $rr['target'];
-		if(!empty($hostnames))
+		if(!empty($hostnames)) {
 			$p->addServiceSet($svcId, 'DNS', $hostnames);
+			echo "- DNS: ". implode(', ', $hostnames) ."\n";
+		}
 	}
 
 
@@ -67,8 +70,10 @@ foreach($p->listEntityDomains() as $domain) {
 	foreach(dns_get_record($e->domain_email, DNS_MX) as $rr)
 		$hostnames[] = $rr['target'];
 	if(!empty($hostnames)) {
+		echo "Creating SMTP service: $e->domain_email\n";
 		$svcId = $p->addService($e->id, 'SMTP', $e->domain_email,
 				'E-postdomän '. $e->org);
 		$p->addServiceSet($svcId, 'SMTP', $hostnames);
+		echo "- SMTP: ". implode(', ', $hostnames) ."\n";
 	}
 }
