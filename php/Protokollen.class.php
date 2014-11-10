@@ -577,8 +577,9 @@ class Protokollen {
 			$vhostId = $this->addServiceVhost($ss->id, $probe->host,
 								$probe->ip);
 
-			$q = 'SELECT * FROM sslprobes WHERE service_id=?
-				AND vhost_id=? AND entry_type="current"';
+			$q = 'SELECT id, json_id, json_sha256 FROM sslprobes
+				WHERE service_id=? AND vhost_id=?
+				AND entry_type="current"';
 			$st = $this->m->prepare($q);
 			$st->bind_param('ii', $svc->id, $vhostId);
 			if(!$st->execute()) {
@@ -654,25 +655,147 @@ class Protokollen {
 
 				$st->close();
 
-				$changes = array();
-				if($row->sslv2 != $sslv2)
-					$changes[] = "SSLv2 ($row->sslv2 -> $sslv2)";
-				if($row->sslv3 != $sslv3)
-					$changes[] = "SSLv3 ($row->sslv3 -> $sslv3)";
-				if($row->tlsv1 != $tlsv1)
-					$changes[] = "TLSv1 ($row->tlsv1 -> $tlsv1)";
-				if($row->tlsv1_1 != $tlsv1_1)
-					$changes[] = "TLSv1.1 ($row->tlsv1_1 -> $tlsv1_1)";
-				if($row->tlsv1_2 != $tlsv1_2)
-					$changes[] = "TLSv1.2 ($row->tlsv1_1 -> $tlsv1_2)";
+				$changes = $this->computeSslprobeChanges(
+						$probe, $svc->id,
+						$row->json_sha256);
+
 				$log = sprintf('%s sslprobe changed:'
 						.' %s (%s) [%s]',
+						$svc->service_type,
 						$probe->host, $probe->ip,
-						implode(', ', $changes));
+						implode('. ', $changes));
 			}
 
-			$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
+			$this->logEntry($svc->id, $svc->service_name,
+					$log, $jsonId);
+		} /* End foreach */
+	}
+
+	function computeSslprobeChanges($probe, $svcId, $prevJsonHash) {
+
+		$foundProbe = FALSE;
+		$jsonRow = $this->getJsonByHash($svcId, $prevJsonHash);
+		foreach(json_decode($jsonRow->json) as $prevProbe) {
+			if($prevProbe->ip !== $probe->ip) continue;
+			if($prevProbe->port !== $probe->port) continue;
+			if($prevProbe->host !== $probe->host) continue;
+			$foundProbe = TRUE;
+			break;
 		}
+
+		if(!$foundProbe)
+			return array();
+
+		$prev = array();
+		foreach($prevProbe->protocols as $p)
+			$prev[$p->name] = $p;
+
+		$cur = array();
+		foreach($probe->protocols as $p)
+			$cur[$p->name] = $p;
+
+		$names = array_keys($cur);
+		$prevArr = array();
+		$curArr = array();
+		foreach($names as $n) {
+			if($cur[$n]->supported) $curArr[] = $n;
+			if($prev[$n]->supported) $prevArr[] = $n;
+		}
+
+		$changes = array();
+
+		$arr = array();
+		$add = array_diff($curArr, $prevArr);
+		$del = array_diff($prevArr, $curArr);
+		if(count($add))
+			$arr[] = 'enabled ('. implode('; ', $add) .')';
+		if(count($del))
+			$arr[] = 'disabled ('. implode('; ', $del) .')';
+		if(count($arr)) {
+			$changes[] = 'Protocols changed:'
+					.' '. implode(', ', $arr);
+		}
+
+		foreach($names as $n) {
+			if(!$cur[$n]->supported) continue;
+			if(!$prev[$n]->supported) continue;
+
+			/* Cipher suite preference */
+			$prevCSP = $prev[$n]->cipherSuitePreference;
+			$curCSP = $cur[$n]->cipherSuitePreference;
+			if($prevCSP != $curCSP) {
+				$log = 'Cipher suite preference has been';
+				if($curCSP > 0)
+					$changes[] = $log .' enabled';
+				else
+					$changes[] = $log .' disabled';
+			}
+
+			/* Cipher suite */
+			$prevArr = array();
+			$curArr = array();
+			foreach($prev[$n]->cipherSuites as $cs)
+				$prevArr[] = $cs->name;
+			foreach($cur[$n]->cipherSuites as $cs)
+				$curArr[] = $cs->name;
+
+			$arr = array();
+			$add = array_diff($curArr, $prevArr);
+			$del = array_diff($prevArr, $curArr);
+			if(count($add))
+				$arr[] = 'added ('. implode('; ', $add) .')';
+			if(count($del))
+				$arr[] = 'removed ('. implode('; ', $del) .')';
+			if(count($arr))
+				$changes[] = $n. ' cipher suites changed:'
+						.' '. implode(', ', $arr);
+
+			/* NPN */
+			$prevArr = array();
+			$curArr = array();
+			if(isset($prev[$n]->extensions))
+			foreach($prev[$n]->extensions->npn as $npn)
+				$prevArr[] = $npn;
+			if(isset($cur[$n]->extensions))
+			foreach($cur[$n]->extensions->npn as $npn)
+				$curArr[] = $npn;
+
+			$arr = array();
+			$add = array_diff($curArr, $prevArr);
+			$del = array_diff($prevArr, $curArr);
+			if(count($add))
+				$arr[] = 'added ('. implode(', ', $add) .')';
+			if(count($del))
+				$arr[] = 'removed ('. implode(', ', $del) .')';
+			if(count($arr))
+				$changes[] = $n .' NPN protocols changed:'
+						.' '. implode(', ', $arr);
+
+			/* Certificates */
+			$prevArr = array();
+			$curArr = array();
+			foreach($prev[$n]->certificates as $pem) {
+				$cert = openssl_x509_parse($pem, TRUE);
+				$prevArr[] = $cert['name'];
+			}
+			foreach($cur[$n]->certificates as $pem) {
+				$cert = openssl_x509_parse($pem, TRUE);
+				$curArr[] = $cert['name'];
+			}
+
+			$arr = array();
+			$add = array_diff($curArr, $prevArr);
+			$del = array_diff($prevArr, $curArr);
+			if(count($add))
+				$arr[] = 'added ('. implode('; ', $add) .')';
+			if(count($del))
+				$arr[] = 'removed ('. implode('; ', $del) .')';
+			if(count($arr))
+				$changes[] = 'Certificates changed:'
+						.' '. implode(', ', $arr);
+		} /* End foreach */
+
+		return array_unique($changes);
 	}
 
 	function addTlsStatusJson($svcId, $json) {
@@ -827,6 +950,18 @@ class Protokollen {
 		if(!empty($changes)) {
 			$log = 'TLS status changed: '. implode(', ', $changes);
 			$this->logEntry($svc->id, $hostname->hostname, $log, $jsonId);
+		}
+
+		if($row !== NULL) foreach($probes as $probe) {
+			$changes = $this->computeSslprobeChanges(
+					$probe, $svc->id,
+					$row->json_sha256);
+
+			$log = sprintf('%s sslprobe changed:'
+					.' %s (%s) [%s]',
+					$svc->service_type,
+					$probe->host, $probe->ip,
+					implode('. ', $changes));
 		}
 
 		return $id;
