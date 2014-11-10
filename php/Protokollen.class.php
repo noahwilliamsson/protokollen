@@ -1067,7 +1067,7 @@ class Protokollen {
 	/**
 	 * Add a new set of hostnames to a service
 	 * @param $svcId Service ID
-	 * @param $protocol Internet protocol (DNS, HTTP, HTTPS, SMTP, ..)
+	 * @param $protocol Internet protocol, lowercase (dns, http, https, ..)
 	 * @param $hostnames Array of hostname[:port] strings
 	 * @return ID of service_sets entry
 	 */
@@ -1078,15 +1078,15 @@ class Protokollen {
 			throw new Exception($err);
 		}
 
-		$protocol = strtoupper($protocol);
+		$protocol = strtolower($protocol);
 
 		/* Set default port */
 		$port = NULL;
 		switch($protocol) {
-		case 'HTTP': $port = 80; break;
-		case 'HTTPS': $port = 443; break;
-		case 'DNS': $port = 53; break;
-		case 'SMTP': $port = 25; break;
+		case 'http': $port = 80; break;
+		case 'https': $port = 443; break;
+		case 'dns': $port = 53; break;
+		case 'smtp': $port = 25; break;
 		default:
 			throw new Exception(__METHOD__ .": Unsupported"
 						." protocol: $protocol");

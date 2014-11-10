@@ -32,7 +32,7 @@ foreach($p->listEntityDomains() as $domain) {
 		$hostnames = array_unique($hostnames);
 
 		/* Add HTTP service set */
-		$p->addServiceSet($svcId, 'HTTP', $hostnames);
+		$p->addServiceSet($svcId, 'http', $hostnames);
 		echo "- HTTP: ". implode(', ', $hostnames) ."\n";
 
 
@@ -41,7 +41,7 @@ foreach($p->listEntityDomains() as $domain) {
 		$svcId = $p->addService($e->id, Protokollen::SERVICE_TYPE_HTTPS,
 					$e->domain, 'Webbsajt '. $e->domain
 					.' (HTTPS)');
-		$p->addServiceSet($svcId, 'HTTPS', $hostnames);
+		$p->addServiceSet($svcId, 'https', $hostnames);
 		echo "- HTTPS: ". implode(', ', $hostnames) ."\n";
 	}
 
@@ -56,7 +56,7 @@ foreach($p->listEntityDomains() as $domain) {
 		foreach(dns_get_record($e->domain, DNS_NS) as $rr)
 			$hostnames[] = $rr['target'];
 		if(!empty($hostnames)) {
-			$p->addServiceSet($svcId, 'DNS', $hostnames);
+			$p->addServiceSet($svcId, 'dns', $hostnames);
 			echo "- DNS: ". implode(', ', $hostnames) ."\n";
 		}
 	}
@@ -73,7 +73,7 @@ foreach($p->listEntityDomains() as $domain) {
 		echo "Creating SMTP service: $e->domain_email\n";
 		$svcId = $p->addService($e->id, 'SMTP', $e->domain_email,
 				'E-postdomän '. $e->org);
-		$p->addServiceSet($svcId, 'SMTP', $hostnames);
+		$p->addServiceSet($svcId, 'smtp', $hostnames);
 		echo "- SMTP: ". implode(', ', $hostnames) ."\n";
 	}
 }

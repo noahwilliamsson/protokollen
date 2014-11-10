@@ -24,12 +24,12 @@ while [ $# -ge 3 ]; do
 	JSON="$protocol.$hostname.$port.$$".json
 
 	case "$protocol" in
-	HTTP )
+	http )
 		./check_preferred_http_host.py $@ > "$JSON" \
 			&& ./pk-import-http-prefs.php "$svcId" "$JSON" \
 			&& rm -f "$JSON"
 		;;
-	HTTPS )
+	https )
 		./check_preferred_http_host.py $@ > "$JSON" \
 			&& ./pk-import-http-prefs.php "$svcId" "$JSON" \
 			&& rm -f "$JSON"
@@ -37,12 +37,12 @@ while [ $# -ge 3 ]; do
 			&& ./pk-import-sslprobe.php "$svcSetId" "$JSON" \
 			&& rm -f "$JSON"
 		;;
-	SMTP )
+	smtp )
 		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
 			&& ./pk-import-sslprobe.php "$svcSetId" "$JSON" \
 			&& rm -f "$JSON"
 		;;
-	DNS )
+	dns )
 		;;
 	esac
 

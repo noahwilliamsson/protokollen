@@ -31,8 +31,7 @@ foreach($entities as $entityId) {
 				$hostnames[] = $r['target'];
 			if(empty($hostnames))
 				break;
-			$p->addServiceSet($svc->id, $svc->service_type,
-						$hostnames);
+			$p->addServiceSet($svc->id, 'smtp', $hostnames);
 			break;
 		case Protokollen::SERVICE_TYPE_DNS:
 			$hostnames = array();
@@ -41,8 +40,7 @@ foreach($entities as $entityId) {
 				$hostnames[] = $r['target'];
 			if(empty($hostnames))
 				break;
-			$p->addServiceSet($svc->id, $svc->service_type,
-						$hostnames);
+			$p->addServiceSet($svc->id, 'dns', $hostnames);
 			break;
 		default:
 			break;
