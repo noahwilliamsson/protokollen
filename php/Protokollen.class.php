@@ -723,9 +723,9 @@ class Protokollen {
 		$add = array_diff($curArr, $prevArr);
 		$del = array_diff($prevArr, $curArr);
 		if(count($add))
-			$arr[] = 'enabled ('. implode('; ', $add) .')';
+			$arr[] = 'ENABLED ('. implode('; ', $add) .')';
 		if(count($del))
-			$arr[] = 'disabled ('. implode('; ', $del) .')';
+			$arr[] = 'DISABLED ('. implode('; ', $del) .')';
 		if(count($arr)) {
 			$changes[] = 'Protocols changed:'
 					.' '. implode(', ', $arr);
@@ -752,9 +752,9 @@ class Protokollen {
 			if($prevCA !== $curCA) {
 				$log = 'SSL/TLS compression changed to';
 				if($curCA > 0)
-					$changes[] = $log .' enabled (CRIME)';
+					$changes[] = $log .' ENABLED (CRIME)';
 				else
-					$changes[] = $log .' disabled';
+					$changes[] = $log .' DISABLED';
 			}
 
 			/* Secure renegotation */
@@ -766,9 +766,9 @@ class Protokollen {
 			if($prevReneg !== $curReneg) {
 				$log = 'Secure renegotiation changed to';
 				if($curReneg > 0)
-					$changes[] = $log .' enabled';
+					$changes[] = $log .' ENABLED';
 				else
-					$changes[] = $log .' disabled';
+					$changes[] = $log .' DISABLED';
 			}
 
 			/* Cipher suite preference */
@@ -777,9 +777,9 @@ class Protokollen {
 			if($prevCSP !== $curCSP) {
 				$log = 'Cipher suite preference changed to';
 				if($curCSP > 0)
-					$changes[] = $log .' enabled';
+					$changes[] = $log .' ENABLED';
 				else
-					$changes[] = $log .' disabled';
+					$changes[] = $log .' DISABLED';
 			}
 
 			/* Cipher suite */
