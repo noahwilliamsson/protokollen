@@ -726,10 +726,9 @@ class Protokollen {
 			$arr[] = 'ENABLED ('. implode('; ', $add) .')';
 		if(count($del))
 			$arr[] = 'DISABLED ('. implode('; ', $del) .')';
-		if(count($arr)) {
+		if(count($arr))
 			$changes[] = 'Protocols changed:'
 					.' '. implode(', ', $arr);
-		}
 
 		foreach($names as $n) {
 			if(!$cur[$n]->supported) continue;
