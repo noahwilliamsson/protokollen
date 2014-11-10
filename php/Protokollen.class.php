@@ -399,7 +399,7 @@ class Protokollen {
 		}
 
 		$arr = array();
-		foreach($result->http as $res) {
+		if(isset($result->http)) foreach($result->http as $res) {
 			if(substr($res->error, 0, 22) === 'Could not resolve host')
 				continue;
 			if($res->error)
@@ -413,7 +413,7 @@ class Protokollen {
 
 		$arr = array();
 		$arr_err = array();
-		foreach($result->https as $res) {
+		if(isset($result->https)) foreach($result->https as $res) {
 			if(substr($res->error, 0, 22) === 'Could not resolve host')
 				continue;
 			if($res->error)
@@ -457,7 +457,7 @@ class Protokollen {
 				created=NOW()
 				WHERE id=?';
 			$st = $m->prepare($q);
-			$st->bind_param('issssssi', $svc->id, 
+			$st->bind_param('issssssi', $svc->id,
 				$e->domain, $title, $pref,
 				$http_preferred, $https_preferred, $https_error,
 				$row->id);
