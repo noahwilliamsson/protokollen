@@ -1196,9 +1196,18 @@ class Protokollen {
 			foreach($oldSvcHosts as $s)
 				$oldHosts[] = $s->hostname .':'. $s->port;
 
+			$arr = array();
+			$add = array_diff($newHosts, $oldHosts);
+			$del = array_diff($oldHosts, $newHosts);
+			if(count($add))
+				$arr[] = 'added ('. implode('; ', $add) .')';
+			if(count($del))
+				$arr[] = 'removed ('. implode('; ', $del) .')';
+			if(count($arr) === 0)
+				return $id;
+
 			$log = 'Service set changed:'
-				.' ['. implode(', ', $oldHosts) .'] ->'
-				.' ['. implode(', ', $newHosts) .']';
+				.' '. implode(', ', $arr);
 		}
 
 		$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
