@@ -14,40 +14,38 @@ svcType="$3"
 svcSetId="$4"
 shift 4
 
-protocol="$1"
-hostname="$2"
-port="$3"
-
-F="$hostname"."$port"."$$".json
-
-
 cd "$(dirname $0)" || exit 1
-printf "%5d\t%s\t%s\t%s\n" "$svcId" "$svcType" "$*"
-case "$svcType" in
+while [ $# -ge 3 ]; do
+	protocol="$1"
+	hostname="$2"
+	port="$3"
+	printf "%5d\t%s\t%s\t%s\n" "$svcId" "$svcType" "$hostname:$port ($protocol)"
+
+	JSON="$protocol.$hostname.$port.$$".json
+
+	case "$protocol" in
 	HTTP )
-		./check_preferred_http_host.py $@ > "$F" && ./pk-import-http-prefs.php "$svcId" "$F" && rm -f "$F"
+		./check_preferred_http_host.py $@ > "$JSON" \
+			&& ./pk-import-http-prefs.php "$svcId" "$JSON" \
+			&& rm -f "$JSON"
 		;;
 	HTTPS )
-		./check_preferred_http_host.py $@ > "$F" && ./pk-import-http-prefs.php "$svcId" "$F" && rm -f "$F"
-
-		while [ $# -ge 3 ]; do
-			protocol="$1"
-			hostname="$2"
-			port="$3"
-			shift 3
-			../bin/sslprobe "$hostname" "$port" > "$F" 2>/dev/null && ./pk-import-sslprobe.php "$svcSetId" "$F" && rm -f "$F"
-		done
-
+		./check_preferred_http_host.py $@ > "$JSON" \
+			&& ./pk-import-http-prefs.php "$svcId" "$JSON" \
+			&& rm -f "$JSON"
+		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
+			&& ./pk-import-sslprobe.php "$svcSetId" "$JSON" \
+			&& rm -f "$JSON"
 		;;
 	SMTP )
-		while [ $# -ge 3 ]; do
-			protocol="$1"
-			hostname="$2"
-			port="$3"
-			shift 3
-			../bin/sslprobe "$hostname" "$port" > "$F" 2>/dev/null && ./pk-import-sslprobe.php "$svcSetId" "$F" && rm -f "$F"
-		done
+		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
+			&& ./pk-import-sslprobe.php "$svcSetId" "$JSON" \
+			&& rm -f "$JSON"
 		;;
 	DNS )
 		;;
-esac
+	esac
+
+	# Skip to next service host
+	shift 3
+done
