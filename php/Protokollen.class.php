@@ -635,11 +635,11 @@ class Protokollen {
 
 			$st->close();
 
-			$log = sprintf('Sslprobe created: %s (%s) [SSLv2:%d,'
+			$log = sprintf('Created %s sslprobe: %s (%s) [SSLv2:%d,'
 					.' SSLv3:%d, TLSv1:%d, TLSv1.1:%d,'
-					.' TLSv1.2:%d]', $probe->host,
-					$probe->ip, $sslv2, $sslv3, $tlsv1,
-					$tlsv1_1, $tlsv1_2);
+					.' TLSv1.2:%d]', $svc->service_type,
+					$probe->host, $probe->ip, $sslv2,
+					$sslv3, $tlsv1, $tlsv1_1, $tlsv1_2);
 			if($row) {
 				$q = 'UPDATE sslprobes SET entry_type="revision"
 					WHERE id=?';
@@ -665,7 +665,8 @@ class Protokollen {
 					$changes[] = "TLSv1.1 ($row->tlsv1_1 -> $tlsv1_1)";
 				if($row->tlsv1_2 != $tlsv1_2)
 					$changes[] = "TLSv1.2 ($row->tlsv1_1 -> $tlsv1_2)";
-				$log = sprintf('Sslprobe changed: %s (%s) [%s]',
+				$log = sprintf('%s sslprobe changed:'
+						.' %s (%s) [%s]',
 						$probe->host, $probe->ip,
 						implode(', ', $changes));
 			}
@@ -1099,7 +1100,6 @@ class Protokollen {
 		$id = $st->insert_id;
 		$st->close();
 
-		$log = sprintf('Created virtual host: %s [%s]', $hostname, $ip);
 		if($vhost !== NULL) {
 			$q = 'UPDATE service_vhosts SET entry_type="revision"
 				WHERE id=?';
@@ -1115,9 +1115,8 @@ class Protokollen {
 			$oldNode = $this->getNodeById($vhost->node_id);
 			$log = sprintf('Virtual host changed: %s [%s -> %s]',
 					$hostname, $oldNode->ip, $ip);
+			$this->logEntry($svc->id, $svc->service_name, $log);
 		}
-
-		$this->logEntry($svc->id, $svc->service_name, $log);
 
 		return $id;
 	}
