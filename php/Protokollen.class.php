@@ -181,7 +181,7 @@ class Protokollen {
 			$st->bind_param('si', $svcDesc, $svc->id);
 			if(!$st->execute()) {
 				$err = "Update service ($entityId, $svcType,"
-					." $svcName) failed: $this->m->error";
+					." $svcName) failed: ". $this->m->error;
 				throw new Exception($err);
 			}
 			$st->close();
@@ -197,7 +197,7 @@ class Protokollen {
 				$svcName, $svcDesc);
 		if(!$st->execute()) {
 			$err = "Add service ($entityId, $svcType, $svcName)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -332,7 +332,7 @@ class Protokollen {
 		$st->bind_param('is', $svcId, $sha256);
 		if(!$st->execute()) {
 			$err = "JSON lookup ($svcId, $sha256)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			error_log($err);
 			throw new Exception($err);
 		}
@@ -354,7 +354,7 @@ class Protokollen {
 			$svc->service_name, $json);
 		if(!$st->execute()) {
 			$err = "JSON add ($svc->id, $hash)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -597,8 +597,9 @@ class Protokollen {
 			$st = $this->m->prepare($q);
 			$st->bind_param('ii', $svc->id, $vhostId);
 			if(!$st->execute()) {
-				$err = "Sslprobe lookup ($svc->id,"
-					." $hostname) failed: $this->m->error";
+				$err = "Sslprobe lookup"
+					." ($svc->id, $hostname)"
+					." failed:". $this->m->error;
 				throw new Exception($err);
 			}
 
@@ -643,8 +644,9 @@ class Protokollen {
 					$probe->host, $sslv2, $sslv3, $tlsv1,
 					$tlsv1_1, $tlsv1_2, $jsonId, $hash);
 			if(!$st->execute()) {
-				$err = "Sslprobe update ($svc->id,"
-					." $hostname) failed: $this->m->error";
+				$err = "Sslprobe update"
+					." ($svc->id, $hostname)"
+					." failed: ". $this->m->error;
 				throw new Exception($err);
 			}
 
@@ -663,7 +665,7 @@ class Protokollen {
 				if(!$st->execute()) {
 					$err = "Sslprobe revision update"
 						." ($svc->id, $hostname)"
-						." failed: $this->m->error";
+						." failed: ". $this->m->error;
 					throw new Exception($err);
 				}
 
@@ -1051,7 +1053,7 @@ class Protokollen {
 		$st->bind_param('i', $svcSetId);
 		if(!$st->execute()) {
 			$err = "Service set lookup ($svcSetId)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1127,7 +1129,8 @@ class Protokollen {
 		$st->bind_param('iiiss', $svc->id, $svc->entity_id,
 				$jsonId, $hash, $svc->service_type);
 		if(!$st->execute()) {
-			$err = "Service set add ($svcId) failed: $this->m->error";
+			$err = "Service set add ($svcId) failed:"
+				." ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1146,7 +1149,7 @@ class Protokollen {
 			$st->bind_param('i', $currentSvcSet->id);
 			if(!$st->execute()) {
 				$err = "Service set revision update ($svcId)"
-					." failed: $this->m->error";
+					." failed: ". $this->m->error;
 				throw new Exception($err);
 			}
 
@@ -1186,7 +1189,7 @@ class Protokollen {
 		$st = $this->m->prepare($q);
 		$st->bind_param('iis', $ss->id, $nodeId, $hostname);
 		if(!$st->execute()) {
-			$err = "Service vhost lookup failed: $this->m->error";
+			$err = "Service vhost lookup failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1215,7 +1218,7 @@ class Protokollen {
 		$st = $this->m->prepare($q);
 		$st->bind_param('is', $ss->id, $hostname);
 		if(!$st->execute()) {
-			$err = "Service vhost lookup failed: $this->m->error";
+			$err = "Service vhost lookup failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1273,7 +1276,7 @@ class Protokollen {
 				$hostname, $ip, $svc->service_type);
 		if(!$st->execute()) {
 			$err = "Service vhost add ($svcId, $hostname, $ip)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1287,7 +1290,7 @@ class Protokollen {
 			$st->bind_param('i', $vhost->id);
 			if(!$st->execute()) {
 				$err = "Service vhost revision update ($svcId)"
-					." failed: $this->m->error";
+					." failed: ". $this->m->error;
 				throw new Exception($err);
 			}
 
@@ -1307,11 +1310,11 @@ class Protokollen {
 	 * @return Row (object) from nodes table, throws on error
 	 */
 	function getNodeById($nodeId) {
-
 		$st = $this->m->prepare('SELECT * FROM nodes WHERE id=?');
 		$st->bind_param('i', $nodeId);
 		if(!$st->execute()) {
-			$err = "Node lookup ($nodeId) failed: $this->m->error";
+			$err = "Node lookup ($nodeId) failed:"
+				." ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1329,12 +1332,10 @@ class Protokollen {
 	 * @return Row (object) from nodes table, throws on error
 	 */
 	function getNodeByIp($ip) {
-		$m = $this->m;
-
-		$st = $m->prepare('SELECT * FROM nodes WHERE ip=?');
+		$st = $this->m->prepare('SELECT * FROM nodes WHERE ip=?');
 		$st->bind_param('s', $ip);
 		if(!$st->execute()) {
-			$err = "Node lookup ($ip) failed: $m->error";
+			$err = "Node lookup ($ip) failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1355,12 +1356,11 @@ class Protokollen {
 		if($node !== NULL)
 			return $node->id;
 
-		$m = $this->m;
 		$q = 'INSERT INTO nodes SET ip=?, created=NOW()';
-		$st = $m->prepare($q);
+		$st = $this->m->prepare($q);
 		$st->bind_param('s', $ip);
 		if(!$st->execute()) {
-			$err = "Node add ($ip) failed: $m->error";
+			$err = "Node add ($ip) failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1376,7 +1376,7 @@ class Protokollen {
 		$st->bind_param('s', $sha256Hash);
 		if(!$st->execute()) {
 			$err = "Cert lookup ($sha256Hash)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1404,7 +1404,7 @@ class Protokollen {
 		$st = $this->m->prepare($q);
 		$st->bind_param('ss', $hash, $pem);
 		if(!$st->execute()) {
-			$err = "Cert add ($hash) failed: $this->m->error";
+			$err = "Cert add ($hash) failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1421,7 +1421,7 @@ class Protokollen {
 		$st->bind_param('ii', $certId, $vhostId);
 		if(!$st->execute()) {
 			$err = "Cert vhost lookup ($certId, $vhostId)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
@@ -1438,7 +1438,7 @@ class Protokollen {
 		$st->bind_param('ii', $certId, $vhostId);
 		if(!$st->execute()) {
 			$err = "Cert vhost add ($certId, $vhostId)"
-				." failed: $this->m->error";
+				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
 
