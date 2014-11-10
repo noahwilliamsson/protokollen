@@ -735,11 +735,47 @@ class Protokollen {
 			if(!$cur[$n]->supported) continue;
 			if(!$prev[$n]->supported) continue;
 
+			/* Error message */
+			$prevErr = $prev[$n]->lastError;
+			$curErr = $cur[$n]->lastError;
+			if($prevErr !== $curErr) {
+				if(!$prevErr) $prevErr = '(null)';
+				if(!$curErr) $curErr = '(null)';
+				$log = 'Last connection error changed from ('.
+					$prevErr .') to ('. $curErr .')';
+				$changes[] = $log;
+			}
+
+			/* Compression algorithm */
+			$prevCA = $prev[$n]->compressionAlgorithm;
+			$curCA = $cur[$n]->compressionAlgorithm;
+			if($prevCA !== $curCA) {
+				$log = 'SSL/TLS compression changed to';
+				if($curCA > 0)
+					$changes[] = $log .' enabled (CRIME)';
+				else
+					$changes[] = $log .' disabled';
+			}
+
+			/* Secure renegotation */
+			$prevReneg = $curReneg = 0;
+			if(isset($prev[$n]->extensions))
+			$prevReneg = $prev[$n]->extensions->secureRenegotiation;
+			if(isset($cur[$n]->extensions))
+			$curReneg = $cur[$n]->extensions->secureRenegotiation;
+			if($prevReneg !== $curReneg) {
+				$log = 'Secure renegotiation changed to';
+				if($curReneg > 0)
+					$changes[] = $log .' enabled';
+				else
+					$changes[] = $log .' disabled';
+			}
+
 			/* Cipher suite preference */
 			$prevCSP = $prev[$n]->cipherSuitePreference;
 			$curCSP = $cur[$n]->cipherSuitePreference;
-			if($prevCSP != $curCSP) {
-				$log = 'Cipher suite preference has been';
+			if($prevCSP !== $curCSP) {
+				$log = 'Cipher suite preference changed to';
 				if($curCSP > 0)
 					$changes[] = $log .' enabled';
 				else
