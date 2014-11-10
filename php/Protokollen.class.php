@@ -1185,6 +1185,37 @@ class Protokollen {
 	}
 
 	/**
+	 * List current service hosts associated with service
+	 * @param $svcSetId Service set ID
+	 * @param $hostname Hostname
+	 * @return Row (object) from service_vhosts table, throws on error
+	 */
+	function listServiceVhosts($svcSetId, $hostname) {
+		if(($ss = $this->getServiceSetById($svcSetId)) === NULL) {
+			$err = __METHOD__ .": Unknown service ($svcSetId)";
+			throw new Exception($err);
+		}
+
+		$q = 'SELECT * FROM service_vhosts WHERE service_set_id=?
+			AND hostname=? AND entry_type="current"';
+		$st = $this->m->prepare($q);
+		$st->bind_param('is', $ss->id, $hostname);
+		if(!$st->execute()) {
+			$err = "Service vhost lookup failed: $this->m->error";
+			throw new Exception($err);
+		}
+
+		$arr = array();
+		$r = $st->get_result();
+		while($row = $r->fetch_object())
+			$arr[] = $row;
+		$r->close();
+		$st->close();
+
+		return $arr;
+	}
+
+	/**
 	 * Add service virtual host
 	 * @param $svcSetId Service set ID
 	 * @param $hostname Hostname
