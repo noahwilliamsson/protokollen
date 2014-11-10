@@ -1155,7 +1155,7 @@ class Protokollen {
 			$st->close();
 
 			$oldHosts = array();
-			$jsonRow = $this->getJsonByHash($currentSvcSet->json_sha256);
+			$jsonRow = $this->getJsonByHash($svc->id, $currentSvcSet->json_sha256);
 			$oldSvcHosts = json_decode($jsonRow->json);
 			foreach($oldSvcHosts as $s)
 				$oldHosts[] = $s->hostname .':'. $s->port;
