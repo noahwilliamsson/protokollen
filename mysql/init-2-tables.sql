@@ -54,7 +54,7 @@ CREATE TABLE `entities` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `domain` (`domain`)
-) ENGINE=InnoDB AUTO_INCREMENT=607 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
+) ENGINE=InnoDB AUTO_INCREMENT=614 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `json` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `service_id` (`service_id`,`json_sha256`),
   CONSTRAINT `json_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2940 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
+) ENGINE=InnoDB AUTO_INCREMENT=3076 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `logs` (
   KEY `json_id` (`json_id`),
   CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1808 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
+) ENGINE=InnoDB AUTO_INCREMENT=2608 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +139,7 @@ CREATE TABLE `service_hostnames` (
   KEY `entity_id` (`entity_id`),
   CONSTRAINT `service_hostnames_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_hostnames_ibfk_2` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1869 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of hostnames associated with a service';
+) ENGINE=InnoDB AUTO_INCREMENT=1899 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of hostnames associated with a service';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +168,7 @@ CREATE TABLE `service_http_preferences` (
   KEY `json_id` (`json_id`),
   CONSTRAINT `service_http_preferences_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_http_preferences_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2181 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences for apex domain vs www and for http vs https';
+) ENGINE=InnoDB AUTO_INCREMENT=2932 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences for apex domain vs www and for http vs https';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +228,7 @@ CREATE TABLE `service_tls_statuses` (
   CONSTRAINT `service_tls_statuses_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_tls_statuses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_tls_statuses_ibfk_2` FOREIGN KEY (`hostname_id`) REFERENCES `service_hostnames` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2669 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
+) ENGINE=InnoDB AUTO_INCREMENT=2928 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +299,7 @@ CREATE TABLE `services` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `entity_id` (`entity_id`,`service_type`,`service_name`),
   CONSTRAINT `services_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1267 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of services (DNS, HTTP, SMTP, Webmail, ..)';
+) ENGINE=InnoDB AUTO_INCREMENT=1285 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of services (DNS, HTTP, SMTP, Webmail, ..)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,6 +333,26 @@ CREATE TABLE `sslprobes` (
   CONSTRAINT `sslprobes_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tls_ciphers`
+--
+
+DROP TABLE IF EXISTS `tls_ciphers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tls_ciphers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cbc` int(10) unsigned NOT NULL,
+  `ecc` int(11) unsigned NOT NULL DEFAULT '0',
+  `pfs` int(11) unsigned NOT NULL DEFAULT '0',
+  `strength` enum('CLEAR','WEAK','MEDIUM','STRONG','UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `protocols` varchar(255) DEFAULT NULL,
+  `rfcs` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=458946 DEFAULT CHARSET=utf8 COMMENT='List of TLS ciphers';
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -343,4 +363,4 @@ CREATE TABLE `sslprobes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-10  6:16:41
+-- Dump completed on 2014-11-10 20:46:56
