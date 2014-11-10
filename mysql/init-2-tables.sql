@@ -75,7 +75,7 @@ CREATE TABLE `json` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `service_id` (`service_id`,`json_sha256`),
   CONSTRAINT `json_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2885 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
+) ENGINE=InnoDB AUTO_INCREMENT=2940 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `logs` (
   KEY `json_id` (`json_id`),
   CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1115 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
+) ENGINE=InnoDB AUTO_INCREMENT=1808 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +168,7 @@ CREATE TABLE `service_http_preferences` (
   KEY `json_id` (`json_id`),
   CONSTRAINT `service_http_preferences_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_http_preferences_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1489 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences for apex domain vs www and for http vs https';
+) ENGINE=InnoDB AUTO_INCREMENT=2181 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences for apex domain vs www and for http vs https';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +228,7 @@ CREATE TABLE `service_tls_statuses` (
   CONSTRAINT `service_tls_statuses_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_tls_statuses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_tls_statuses_ibfk_2` FOREIGN KEY (`hostname_id`) REFERENCES `service_hostnames` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2555 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
+) ENGINE=InnoDB AUTO_INCREMENT=2669 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,11 +261,12 @@ DROP TABLE IF EXISTS `service_vhosts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `service_vhosts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `service_id` int(11) unsigned NOT NULL,
   `service_set_id` int(11) unsigned NOT NULL,
+  `service_id` int(11) unsigned NOT NULL,
   `node_id` int(11) unsigned NOT NULL,
   `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
   `hostname` varchar(255) NOT NULL DEFAULT '',
+  `ip` varchar(45) NOT NULL DEFAULT '' COMMENT '(redundant but nice for table browsing)',
   `service_type` varchar(16) NOT NULL COMMENT '(only to make browsing table data more useful)',
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -273,10 +274,10 @@ CREATE TABLE `service_vhosts` (
   KEY `service_id` (`service_id`),
   KEY `service_set_id` (`service_set_id`),
   KEY `node_id` (`node_id`),
-  CONSTRAINT `service_vhosts_ibfk_3` FOREIGN KEY (`node_id`) REFERENCES `nodes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_vhosts_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `service_vhosts_ibfk_2` FOREIGN KEY (`service_set_id`) REFERENCES `service_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Mapping between service hostnames and nodes';
+  CONSTRAINT `service_vhosts_ibfk_2` FOREIGN KEY (`service_set_id`) REFERENCES `service_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `service_vhosts_ibfk_3` FOREIGN KEY (`node_id`) REFERENCES `nodes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Mapping between service hostnames and nodes (addresses)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -342,4 +343,4 @@ CREATE TABLE `sslprobes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-09 13:19:38
+-- Dump completed on 2014-11-10  6:16:41
