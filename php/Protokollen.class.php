@@ -550,6 +550,130 @@ class Protokollen {
 		return $arr;
 	}
 
+	/**
+	 * Add sslprobe output to service set
+	 * @param $svcSetId Service set ID
+	 * @param $json JSON output from sslprobe
+	 *
+	 */
+	function addSslprobe($svcSetId, $json) {
+		if(($ss = $this->getServiceSetById($svcSetId)) === NULL) {
+			$err = __METHOD__ .": Unknown service set ($svcSetId)";
+			throw new Exception($err);
+		}
+
+		$svc = $this->getServiceById($ss->service_id);
+
+		$probes = json_decode($json);
+		if(!is_array($probes))
+			throw new Exception(__METHOD__ .": Invalid JSON for"
+						." for service $svcId");
+		if(empty($probes))
+			return NULL;
+
+		$hash = hash('sha256', $json);
+		$jsonId = $this->addJson($svc->id, $json);
+		foreach($probes as $probe) {
+			$vhostId = $this->addServiceVhost($ss->id, $probe->host,
+								$probe->ip);
+
+			$q = 'SELECT * FROM sslprobes WHERE service_id=?
+				AND vhost_id=? AND entry_type="current"';
+			$st = $this->m->prepare($q);
+			$st->bind_param('ii', $svc->id, $vhostId);
+			if(!$st->execute()) {
+				$err = "Sslprobe lookup ($svc->id,"
+					." $hostname) failed: $this->m->error";
+				throw new Exception($err);
+			}
+
+			$r = $st->get_result();
+			$row = $r->fetch_object();
+			$r->close();
+			$st->close();
+
+			if($row && $row->json_id == $jsonId)
+				continue;
+
+			$sslv2 = 0;
+			$sslv3 = 0;
+			$tlsv1 = 0;
+			$tlsv1_1 = 0;
+			$tlsv1_2 = 0;
+			foreach($probe->protocols as $p) {
+				if(!$p->supported)
+					continue;
+
+				switch($p->name) {
+				case 'SSL 2.0': $sslv2++; break;
+				case 'SSL 3.0': $sslv3++; break;
+				case 'TLS 1.0': $tlsv1++; break;
+				case 'TLS 1.1': $tlsv1_1++; break;
+				case 'TLS 1.2': $tlsv1_2++; break;
+				default: break;
+				}
+
+				foreach($p->certificates as $pem) {
+					$certId = $this->addCert($pem);
+					$this->addCertVhostMapping($certId, $vhostId);
+				}
+			}
+
+			$q = 'INSERT INTO sslprobes SET service_id=?,
+				vhost_id=?, entry_type="current", hostname=?,
+				sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?, tlsv1_2=?,
+				json_id=?, json_sha256=?, created=NOW()';
+			$st = $this->m->prepare($q);
+			$st->bind_param('iissssssis', $svc->id, $vhostId,
+					$probe->host, $sslv2, $sslv3, $tlsv1,
+					$tlsv1_1, $tlsv1_2, $jsonId, $hash);
+			if(!$st->execute()) {
+				$err = "Sslprobe update ($svc->id,"
+					." $hostname) failed: $this->m->error";
+				throw new Exception($err);
+			}
+
+			$st->close();
+
+			$log = sprintf('Sslprobe created: %s (%s) [SSLv2:%d,'
+					.' SSLv3:%d, TLSv1:%d, TLSv1.1:%d,'
+					.' TLSv1.2:%d]', $probe->host,
+					$probe->ip, $sslv2, $sslv3, $tlsv1,
+					$tlsv1_1, $tlsv1_2);
+			if($row) {
+				$q = 'UPDATE sslprobes SET entry_type="revision"
+					WHERE id=?';
+				$st = $this->m->prepare($q);
+				$st->bind_param('i', $row->id);
+				if(!$st->execute()) {
+					$err = "Sslprobe revision update"
+						." ($svc->id, $hostname)"
+						." failed: $this->m->error";
+					throw new Exception($err);
+				}
+
+				$st->close();
+
+				$changes = array();
+				if($row->sslv2 != $sslv2)
+					$changes[] = "SSLv2 ($row->sslv2 -> $sslv2)";
+				if($row->sslv3 != $sslv3)
+					$changes[] = "SSLv3 ($row->sslv3 -> $sslv3)";
+				if($row->tlsv1 != $tlsv1)
+					$changes[] = "TLSv1 ($row->tlsv1 -> $tlsv1)";
+				if($row->tlsv1_1 != $tlsv1_1)
+					$changes[] = "TLSv1.1 ($row->tlsv1_1 -> $tlsv1_1)";
+				if($row->tlsv1_2 != $tlsv1_2)
+					$changes[] = "TLSv1.2 ($row->tlsv1_1 -> $tlsv1_2)";
+				$log = sprintf('Sslprobe changed: %s (%s) [%s]',
+						$probe->host, $probe->ip,
+						implode(', ', $changes));
+			}
+
+			$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
+		}
+	}
+
 	function addTlsStatusJson($svcId, $json) {
 		$m = $this->m;
 
@@ -767,6 +891,29 @@ class Protokollen {
 	}
 
 	/**
+	 * Get service set by primary key
+	 * @param $svcSetId Service set ID
+	 * @return Row (object) for service_sets entry
+	 */
+	function getServiceSetById($svcSetId) {
+		$q = 'SELECT * FROM service_sets WHERE id=?';
+		$st = $this->m->prepare($q);
+		$st->bind_param('i', $svcSetId);
+		if(!$st->execute()) {
+			$err = "Service set lookup ($svcSetId)"
+				." failed: $this->m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
+	}
+
+	/**
 	 * Add a new set of hostnames to a service
 	 * @param $svcId Service ID
 	 * @param $protocol Internet protocol (DNS, HTTP, HTTPS, SMTP, ..)
@@ -933,20 +1080,19 @@ class Protokollen {
 		}
 
 		$nodeId = $this->addNode($ip);
-		$vhost = $this->getServiceVhost($svcId, $hostname);
-		if($vhost && $vhost->nodeId == $nodeId)
+		$vhost = $this->getServiceVhost($ss->id, $hostname, $nodeId);
+		if($vhost && $vhost->node_id == $nodeId)
 			return $vhost->id;
 
-		$q = 'INSERT INTO service_vhosts SET service_id=?, entity_id=?,
-			sevice_set_id=?, node_id=?, entry_type="current",
-			hostname=?, service_type=?, created=NOW()';
-		$st = $m->prepare($q);
-		$st->bind_param('iiiiss', $svc->id, $svc->entity_id, $ss->id,
-				$nodeId, $hostname, $svc->service_type);
-
+		$q = 'INSERT INTO service_vhosts SET service_set_id=?,
+			service_id=?, node_id=?, entry_type="current",
+			hostname=?, ip=?, service_type=?, created=NOW()';
+		$st = $this->m->prepare($q);
+		$st->bind_param('iiisss', $ss->id, $svc->id, $nodeId,
+				$hostname, $ip, $svc->service_type);
 		if(!$st->execute()) {
 			$err = "Service vhost add ($svcId, $hostname, $ip)"
-				." failed: $m->error";
+				." failed: $this->m->error";
 			throw new Exception($err);
 		}
 
@@ -966,13 +1112,36 @@ class Protokollen {
 			}
 
 			$st->close();
+			$oldNode = $this->getNodeById($vhost->node_id);
 			$log = sprintf('Virtual host changed: %s [%s -> %s]',
-					$hostname, $vhost->ip, $ip);
+					$hostname, $oldNode->ip, $ip);
 		}
 
 		$this->logEntry($svc->id, $svc->service_name, $log);
 
 		return $id;
+	}
+
+	/**
+	 * Lookup node by primary key
+	 * @param $nodeId Node ID
+	 * @return Row (object) from nodes table, throws on error
+	 */
+	function getNodeById($nodeId) {
+
+		$st = $this->m->prepare('SELECT * FROM nodes WHERE id=?');
+		$st->bind_param('i', $nodeId);
+		if(!$st->execute()) {
+			$err = "Node lookup ($nodeId) failed: $this->m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		return $row;
 	}
 
 	/**
