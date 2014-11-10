@@ -20,8 +20,8 @@ $entities = $p->listEntityIds();
 /* Randomize order */
 shuffle($entities);
 foreach($entities as $entityId) {
-	$httpServices = $p->listServices($entityId, $serviceType);
-	foreach($httpServices as $svc) {
+	$services = $p->listServices($entityId, $serviceType);
+	foreach($services as $svc) {
 		/* Update service set */
 		switch($svc->service_type) {
 		case Protokollen::SERVICE_TYPE_SMTP:
