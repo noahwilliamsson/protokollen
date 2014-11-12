@@ -8,6 +8,9 @@ if [ $# -lt 7 ]; then
 	exit 1
 fi
 
+# Skip rows beginning with a comment
+echo "$1"|grep -q '^[^0-9]' && exit 0
+
 entId="$1"
 svcId="$2"
 svcType="$3"

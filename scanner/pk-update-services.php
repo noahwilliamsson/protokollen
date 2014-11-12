@@ -17,6 +17,9 @@ $serviceType = $argv[1];
 $p = new Protokollen();
 $entities = $p->listEntityIds();
 
+$header = array('Entity ID', 'Service ID', 'Service Type', 'Service set ID', 'Protocol #1', 'Hostname #1', 'Port #1', '...');
+echo implode("\t", $header) ."\n";
+
 /* Randomize order */
 shuffle($entities);
 foreach($entities as $entityId) {
@@ -56,7 +59,7 @@ foreach($entities as $entityId) {
 		$jsonRow = $p->getJsonByHash($svc->id, $ss->json_sha256);
 		$svcHosts = json_decode($jsonRow->json);
 		foreach($svcHosts as $svcHost) {
-			$args[] = $svcHost->protocol;
+			$args[] = strtolower($svcHost->protocol);
 			$args[] = $svcHost->hostname;
 			$args[] = $svcHost->port;
 		}
