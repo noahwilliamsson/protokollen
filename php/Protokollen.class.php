@@ -651,7 +651,7 @@ class Protokollen {
 
 			$st->close();
 
-			$log = sprintf('Created %s sslprobe: %s (%s) [SSLv2:%d,'
+			$log = sprintf('%s sslprobe created: %s (%s) [SSLv2:%d,'
 					.' SSLv3:%d, TLSv1:%d, TLSv1.1:%d,'
 					.' TLSv1.2:%d]', $svc->service_type,
 					$probe->host, $probe->ip, $sslv2,
@@ -726,9 +726,10 @@ class Protokollen {
 			$arr[] = 'ENABLED ('. implode('; ', $add) .')';
 		if(count($del))
 			$arr[] = 'DISABLED ('. implode('; ', $del) .')';
-		if(count($arr))
+		if(count($arr)) {
 			$changes[] = 'Protocols changed:'
 					.' '. implode(', ', $arr);
+		}
 
 		foreach($names as $n) {
 			if(!$cur[$n]->supported) continue;
@@ -1175,7 +1176,8 @@ class Protokollen {
 		foreach(array_values($arr) as $s)
 			$newHosts[] = $s->hostname .':'. $s->port;
 
-		$log = 'Service set created: ['. implode(', ', $newHosts) .']';
+		$log = $svc->service_type .' service set created:'
+				.' ['. implode(', ', $newHosts) .']';
 		if($currentSvcSet !== NULL) {
 			$q = 'UPDATE service_sets SET entry_type="revision"
 				WHERE id=?';
@@ -1205,8 +1207,8 @@ class Protokollen {
 			if(count($arr) === 0)
 				return $id;
 
-			$log = 'Service set changed:'
-				.' '. implode(', ', $arr);
+			$log = $svc->service_type .' service set changed:'
+					.' '. implode(', ', $arr);
 		}
 
 		$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
