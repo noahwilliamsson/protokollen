@@ -5,7 +5,9 @@
  * For use with the updating script
  */
 
-require_once('../php/Protokollen.class.php');
+require_once('../php/ProtokollenBase.class.php');
+require_once('../php/ServiceGroup.class.php');
+require_once('../php/ServiceSet.class.php');
 
 
 if($argc < 2)
@@ -14,10 +16,12 @@ if($argc < 2)
 $serviceType = $argv[1];
 
 
-$p = new Protokollen();
+$p = new ProtokollenBase();
+$sg = new ServiceGroup();
+$ss = new ServiceSet();
 $entities = $p->listEntityIds();
 
-$header = array('Entity ID', 'Service ID', 'Service Type', 'Service set ID', 'Protocol #1', 'Hostname #1', 'Port #1', '...');
+$header = array('Entity ID', 'Service ID', 'Service Type', 'Service group ID', 'Protocol #1', 'Hostname #1', 'Port #1', '...');
 echo implode("\t", $header) ."\n";
 
 /* Randomize order */
@@ -27,38 +31,57 @@ foreach($entities as $entityId) {
 	foreach($services as $svc) {
 		/* Update service set */
 		switch($svc->service_type) {
-		case Protokollen::SERVICE_TYPE_SMTP:
+		case ProtokollenBase::SERVICE_TYPE_SMTP:
 			$hostnames = array();
-			$rr = dns_get_record($svc->service_name, DNS_MX);
-			foreach($rr as $r)
-				$hostnames[] = $r['target'];
-			if(empty($hostnames))
-				break;
-			$p->addServiceSet($svc->id, 'smtp', $hostnames);
+			$group = array();
+			foreach(dns_get_record($svc->service_name, DNS_MX) as $rr) {
+				$obj = new stdClass();
+				$obj->hostname = $rr['target'];
+				$obj->prio = $rr['pri'];
+				$obj->port = 25;
+				$obj->protocol = 'smtp';
+				$group[] = $obj;
+
+				$hostnames[] = $rr['target'];
+			}
+
+			if(!empty($group))
+				$sg->addServiceGroup($svc->id, $group);
+
+			if(!empty($hostnames))
+				$ss->addServiceSet($svc->id, 'smtp', $hostnames);
 			break;
-		case Protokollen::SERVICE_TYPE_DNS:
+		case ProtokollenBase::SERVICE_TYPE_DNS:
 			$hostnames = array();
-			$rr = dns_get_record($svc->service_name, DNS_NS);
-			foreach($rr as $r)
-				$hostnames[] = $r['target'];
-			if(empty($hostnames))
-				break;
-			$p->addServiceSet($svc->id, 'dns', $hostnames);
+			$group = array();
+			foreach(dns_get_record($svc->service_name, DNS_NS) as $rr) {
+				$obj = new stdClass();
+				$obj->hostname = $rr['target'];
+				$obj->prio = 0;
+				$obj->port = 53;
+				$obj->protocol = 'dns';
+				$group[] = $obj;
+
+				$hostnames[] = $rr['target'];
+			}
+
+			if(!empty($group))
+				$sg->addServiceGroup($svc->id, $group);
+
+			if(!empty($hostnames))
+				$ss->addServiceSet($svc->id, 'dns', $hostnames);
 			break;
 		default:
 			break;
 		}
 
-		if(($ss = $p->getServiceSet($svc->id)) === NULL) {
+		if(($group = $sg->getServiceGroup($svc->id)) === NULL) {
 			/* Empty set */
 			continue;
 		}
 
-		$args = array($entityId, $svc->id, $svc->service_type, $ss->id);
-
-		$jsonRow = $p->getJsonByHash($svc->id, $ss->json_sha256);
-		$svcHosts = json_decode($jsonRow->json);
-		foreach($svcHosts as $svcHost) {
+		$args = array($entityId, $svc->id, $svc->service_type, $group->id);
+		foreach($group->items as $svcHost) {
 			$args[] = strtolower($svcHost->protocol);
 			$args[] = $svcHost->hostname;
 			$args[] = $svcHost->port;

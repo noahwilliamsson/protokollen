@@ -4,14 +4,15 @@
  * Protokollen - import JSON from sslprobe
  */
 
-require_once('../php/Protokollen.class.php');
+require_once('../php/TestSslprobe.class.php');
 
 
-if($argc != 3)
-	die("Usage: ${argv[0]} <service set ID> <sslprobe.json>\n");
+if($argc != 4)
+	die("Usage: ${argv[0]} <service ID> <service group ID> <sslprobe.json>\n");
 
-$svcSetId = $argv[1];
-$filename = $argv[2];
+$svcId = $argv[1];
+$svcGrpId = $argv[2];
+$filename = $argv[3];
 
 $json = file_get_contents($filename);
 if($json === FALSE)
@@ -22,5 +23,5 @@ if(empty($json)) {
 	die();
 }
 
-$p = new Protokollen();
-$id = $p->addSslprobe($svcSetId, $json);
+$test = new TestSslprobe();
+$id = $test->addSslprobeJson($svcId, $svcGrpId, $json);

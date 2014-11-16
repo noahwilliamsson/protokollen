@@ -14,11 +14,13 @@ echo "$1"|grep -q '^[^0-9]' && exit 0
 entId="$1"
 svcId="$2"
 svcType="$3"
-svcSetId="$4"
+svcGrpId="$4"
 shift 4
 
 cd "$(dirname $0)" || exit 1
+loop=0
 while [ $# -ge 3 ]; do
+	loop=$(expr $loop + 1)
 	protocol="$1"
 	hostname="$2"
 	port="$3"
@@ -26,26 +28,32 @@ while [ $# -ge 3 ]; do
 
 	JSON="$protocol.$hostname.$port.$$".json
 
+	# Update DNS records regardless of service
+	test $loop == 1 && ./check_dns_address_records.py $@ > "$JSON" \
+		&& ./pk-import-dns-addresses.php "$svcId" "$svcGrpId" "$JSON" \
+		&& rm -f "$JSON"
+
 	case "$protocol" in
 	http )
-		./check_preferred_http_host.py $@ > "$JSON" \
-			&& ./pk-import-http-prefs.php "$svcId" "$JSON" \
-			&& rm -f "$JSON"
+		test $loop == 1 && ./check_www_primary.py $@ > "$JSON" \
+			&& ./pk-import-www-primary.php "$svcId" "$svcGrpId" "$JSON" \
+			&& rm -f "$JSON" && exit 0
 		;;
 	https )
-		./check_preferred_http_host.py $@ > "$JSON" \
-			&& ./pk-import-http-prefs.php "$svcId" "$JSON" \
+		test $loop == 1 && ./check_www_primary.py $@ > "$JSON" \
+			&& ./pk-import-www-primary.php "$svcId" "$svcGrpId" "$JSON" \
 			&& rm -f "$JSON"
 		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
-			&& ./pk-import-sslprobe.php "$svcSetId" "$JSON" \
+			&& ./pk-import-sslprobe.php "$svcId" "$svcGrpId" "$JSON" \
 			&& rm -f "$JSON"
 		;;
 	smtp )
 		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
-			&& ./pk-import-sslprobe.php "$svcSetId" "$JSON" \
+			&& ./pk-import-sslprobe.php "$svcId" "$svcGrpId" "$JSON" \
 			&& rm -f "$JSON"
 		;;
 	dns )
+		# Not yet implemented
 		;;
 	esac
 

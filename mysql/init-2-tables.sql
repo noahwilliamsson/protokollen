@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `certs`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `certs` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `pem_sha256` varchar(64) NOT NULL DEFAULT '',
-  `x509` mediumtext NOT NULL,
+  `pem_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `x509` mediumtext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -46,7 +46,7 @@ CREATE TABLE `entities` (
   `org_short` varchar(255) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
   `org_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
   `cat` varchar(255) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL DEFAULT 'Svenska nyhetssajter',
-  `domain` varchar(255) DEFAULT NULL,
+  `domain` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `domain_email` varchar(255) DEFAULT NULL,
   `version` int(10) unsigned NOT NULL DEFAULT '1',
@@ -54,7 +54,7 @@ CREATE TABLE `entities` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `domain` (`domain`)
-) ENGINE=InnoDB AUTO_INCREMENT=614 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
+) ENGINE=InnoDB AUTO_INCREMENT=623 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ DROP TABLE IF EXISTS `json`;
 CREATE TABLE `json` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
-  `json_sha256` varchar(64) NOT NULL,
+  `json_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `service` varchar(64) DEFAULT NULL COMMENT '(only to make browsing table data more useful)',
   `json` mediumtext NOT NULL,
   `created` datetime NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE `json` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `service_id` (`service_id`,`json_sha256`),
   CONSTRAINT `json_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3076 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
+) ENGINE=InnoDB AUTO_INCREMENT=3610 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `logs` (
   KEY `json_id` (`json_id`),
   CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2608 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
+) ENGINE=InnoDB AUTO_INCREMENT=3209 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS `nodes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nodes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ip` varchar(45) NOT NULL DEFAULT '',
+  `ip` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -129,7 +129,7 @@ CREATE TABLE `service_hostnames` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
   `entity_id` int(11) unsigned NOT NULL,
-  `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'revision',
   `hostname` varchar(255) NOT NULL DEFAULT '',
   `service_type` varchar(16) NOT NULL COMMENT '(only to make browsing table data more useful)',
   `created` datetime NOT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE `service_hostnames` (
   KEY `entity_id` (`entity_id`),
   CONSTRAINT `service_hostnames_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_hostnames_ibfk_2` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1899 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of hostnames associated with a service';
+) ENGINE=InnoDB AUTO_INCREMENT=1931 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of hostnames associated with a service';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +152,7 @@ DROP TABLE IF EXISTS `service_http_preferences`;
 CREATE TABLE `service_http_preferences` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
-  `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'revision',
   `domain` varchar(255) NOT NULL DEFAULT '',
   `title` varchar(255) DEFAULT '',
   `preferred_url` varchar(255) DEFAULT '',
@@ -166,9 +166,9 @@ CREATE TABLE `service_http_preferences` (
   PRIMARY KEY (`id`),
   KEY `service_id` (`service_id`),
   KEY `json_id` (`json_id`),
-  CONSTRAINT `service_http_preferences_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `service_http_preferences_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2932 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences for apex domain vs www and for http vs https';
+  CONSTRAINT `service_http_preferences_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `service_http_preferences_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3453 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences for apex domain vs www and for http vs https';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,9 +182,9 @@ CREATE TABLE `service_sets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
   `entity_id` int(11) unsigned NOT NULL,
-  `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
+  `entry_type` enum('current','revision') CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'current',
   `json_id` int(11) unsigned DEFAULT NULL,
-  `json_sha256` varchar(64) DEFAULT '',
+  `json_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '',
   `service_type` varchar(16) NOT NULL COMMENT '(only to make browsing table data more useful)',
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -209,8 +209,8 @@ CREATE TABLE `service_tls_statuses` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
   `hostname_id` int(11) unsigned NOT NULL,
-  `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
-  `hostname` varchar(255) NOT NULL DEFAULT '',
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'current',
+  `hostname` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `num_ips` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `sslv2` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `sslv3` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -218,38 +218,17 @@ CREATE TABLE `service_tls_statuses` (
   `tlsv1_1` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `tlsv1_2` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `json_id` int(11) unsigned DEFAULT NULL,
-  `json_sha256` varchar(64) NOT NULL DEFAULT '',
+  `json_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hostname_id` (`hostname_id`),
   KEY `service_id` (`service_id`),
   KEY `json_id` (`json_id`),
-  CONSTRAINT `service_tls_statuses_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_tls_statuses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `service_tls_statuses_ibfk_2` FOREIGN KEY (`hostname_id`) REFERENCES `service_hostnames` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2928 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `service_vhost_certs`
---
-
-DROP TABLE IF EXISTS `service_vhost_certs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `service_vhost_certs` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `cert_id` int(11) unsigned NOT NULL,
-  `vhost_id` int(11) unsigned NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `cert_id` (`cert_id`,`vhost_id`),
-  KEY `vhost_id` (`vhost_id`),
-  CONSTRAINT `service_vhost_certs_ibfk_2` FOREIGN KEY (`vhost_id`) REFERENCES `service_vhosts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `service_vhost_certs_ibfk_1` FOREIGN KEY (`cert_id`) REFERENCES `certs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: X.509 cert store for scan data';
+  CONSTRAINT `service_tls_statuses_ibfk_2` FOREIGN KEY (`hostname_id`) REFERENCES `service_hostnames` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `service_tls_statuses_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3971 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -264,9 +243,9 @@ CREATE TABLE `service_vhosts` (
   `service_set_id` int(11) unsigned NOT NULL,
   `service_id` int(11) unsigned NOT NULL,
   `node_id` int(11) unsigned NOT NULL,
-  `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
-  `hostname` varchar(255) NOT NULL DEFAULT '',
-  `ip` varchar(45) NOT NULL DEFAULT '' COMMENT '(redundant but nice for table browsing)',
+  `entry_type` enum('current','revision') CHARACTER SET utf8 NOT NULL DEFAULT 'current',
+  `hostname` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `ip` varchar(45) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '(redundant but nice for table browsing)',
   `service_type` varchar(16) NOT NULL COMMENT '(only to make browsing table data more useful)',
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -299,39 +278,163 @@ CREATE TABLE `services` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `entity_id` (`entity_id`,`service_type`,`service_name`),
   CONSTRAINT `services_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1285 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of services (DNS, HTTP, SMTP, Webmail, ..)';
+) ENGINE=InnoDB AUTO_INCREMENT=1306 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of services (DNS, HTTP, SMTP, Webmail, ..)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `sslprobes`
+-- Table structure for table `svc_group_map`
 --
 
-DROP TABLE IF EXISTS `sslprobes`;
+DROP TABLE IF EXISTS `svc_group_map`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sslprobes` (
+CREATE TABLE `svc_group_map` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `service_id` int(11) unsigned NOT NULL,
-  `vhost_id` int(11) unsigned NOT NULL,
-  `entry_type` enum('current','revision') NOT NULL DEFAULT 'current',
-  `hostname` varchar(255) NOT NULL DEFAULT '' COMMENT '(redundant but nice for table browsing)',
+  `svc_group_id` int(11) unsigned NOT NULL,
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'revision',
+  `created` datetime NOT NULL,
+  `until` datetime DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `svc_group_id` (`svc_group_id`),
+  CONSTRAINT `svc_group_map_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `svc_group_map_ibfk_2` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Link between services and service groups, with revisions';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `svc_groups`
+--
+
+DROP TABLE IF EXISTS `svc_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `svc_groups` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `json` mediumtext NOT NULL,
+  `hash` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hash` (`hash`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Group of service hostnames (hostname, port, prio, protocol) as JSON';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `test_dns_addresses`
+--
+
+DROP TABLE IF EXISTS `test_dns_addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_dns_addresses` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `service_id` int(11) unsigned NOT NULL,
+  `svc_group_id` int(11) unsigned NOT NULL,
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'revision',
+  `json_id` int(11) unsigned DEFAULT NULL,
+  `json_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `num_hosts` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final URL (after redirects)',
+  `num_a` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final document title',
+  `num_aaaa` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final document title',
+  `num_cname` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final document title',
+  `created` datetime NOT NULL,
+  `until` datetime DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `json_id` (`json_id`),
+  KEY `svc_group_id` (`svc_group_id`),
+  CONSTRAINT `test_dns_addresses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_dns_addresses_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_dns_addresses_ibfk_3` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Protokollen: Number of A, AAAA and CNAME records in a service group';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `test_sslprobe_certs`
+--
+
+DROP TABLE IF EXISTS `test_sslprobe_certs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_sslprobe_certs` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cert_id` int(11) unsigned NOT NULL,
+  `svc_group_id` int(11) unsigned NOT NULL,
+  `hostname` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `cert_id` (`cert_id`,`svc_group_id`,`hostname`),
+  KEY `svc_group_id` (`svc_group_id`),
+  CONSTRAINT `test_sslprobe_certs_ibfk_2` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_sslprobe_certs_ibfk_1` FOREIGN KEY (`cert_id`) REFERENCES `certs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: X.509 cert store for scan data';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `test_sslprobes`
+--
+
+DROP TABLE IF EXISTS `test_sslprobes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_sslprobes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `service_id` int(11) unsigned NOT NULL,
+  `svc_group_id` int(11) unsigned NOT NULL,
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'revision',
+  `json_id` int(11) unsigned DEFAULT NULL,
+  `json_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `hostname` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `sslv2` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `sslv3` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `tlsv1` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `tlsv1_1` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `tlsv1_2` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `json_id` int(11) unsigned DEFAULT NULL,
-  `json_sha256` varchar(64) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
+  `until` datetime DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `json_id` (`json_id`),
   KEY `service_id` (`service_id`),
-  KEY `vhost_id` (`vhost_id`),
-  CONSTRAINT `sslprobes_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `sslprobes_ibfk_2` FOREIGN KEY (`vhost_id`) REFERENCES `service_vhosts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `sslprobes_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `svc_group_id` (`svc_group_id`),
+  KEY `json_id` (`json_id`),
+  CONSTRAINT `test_sslprobes_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_sslprobes_ibfk_2` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_sslprobes_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `test_www_prefs`
+--
+
+DROP TABLE IF EXISTS `test_www_prefs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_www_prefs` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `service_id` int(11) unsigned NOT NULL,
+  `svc_group_id` int(11) unsigned NOT NULL,
+  `entry_type` enum('current','revision') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'revision',
+  `json_id` int(11) unsigned DEFAULT NULL,
+  `json_sha256` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `url` text COMMENT 'Final URL (after redirects)',
+  `title` varchar(255) DEFAULT '' COMMENT 'Final document title',
+  `created` datetime NOT NULL,
+  `until` datetime DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `json_id` (`json_id`),
+  KEY `svc_group_id` (`svc_group_id`),
+  CONSTRAINT `test_www_prefs_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_www_prefs_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_www_prefs_ibfk_4` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences webservers in a service group';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -363,4 +466,4 @@ CREATE TABLE `tls_ciphers` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-10 20:46:56
+-- Dump completed on 2014-11-16 15:05:57
