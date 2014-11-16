@@ -7,7 +7,8 @@
 
 require_once('../php/ProtokollenBase.class.php');
 require_once('../php/ServiceGroup.class.php');
-require_once('../php/ServiceSet.class.php');
+
+mb_internal_encoding('utf-8');
 
 
 if($argc < 2)
@@ -18,7 +19,6 @@ $serviceType = $argv[1];
 
 $p = new ProtokollenBase();
 $sg = new ServiceGroup();
-$ss = new ServiceSet();
 $entities = $p->listEntityIds();
 
 $header = array('Entity ID', 'Service ID', 'Service Type', 'Service group ID', 'Protocol #1', 'Hostname #1', 'Port #1', '...');
@@ -47,9 +47,6 @@ foreach($entities as $entityId) {
 
 			if(!empty($group))
 				$sg->addServiceGroup($svc->id, $group);
-
-			if(!empty($hostnames))
-				$ss->addServiceSet($svc->id, 'smtp', $hostnames);
 			break;
 		case ProtokollenBase::SERVICE_TYPE_DNS:
 			$hostnames = array();
@@ -67,9 +64,6 @@ foreach($entities as $entityId) {
 
 			if(!empty($group))
 				$sg->addServiceGroup($svc->id, $group);
-
-			if(!empty($hostnames))
-				$ss->addServiceSet($svc->id, 'dns', $hostnames);
 			break;
 		default:
 			break;
@@ -83,7 +77,7 @@ foreach($entities as $entityId) {
 		$args = array($entityId, $svc->id, $svc->service_type, $group->id);
 		foreach($group->items as $svcHost) {
 			$args[] = strtolower($svcHost->protocol);
-			$args[] = $svcHost->hostname;
+			$args[] = mb_convert_case($svcHost->hostname, MB_CASE_LOWER);
 			$args[] = $svcHost->port;
 		}
 
