@@ -155,6 +155,9 @@ def check_url(url, resolve=None):
 	except:
 		pass
 
+	# Convert IDN hostname to Unicode
+	hostname = dns.name.from_text(hostname).to_unicode(omit_final_dot=True)
+
 	res = {
 		'charset': charset,
 		'contentType': content_type,
@@ -205,10 +208,8 @@ for scheme, hostport in sites:
 	error = None
 	rd = []
 	try:
-		qr = r.query(hostname, 'A')
-		for rr in qr.rrset:
-			rd.append(rr.to_text())
-		qr = r.query(hostname, 'AAAA')
+		domain = dns.name.from_unicode(unicode(hostname, 'utf-8'))
+		qr = r.query(domain, 'A')
 		for rr in qr.rrset:
 			rd.append(rr.to_text())
 	#except (Timeout, NXDOMAIN, YXDOMAIN, NoAnswer, NoNameservers) as e:
@@ -217,6 +218,18 @@ for scheme, hostport in sites:
 	except DNSException as e:
 		error = e.__class__.__name__
 
+	try:
+		domain = dns.name.from_unicode(unicode(hostname, 'utf-8'))
+		qr = r.query(domain, 'AAAA')
+		for rr in qr.rrset:
+			rd.append(rr.to_text())
+	except dns.resolver.NXDOMAIN as e:
+		error = 'NXDOMAIN'
+	except DNSException as e:
+		error = e.__class__.__name__
+
+	# Curl needs puny-coded hostnames
+	hostname = domain.to_text(omit_final_dot=True)
 	for ip in sorted(rd):
 		url = scheme + '://' + hostname
 		if explicit_port:
