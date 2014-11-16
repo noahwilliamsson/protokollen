@@ -29,18 +29,18 @@ while [ $# -ge 3 ]; do
 	JSON="$protocol.$hostname.$port.$$".json
 
 	# Update DNS records regardless of service
-	test $loop == 1 && ./check_dns_address_records.py $@ > "$JSON" \
+	test "$loop" = "1" && ./check_dns_address_records.py $@ > "$JSON" \
 		&& ./pk-import-dns-addresses.php "$svcId" "$svcGrpId" "$JSON" \
 		&& rm -f "$JSON"
 
 	case "$protocol" in
 	http )
-		test $loop == 1 && ./check_www_primary.py $@ > "$JSON" \
+		test "$loop" = "1" && ./check_www_primary.py $@ > "$JSON" \
 			&& ./pk-import-www-primary.php "$svcId" "$svcGrpId" "$JSON" \
 			&& rm -f "$JSON" && exit 0
 		;;
 	https )
-		test $loop == 1 && ./check_www_primary.py $@ > "$JSON" \
+		test "$loop" = "1" && ./check_www_primary.py $@ > "$JSON" \
 			&& ./pk-import-www-primary.php "$svcId" "$svcGrpId" "$JSON" \
 			&& rm -f "$JSON"
 		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
