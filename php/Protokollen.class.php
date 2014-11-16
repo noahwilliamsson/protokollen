@@ -321,7 +321,7 @@ class Protokollen {
 	 * @param $json JSON text
 	 * @return ID of row in JSON table, throws on error
 	 */
-	private function addJson($svcId, $json) {
+	protected function addJson($svcId, $json) {
 		if(($svc = $this->getServiceById($svcId)) === NULL) {
 			$err = __METHOD__ .": Unknown service ($svcId)";
 			throw new Exception($err);
