@@ -115,13 +115,15 @@ class Protokollen {
 	function listServices($entityId, $svcType = NULL) {
 		$m = $this->m;
 		if($svcType) {
-			$st = $m->prepare('SELECT * FROM services
-					WHERE entity_id=? AND service_type=?');
+			$q = 'SELECT * FROM services WHERE entity_id=? AND service_type=?
+					ORDER BY LENGTH(service_name), service_name, service_type';
+			$st = $m->prepare($q);
 			$st->bind_param('is', $entityId, $svcType);
 		}
 		else {
-			$st = $m->prepare('SELECT * FROM services
-					WHERE entity_id=? ORDER BY service_type');
+			$q = 'SELECT * FROM services WHERE entity_id=?
+					ORDER BY LENGTH(service_name), service_name, service_type';
+			$st = $m->prepare($q);
 			$st->bind_param('i', $entityId);
 		}
 
