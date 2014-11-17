@@ -25,4 +25,4 @@ if(empty($json)) {
 }
 
 $test = new TestSslprobe();
-$id = $test->addSslprobeJson($svcId, $svcGrpId, $hostname, $json);
+$id = $test->importJson($svcId, $svcGrpId, $hostname, $json);

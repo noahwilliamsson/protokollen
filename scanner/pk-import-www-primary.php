@@ -19,4 +19,4 @@ if($json === FALSE)
 	die("ERROR: File not found: $filename\n");
 
 $test = new TestWwwPreferences();
-$id = $test->addWwwPreferencesJson($svcId, $svcGrpId, $json);
+$id = $test->importJson($svcId, $svcGrpId, $json);
