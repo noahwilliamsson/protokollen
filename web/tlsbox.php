@@ -64,12 +64,13 @@ function parseProbe($probe) {
 			$certIdx++;
 			$x509 = openssl_x509_parse($pem, true);
 			if(!isset($x509['extensions'])) {
-				echo "$probe->hostname ($probe->ip): No extensions in cert\n";
+				error_log(__FUNCTION__  .": $probe->host ($probe->ip) cert index $certIdx: No extensions in cert");
 				continue;
 			}
+
 			$ext = $x509['extensions'];
 			if(!isset($ext['basicConstraints'])) {
-				echo "$probe->hostname ($probe->ip): No constraints in cert\n";
+				error_log(__FUNCTION__ .": $probe->host ($probe->ip): cert index $certIdx: No constraints in cert");
 				continue;
 			}
 
