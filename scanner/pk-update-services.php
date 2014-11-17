@@ -75,7 +75,7 @@ foreach($entities as $entityId) {
 		}
 
 		$args = array($entityId, $svc->id, $svc->service_type, $group->id);
-		foreach($group->items as $svcHost) {
+		foreach($group->json as $svcHost) {
 			$args[] = strtolower($svcHost->protocol);
 			$args[] = mb_convert_case($svcHost->hostname, MB_CASE_LOWER);
 			$args[] = $svcHost->port;

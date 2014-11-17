@@ -179,16 +179,16 @@ foreach($categories as $cat):
 				$grp = $p->getServiceGroup($svc->id);
 				/* Fetch WWW prefs test and make sure https is supported */
 				$prefs = $wwwPrefsTest->getItem($svc->id, $grp->id);
-				if($prefs->url === NULL || $prefs->errors !== NULL)
+				if(!$prefs || !$prefs->url || $prefs->errors !== NULL)
 					continue;
 
 				$sslprobe = NULL;
 				$wwwHostname = parse_url($prefs->url, PHP_URL_HOST);
-				foreach($grp->items as $item) {
-					if($item->hostname !== $wwwHostname)
+				foreach($grp->json as $svcHost) {
+					if($svcHost->hostname !== $wwwHostname)
 						continue;
 
-					$sslprobe = $sslprobeTest->getItem($svc->id, $grp->id, $item->hostname);
+					$sslprobe = $sslprobeTest->getItem($svc->id, $grp->id, $svcHost->hostname);
 					break;
 				}
 

@@ -75,10 +75,10 @@ class TestSslprobe extends ServiceGroup {
 		$st->close();
 
 		if($row) {
-			$row->item = NULL;
+			$row->json = NULL;
 			$json = $this->getJsonByHash($svcId, $row->json_sha256);
 			if($json !== NULL)
-				$row->item = json_decode($json->json);
+				$row->json = json_decode($json->json);
 		}
 
 		return $row;
