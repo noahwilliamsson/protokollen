@@ -134,6 +134,9 @@ def check_url(url, resolve=None):
 				# <meta http-equiv="Content-Type" content="text/html; charset=utf-8"
 				pattern = re.compile('<meta\s+http-equiv=.content-type.[^>]*content=.([^"\']*)', flags=re.IGNORECASE)
 				matches = pattern.search(html)
+				if not matches:
+					pattern = re.compile('<meta\s+content=.([^"\']*).\s+http-equiv=.content-type.[^>]', flags=re.IGNORECASE)
+					matches = pattern.search(html)
 				if matches:
 					content_type, _, charset = matches.group(1).partition(';')
 					_, _, charset = charset.partition('=')
