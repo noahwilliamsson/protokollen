@@ -188,7 +188,7 @@ foreach($categories as $cat):
 					if($item->hostname !== $wwwHostname)
 						continue;
 
-					$sslprobe = $sslprobeTest->getSslprobe($svc->id, $grp->id, $item->hostname);
+					$sslprobe = $sslprobeTest->getItem($svc->id, $grp->id, $item->hostname);
 					break;
 				}
 
