@@ -25,6 +25,9 @@ if($svc === NULL) {
 	$svcId = $p->addService($e->id, $serviceType, $serviceName);
 	echo "Added new service '$serviceName' with type $serviceType and ID: $svcId\n";
 }
+else
+	$svcId = $svc->id;
+
 $hostnames = $p->listServiceHostnames($svcId);
 $found = FALSE;
 foreach($hostnames as $h) {
