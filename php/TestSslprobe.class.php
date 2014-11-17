@@ -16,10 +16,11 @@ class TestSslprobe extends ServiceGroup {
 	 * Add sslprobe output to service set
 	 * @param $svcId Service ID
 	 * @param $svcGroupId Service group ID
+	 * @param $hostname Hostname in service group
 	 * @param $json JSON output from sslprobe
 	 *
 	 */
-	function addSslprobeJson($svcId, $svcGrpId, $json) {
+	function addSslprobeJson($svcId, $svcGrpId, $hostname, $json) {
 		$m = $this->getMySQLHandle();
 
 		if(($svc = $this->getServiceById($svcId)) === NULL) {
@@ -41,34 +42,39 @@ class TestSslprobe extends ServiceGroup {
 
 		$hash = hash('sha256', $json);
 		$jsonId = $this->addJson($svc->id, $json);
+
+		$q = 'SELECT id, json_id, json_sha256
+			FROM test_sslprobes
+			WHERE service_id=? AND svc_group_id=?
+			AND hostname=? AND entry_type="current"';
+		$st = $m->prepare($q);
+		$st->bind_param('iis', $svc->id, $group->id, $hostname);
+		if(!$st->execute()) {
+			$err = "Sslprobe lookup"
+				." ($svc->id, $group->id, $hostname)"
+				." failed:". $m->error;
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+
+		if($row && $row->json_id == $jsonId)
+			return $row->id;
+
+		$sslv2 = 0;
+		$sslv3 = 0;
+		$tlsv1 = 0;
+		$tlsv1_1 = 0;
+		$tlsv1_2 = 0;
+		$ips = array();
+		$changes = array();
+
 		foreach($probes as $probe) {
-			$q = 'SELECT id, json_id, json_sha256
-				FROM test_sslprobes
-				WHERE service_id=? AND svc_group_id=?
-				AND hostname=? AND entry_type="current"';
-			$st = $m->prepare($q);
-			$st->bind_param('iis', $svc->id, $group->id,
-					$probe->host);
-			if(!$st->execute()) {
-				$err = "Sslprobe lookup"
-					." ($svc->id, $group->id, $hostname)"
-					." failed:". $m->error;
-				throw new Exception($err);
-			}
+			$ips[] = $probe->ip;
 
-			$r = $st->get_result();
-			$row = $r->fetch_object();
-			$r->close();
-			$st->close();
-
-			if($row && $row->json_id == $jsonId)
-				continue;
-
-			$sslv2 = 0;
-			$sslv3 = 0;
-			$tlsv1 = 0;
-			$tlsv1_1 = 0;
-			$tlsv1_2 = 0;
 			foreach($probe->protocols as $p) {
 				if(!$p->supported)
 					continue;
@@ -88,60 +94,78 @@ class TestSslprobe extends ServiceGroup {
 				}
 			}
 
-			$q = 'INSERT INTO test_sslprobes SET service_id=?,
-				svc_group_id=?, entry_type="current",
-				json_id=?, json_sha256=?, hostname=?,
-				sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?, tlsv1_2=?,
-				created=NOW()';
+			$log = sprintf('SSLv2:%d, SSLv3:%d, TLSv1:%d,'
+					.' TLSv1.1:%d, TLSv1.2:%d',
+					$probe->protocols[0]->supported,
+					$probe->protocols[1]->supported,
+					$probe->protocols[2]->supported,
+					$probe->protocols[3]->supported,
+					$probe->protocols[4]->supported);
+			$changes[$probe->ip] = $log;
+			if($row === NULL)
+				continue;
+
+			$arr = $this->computeSslprobeChanges($probe, $svc->id,
+							$row->json_sha256);
+			if(!empty($arr))
+				$changes[$probe->ip] = implode('. ', $arr);
+		} /* End foreach */
+
+
+		$q = 'INSERT INTO test_sslprobes SET service_id=?,
+			svc_group_id=?, entry_type="current",
+			json_id=?, json_sha256=?, hostname=?,
+			sslv2=?, sslv3=?, tlsv1=?, tlsv1_1=?, tlsv1_2=?,
+			created=NOW()';
+		$st = $m->prepare($q);
+		$st->bind_param('iiisssssss', $svc->id, $group->id,
+				$jsonId, $hash, $hostname, $sslv2,
+				$sslv3, $tlsv1, $tlsv1_1, $tlsv1_2);
+		if(!$st->execute()) {
+			$err = "Sslprobe update"
+				." ($svc->id, $hostname)"
+				." failed: ". $m->error;
+			throw new Exception($err);
+		}
+		$st->close();
+
+		if($row) {
+			$q = 'UPDATE test_sslprobes
+				SET entry_type="revision", until=NOW()
+				WHERE id=?';
 			$st = $m->prepare($q);
-			$st->bind_param('iiisssssss', $svc->id, $group->id,
-					$jsonId, $hash, $probe->host, $sslv2,
-					$sslv3, $tlsv1, $tlsv1_1, $tlsv1_2);
+			$st->bind_param('i', $row->id);
 			if(!$st->execute()) {
-				$err = "Sslprobe update"
-					." ($svc->id, $hostname)"
+				$err = "Sslprobe revision update"
+					." ($svc->id, $group->id, $hostname)"
 					." failed: ". $m->error;
 				throw new Exception($err);
 			}
 
 			$st->close();
+		}
 
-			$log = sprintf('%s sslprobe created: %s (%s) [SSLv2:%d,'
-					.' SSLv3:%d, TLSv1:%d, TLSv1.1:%d,'
-					.' TLSv1.2:%d]', $svc->service_type,
-					$probe->host, $probe->ip, $sslv2,
-					$sslv3, $tlsv1, $tlsv1_1, $tlsv1_2);
-			if($row) {
-				$q = 'UPDATE test_sslprobes
-					SET entry_type="revision", until=NOW()
-					WHERE id=?';
-				$st = $m->prepare($q);
-				$st->bind_param('i', $row->id);
-				if(!$st->execute()) {
-					$err = "Sslprobe revision update"
-						." ($svc->id, $hostname)"
-						." failed: ". $m->error;
-					throw new Exception($err);
-				}
+		$arr = array();
+		foreach($changes as $ip => $change)
+			$arr[] = "$ip [$change]";
 
-				$st->close();
-
-				$changes = $this->computeSslprobeChanges(
-						$probe, $svc->id,
-						$row->json_sha256);
-
-				$log = sprintf('%s sslprobe changed:'
-						.' %s (%s) [%s]',
-						$svc->service_type,
-						$probe->host, $probe->ip,
-						implode('. ', $changes));
-			}
-
-			$this->logEntry($svc->id, $svc->service_name,
-					$log, $jsonId);
-		} /* End foreach */
+		$log = sprintf('%s sslprobe %s: %s [SSLv2:%d,'
+				.' SSLv3:%d, TLSv1:%d, TLSv1.1:%d,'
+				.' TLSv1.2:%d] (%s)', $svc->service_type,
+				$row === NULL? 'created': 'changed',
+				$hostname, $sslv2, $sslv3, $tlsv1,
+				$tlsv1_1, $tlsv1_2,
+				implode(', ', $arr));
+		$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
 	}
 
+	/**
+	 * Helper routine to compute changes between two probes of the same IPs
+	 * @param $probe Object describing the current probe
+	 * @param $svcId Service ID, needed to lookup JSON for previous probes
+	 * @param $prevJsonHash SHA-256 hash of JSON for previous probes
+	 * @returns Array with changes
+	 */
 	function computeSslprobeChanges($probe, $svcId, $prevJsonHash) {
 
 		$foundProbe = FALSE;

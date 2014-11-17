@@ -7,12 +7,13 @@
 require_once('../php/TestSslprobe.class.php');
 
 
-if($argc != 4)
-	die("Usage: ${argv[0]} <service ID> <service group ID> <sslprobe.json>\n");
+if($argc != 5)
+	die("Usage: ${argv[0]} <service ID> <service group ID> <hostname> <sslprobe.json>\n");
 
 $svcId = $argv[1];
 $svcGrpId = $argv[2];
-$filename = $argv[3];
+$hostname = $argv[3];
+$filename = $argv[4];
 
 $json = file_get_contents($filename);
 if($json === FALSE)
@@ -24,4 +25,4 @@ if(empty($json)) {
 }
 
 $test = new TestSslprobe();
-$id = $test->addSslprobeJson($svcId, $svcGrpId, $json);
+$id = $test->addSslprobeJson($svcId, $svcGrpId, $hostname, $json);
