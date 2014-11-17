@@ -3,11 +3,14 @@
  * Quick hack to make two data series for flot graphs
  */
 
-require_once('../php/Protokollen.class.php');
+require_once('../php/ServiceGroup.class.php');
+require_once('../php/TestSslprobe.class.php');
 
 
 function makeFlots($entityIds) {
-	$p = new Protokollen();
+	$p = new ServiceGroup();
+	$testSslprobe = new TestSslprobe();
+
 	$m = $p->getMySQLHandle();
 
 	$jsonIds = array();
@@ -25,20 +28,22 @@ function makeFlots($entityIds) {
 		 * List all HTTP sites belonging to an entity
 		 * Each site may consist of multiple hostnames (example.com, www.example.com)
 		 */
-		$sites = $p->listServices($row->id, Protokollen::SERVICE_TYPE_HTTP);
-		foreach($sites as $site) {
-			$q = 'SELECT json_id, sslv2, sslv3, tlsv1, tlsv1_1, tlsv1_2
-					FROM service_tls_statuses
-					WHERE service_id="'. $m->escape_string($site->id) .'" AND entry_type="current"';
+		$sites = $p->listServices($row->id, ProtokollenBase::SERVICE_TYPE_HTTPS);
+		foreach($sites as $svc) {
+			$grp = $p->getServiceGroup($svc->id);
+			if(!$grp)
+				continue;
 
-			$rt = $m->query($q) or die($m->error);
-			while($rtRow = $rt->fetch_object()) {
+			foreach($grp->json as $svcHost) {
+				$probe = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
+				if(!$probe)
+					continue;
 
-				$jsonIds[] = $rtRow->json_id;
-
+				$jsonIds[] = $probe->json_id;
 				$numTlsProtocolsSupported = false;
-				foreach($rtRow as $key => $value) {
-					if($key === 'json_id') continue;
+				foreach($probe as $key => $value) {
+					if(!in_array($key, array('sslv2', 'sslv3', 'tlsv1', 'tlsv1_1', 'tlsv1_2')))
+						continue;
 					if(!isset($protocols[$key]))
 						$protocols[$key] = 0;
 
@@ -52,11 +57,10 @@ function makeFlots($entityIds) {
 				if(!$numTlsProtocolsSupported)
 					$protocols['none']++;
 			}
-
-			$rt->close();
 		}
 	}
 	$r->close();
+
 
 	/* Convert to flot data series */
 	$flot = array();

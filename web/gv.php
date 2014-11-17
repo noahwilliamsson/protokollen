@@ -13,7 +13,11 @@
  * http://www.graphviz.org/doc/info/colors.html#svg
  */
 
-require_once('../php/Protokollen.class.php');
+require_once('../php/ServiceGroup.class.php');
+require_once('../php/TestWwwPreferences.class.php');
+require_once('../php/TestSslprobe.class.php');
+require_once('../php/TestDnsAddresses.class.php');
+require_once(dirname(__FILE__) .'/tlsbox.php');
 
 
 if(isset($argc)) {
@@ -40,27 +44,30 @@ if(function_exists('headers_sent') && !headers_sent()) {
  */
 function svgForDomain($domain) {
 
-	$p = new Protokollen();
+	$p = new ServiceGroup();
 	$e = $p->getEntityByDomain($domain);
 
 	ob_start();
 
-echo "digraph g {\n";
-echo "charset=utf8;\n";
-/* Go left-right instead of top-down */
-echo "  rankdir=LR;\n";
+	echo "digraph g {\n";
+	echo "  charset=utf8;\n";
+	/* Go left-right instead of top-down */
+	echo "  rankdir=LR;\n";
 
-/**
- * Rounded record type: Mrecord (as opposed to: record)
- * Also investigate HTML tables:
- * http://www.graphviz.org/doc/info/shapes.html#html
- */
-echo " graph [ nodesep=0.1 ranksep=0.1 ]; \n";
-echo "  node [ shape=Mrecord fontsize=8 fontname=\"helvetica\" ];\n";
+	/**
+	 * Rounded record type: Mrecord (as opposed to: record)
+	 * Also investigate HTML tables:
+	 * http://www.graphviz.org/doc/info/shapes.html#html
+	 */
+	echo "  graph [ nodesep=0.1 ranksep=0.1 ]; \n";
+	echo "  node [ shape=Mrecord fontsize=8 fontname=\"helvetica\" ];\n";
 
 
-echo "ent_$e->id [ label=\"$e->org\" ];\n";
-foreach($p->listServices($e->id /*, Protokollen::SERVICE_TYPE_HTTP*/) as $svc) {
+	echo "ent_$e->id [ label=\"$e->org\" ];\n";
+	$testWww = new TestWwwPreferences();
+	$testSslprobe = new TestSslprobe();
+	$testDnsAddrs = new TestDnsAddresses();
+	foreach($p->listServices($e->id) as $svc) {
 		$label = array('<f0>'. $svc->service_type, '<f1>'. $svc->service_name);
 		if(!empty($svc->service_desc))
 			$label[] = $svc->service_desc;
@@ -69,27 +76,23 @@ foreach($p->listServices($e->id /*, Protokollen::SERVICE_TYPE_HTTP*/) as $svc) {
 		$serviceBox .= sprintf('svc_%d [ label="%s" color=gray style=filled fillcolor=lightgoldenrodyellow ] ', $svc->id, implode('|', $label));
 		$serviceBox .= sprintf("ent_%d -> svc_%d:f1\n", $e->id, $svc->id);
 
+		/* Load service group */
+		$grp = $p->getServiceGroup($svc->id);
 
-
-		$prefs = $p->getHttpPreferences($svc->id);
+		/* Load web preferences for service group */
+		$prefs = $testWww->getItem($svc->id, $grp->id);
 		if(!empty($prefs)) {
-			$prefs = $prefs[0];
-
 			$rows = array();
-			$rows[] = sprintf('<tr><td colspan="2"><b>%s</b>%s</td></tr>', 'Webbplats', !empty($prefs->preferred_url)? '<br/>'. $prefs->preferred_url: '');
-			if(!empty($prefs->http_preferred_url))
-				$rows[] = sprintf('<tr><td>%s</td><td href="%s">%s</td></tr>',
-								'HTTP', $prefs->http_preferred_url,
-								$prefs->http_preferred_url);
-			if(!empty($prefs->https_preferred_url))
-				$rows[] = sprintf('<tr><td bgcolor="lightgreen">%s</td><td href="%s">%s</td></tr>',
-								'HTTPS', $prefs->https_preferred_url,
-								$prefs->https_preferred_url);
-			if( !empty($prefs->https_error)) {
-				$str = $prefs->https_error;
-				if(mb_strlen($str) > 45) $str = mb_substr($prefs->https_error, 0, 45) .'…';
+			$rows[] = sprintf('<tr><td colspan="2"><b>%s</b><br/>%s</td></tr>', 'Webbplats', !empty($prefs->url)? $prefs->url: strtolower(str_replace('Webmail', 'https', $svc->service_type) .'://'. $svc->service_name));
+
+			$scheme = NULL;
+			if($prefs->url !== NULL)
+				$scheme = parse_url($prefs->url, PHP_URL_SCHEME);
+			if(!empty($prefs->errors)) {
+				$str = $prefs->errors;
+				if(mb_strlen($str) > 45) $str = mb_substr($prefs->errors, 0, 45) .'…';
 				$rows[] = sprintf('<tr><td bgcolor="pink">%s</td><td>%s</td></tr>',
-								'HTTPS err', $str);
+								'Error', $str);
 
 				$serviceBox = str_replace('lightgoldenrodyellow', 'pink', $serviceBox);
 			}
@@ -101,74 +104,63 @@ foreach($p->listServices($e->id /*, Protokollen::SERVICE_TYPE_HTTP*/) as $svc) {
 			/* Link HTTP service to HTTP prefs box */
 			echo sprintf("svc_%d -> http_prefs_%d\n", $svc->id, $svc->id);
 		}
-		else
+		else {
 			echo $serviceBox;
-
-
-		/* Render service set box */
-		$label = array(sprintf('<p0>%s-servers %s', $svc->service_type, $svc->service_name));
-		if(($ss = $p->getServiceSet($svc->id)) === NULL)
-				continue;
-
-		$data = $p->getJsonByHash($svc->id, $ss->json_sha256);
-		foreach(json_decode($data->json) as $svcHost) {
-			$label[] = sprintf('<%s> %s', preg_replace('@[^A-Za-z0-9]@', 'A', $svcHost->hostname), $svcHost->hostname);
 		}
 
-if(0) {
-		echo sprintf('svc_set_%d [ label="%s" color=gray ] ', $ss->id, implode('|', $label));
 
-		/* Link service to service set */
-		echo sprintf("svc_%d:f0 -> svc_set_%d:p0\n", $svc->id, $ss->id);
-}
+		/* Render service group box */
+		$label = array(sprintf('<p0>%s-servers %s', $svc->service_type, $svc->service_name));
+		foreach($grp->json as $svcHost) {
+			$svcHostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
+			$label[] = sprintf('<%s> %s', $svcHostId, $svcHost->hostname);
+		}
+
+
+		/* Load DNS addresses for hostnames in service group */
+		$addrs = $testDnsAddrs->getItem($svc->id, $grp->id, $svcHost->hostname);
+		if(!$addrs)
+			continue;
+
+		$hostIpMap = array();
+		foreach($addrs->json->records as $hostname => $obj) {
+			$arr = array();
+			foreach($obj->a as $ip) $arr[] = $ip;
+			foreach($obj->aaaa as $ip) $arr[] = $ip;
+			$hostIpMap[$hostname] = $arr;
+		}
+
 
 		$seenNodesAll = array();
-		foreach(json_decode($data->json) as $svcHost) {
+		foreach($grp->json as $svcHost) {
+
 			$label = array(sprintf('<p0>%s-server %s', $svc->service_type, $svcHost->hostname));
-			$vhosts = $p->listServiceVhosts($ss->id, $svcHost->hostname);
 
 			$seenNodesSvc = array();
 			$nodeIdx = 1;
-			if(empty($vhosts)) {
-					foreach(dns_get_record($svcHost->hostname, DNS_ANY) as $rr) {
-						$ip = NULL;
-						if(isset($rr['ip'])) $ip = $rr['ip'];
-						else if(isset($rr['ipv6'])) $ip = $rr['ipv6'];
-						if(empty($ip)) continue;
-						$obj = new stdClass();
-						$obj->node_id = $p->addNode($ip);
-						$obj->ip = $ip;
-						$vhosts[] = $obj;
-						break;
-					}
-
-			}
-			foreach($vhosts as $vhost) {
-					$node = $p->getNodeById($vhost->node_id);
-
-					$label[] = sprintf('<p%d>%s', $nodeIdx, $node->ip);
-					$nodeId = 'ip'. str_replace('.', '_', str_replace(':', '_', $node->ip));
+			foreach($hostIpMap[$svcHost->hostname] as $ip) {
+					$label[] = sprintf('<p%d>%s', $nodeIdx, $ip);
+					$nodeId = 'ip'. str_replace('.', '_', str_replace(':', '_', $ip));
 					$seenNodesSvc[$nodeIdx++] = $nodeId;
-					if(!isset($seenNodesAll[$node->ip])) {
-						echo sprintf("%s [ shape=house label=\"%s\" ]\n", $nodeId, $node->ip);
-						$seenNodes[$node->ip] = $nodeId;
+
+					if(!isset($seenNodesAll[$ip])) {
+						/* Render node (IP-address) */
+						echo sprintf("%s [ shape=house label=\"%s\" ]\n", $nodeId, $ip);
+						$seenNodes[$ip] = $nodeId;
 					}
-
 			}
-
-			// if(empty($vhosts)) continue;
-
 
 			/* Render vhost box */
 			$vhostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
-			$vhostBoxId = sprintf('svc_set_%d_vhosts_%s', $ss->id, $vhostId);
+			$vhostBoxId = sprintf('svc_set_%d_vhosts_%s', $grp->id, $vhostId);
 			echo sprintf('%s [ label="%s" fillcolor=aliceblue style=filled ] ',
-						$vhostBoxId,
-						implode('|', $label));
-
+							$vhostBoxId,
+							implode('|', $label));
 			echo "\n";
+
 			for($i = 1; $i < $nodeIdx; $i++) {
-					echo sprintf("\n%s -> %s\n", $vhostBoxId, $seenNodesSvc[$i]);
+					/* Link vhost to node */
+					echo sprintf("%s -> %s\n", $vhostBoxId, $seenNodesSvc[$i]);
 			}
 
 			/* Link service set host to vhost box */
@@ -177,13 +169,53 @@ if(0) {
 						$ss->id, preg_replace('@[^A-Za-z0-9]@', 'A', $svcHost->hostname),
 						$ss->id, preg_replace('@[^A-Za-z0-9]@', 'A', $svcHost->hostname));
 			*/
-			echo sprintf("svc_%d:f1 -> %s\n",
-						$svc->id, $vhostBoxId);
+			echo sprintf("svc_%d:f1 -> %s\n", $svc->id, $vhostBoxId);
 			echo "\n";
 		}
-}
 
-echo "}\n";
+
+		$tlsBoxes = array();
+		$tlsIds = array();
+		foreach($grp->json as $svcHost) {
+
+			/* Load sslprobe for service host */
+			$sslprobe = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
+			if(!$sslprobe)
+				continue;
+
+			foreach($hostIpMap[$svcHost->hostname] as $ip) {
+				foreach($sslprobe->json as $probe) {
+					$opts = parseProbe($probe);
+					$tlsId = 'tls_'. substr(md5(json_encode($opts)), 0, 8);
+
+					$vhostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
+					$vhostBoxId = sprintf('svc_set_%d_vhosts_%s', $grp->id, $vhostId);
+					/* Link vhost to TLS box (even though TLS box is not yet defined) */
+					echo " $vhostBoxId -> $tlsId \n";
+
+					if(isset($tlsBoxes[$tlsId]))
+						continue;
+
+					$trows = array();
+					foreach($opts as $obj) {
+						if(!is_object($obj))
+							continue;
+
+						$trows[] = '<tr><td bgcolor="'. $obj->color .'">'. $obj->title .'</td><td>'. $obj->body .'</td></tr>';
+					}
+
+					$box = $tlsId .' [ label=<<table cellborder="1" border="0" >'. implode('', $trows) .'</table>> shape="none"]' ."\n";
+					$tlsBoxes[$tlsId] = $box;
+				}
+			}
+		}
+
+		/* Render TLS box */
+		foreach($tlsBoxes as $tlsId => $box)
+			echo $box;
+	}
+
+	echo "}\n";
 
 
 	$dot = ob_get_contents();
