@@ -1,5 +1,7 @@
 <?php
-require_once('../php/Protokollen.class.php');
+require_once('../php/ServiceGroup.class.php');
+require_once('../php/TestWwwPreferences.class.php');
+require_once('../php/TestSslprobe.class.php');
 
 if(!isset($_GET['domain'])) {
 	header('Location: /');
@@ -8,20 +10,20 @@ if(!isset($_GET['domain'])) {
 
 $domain = $_GET['domain'];
 
-$p = new Protokollen();
+$p = new ServiceGroup();
 $ent = $p->getEntityByDomain($domain);
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Protokollen - undersök internetjänsters säkerhet</title>
 
 	<!-- Bootstrap -->
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
 
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -56,6 +58,7 @@ padding-bottom: 20px;
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="/">Hem</a></li>
+					<li><a href="lists.php">Listor</a></li>
 					<li><a href="#medier">Medier</a></li>
 					<li><a href="#myndigheter">Myndigheter</a></li>
 					<li><a href="https://github.com/noahwilliamsson/protokollen">Om tjänsten</a></li>
@@ -102,33 +105,33 @@ padding-bottom: 20px;
 	<div class="container">
 		<?php
 		foreach($p->listServices($ent->id) as $svc):
-			if($svc->service_type === Protokollen::SERVICE_TYPE_DNS) continue;
-			if($svc->service_type === Protokollen::SERVICE_TYPE_SMTP) continue;
-			$m = $p->getMySQLHandle();
-			$q = 'SELECT * FROM service_http_preferences WHERE service_id="'. $m->escape_string($svc->id) .'"';
-			$r = $m->query($q);
-			$prefs = $r->fetch_object();
-			$r->close();
+			if($svc->service_type === ProtokollenBase::SERVICE_TYPE_DNS) continue;
+			if($svc->service_type === ProtokollenBase::SERVICE_TYPE_SMTP) continue;
+
+			$grp = $p->getServiceGroup($svc->id);
+			$wwwPrefsTest = new TestWwwPreferences();
+			$prefs = $wwwPrefsTest->getItem($svc->id, $grp->id);
 		?>
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 			<h3 class="panel-title">
 			<?php
-			echo htmlspecialchars(trim("$svc->service_name ($svc->service_desc)", '() '), ENT_NOQUOTES);
+			$title = $svc->service_name;
+			if(!empty($svc->service_desc))
+					$title .= ' ('. $svc->service_desc .')';
+			echo htmlspecialchars($title, ENT_NOQUOTES);
 			if($prefs !== NULL):
 				foreach($prefs as $key => $value):
 				switch($key) {
-				case 'http_preferred_url':
-					if(!empty($value))
-						echo '<span class="label label-success">http</span>';
+				case 'url':
+					if(empty($value))
+						break;
+					$scheme = parse_url($value, PHP_URL_SCHEME);
+					echo '<span class="label label-success">'. htmlspecialchars($scheme, ENT_NOQUOTES) .'</span>';
 					break;
-				case 'https_preferred_url':
+				case 'errors':
 					if(!empty($value))
-						echo '<span class="label label-success">https</span>';
-					break;
-				case 'https_error':
-					if(!empty($value))
-						echo '<span class="label label-danger">HTTPs error</span>';
+						echo '<span class="label label-danger">HTTP error</span>';
 					break;
 				}
 				echo ' ';
@@ -141,25 +144,19 @@ padding-bottom: 20px;
 		  <div class="panel-body">
 			<?php if($prefs !== NULL): ?>
 					<?php if($prefs->title): ?>
-					<a href="<?php echo htmlspecialchars($prefs->preferred_url); ?>"><?php echo htmlspecialchars($prefs->title, ENT_NOQUOTES); ?></a>
+					<a href="<?php echo htmlspecialchars($prefs->url); ?>"><?php echo htmlspecialchars($prefs->title, ENT_NOQUOTES); ?></a>
 					<?php endif; ?>
 					<!-- List group -->
 				  <ul class="list-group">
-					<?php if($prefs->https_error): ?>
-					<li class="list-group-item list-group-item-danger"><span class="label label-danger">HTTPs error</span> <?php echo htmlspecialchars($prefs->https_error, ENT_NOQUOTES); ?></li>
-					<?php endif; ?>
-					<?php if($prefs->https_preferred_url): ?>
-					<li class="list-group-item list-group-item-success"><span class="label label-success">https</span> <?php echo htmlspecialchars($prefs->https_preferred_url, ENT_NOQUOTES); ?></li>
-					<?php endif; ?>
-					<?php if($prefs->http_preferred_url): ?>
-					<li class="list-group-item list-group-item-success"><span class="label label-success">http</span> <?php echo htmlspecialchars($prefs->http_preferred_url, ENT_NOQUOTES); ?></li>
+					<?php if($prefs->errors): ?>
+					<li class="list-group-item list-group-item-danger"><span class="label label-warning">error</span> <?php echo htmlspecialchars($prefs->errors, ENT_NOQUOTES); ?></li>
 					<?php endif; ?>
 				  </ul>
 			<?php endif; // prefs ?>
 		  </div>
 		</div>
 
-		<?php endforeach; // service ?>
+		<?php endforeach; // services ?>
 	</div>
 
 	<div class="container">

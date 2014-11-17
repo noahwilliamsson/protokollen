@@ -1,18 +1,23 @@
 <?php
-require_once('../php/Protokollen.class.php');
-$p = new Protokollen();
+require_once('../php/ProtokollenBase.class.php');
+require_once('../php/ServiceGroup.class.php');
+require_once('../php/TestWwwPreferences.class.php');
+require_once('../php/TestSslprobe.class.php');
+$p = new ServiceGroup();
 $m = $p->getMySQLHandle();
+$wwwPrefsTest = new TestWwwPreferences();
+$sslprobeTest = new TestSslprobe();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Protokollen - undersök internetjänsters säkerhet</title>
 
 	<!-- Bootstrap -->
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
 
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -48,6 +53,7 @@ padding-bottom: 20px;
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="/">Hem</a></li>
+					<li><a href="lists.php">Listor</a></li>
 					<li><a href="#medier">Medier</a></li>
 					<li><a href="#myndigheter">Myndigheter</a></li>
 					<li><a href="https://github.com/noahwilliamsson/protokollen">Om tjänsten</a></li>
@@ -156,30 +162,69 @@ foreach($categories as $cat):
 			<tr>
 				<th>Org.</th>
 				<th>Domän</th>
+				<th>SSLv2</th>
+				<th>SSLv3</th>
+				<th>TLSv1</th>
+				<th>TLSv1.1</th>
+				<th>TLSv1.2</th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
 		for($i = 0, $j = 0; $i < count($entityIds) && $j < 10; $i++):
 			$e = $p->getEntityById($entityIds[$i]);
-			$services = $p->listServices($e->id, Protokollen::SERVICE_TYPE_HTTP);
+			$services = $p->listServices($e->id, Protokollen::SERVICE_TYPE_HTTPS);
 			foreach($services as $svc):
-				$m = $p->getMySQLHandle();
-				$q = 'SELECT https_preferred_url AS url FROM service_http_preferences WHERE service_id="'. $m->escape_string($svc->id) .'" AND entry_type="current" AND https_error IS NULL';
-				$r = $m->query($q);
-				while(($row = $r->fetch_object()) && $j < 10):
-					$j++;
-					$title = mb_substr($row->url, 0, 40);
-					if(mb_strlen($row->url) > 40) $title .= '…';
-					if(empty($title)) $title = $e->domain;
+
+				$grp = $p->getServiceGroup($svc->id);
+				/* Fetch WWW prefs test and make sure https is supported */
+				$prefs = $wwwPrefsTest->getItem($svc->id, $grp->id);
+				if($prefs->url === NULL || $prefs->errors !== NULL)
+					continue;
+
+				$sslprobe = NULL;
+				$wwwHostname = parse_url($prefs->url, PHP_URL_HOST);
+				foreach($grp->items as $item) {
+					if($item->hostname !== $wwwHostname)
+						continue;
+
+					$sslprobe = $sslprobeTest->getSslprobe($svc->id, $grp->id, $item->hostname);
+					break;
+				}
+
+				if($sslprobe === NULL)
+					continue;
+
+				$j++;
+				$title = mb_substr($prefs->url, 0, 40);
+				if(mb_strlen($prefs->url) > 40) $title .= '…';
+				if(empty($title)) $title = $e->domain;
+
+				$protocols = array('sslv2' => 0, 'sslv3' => 0, 'tlsv1' => 0, 'tlsv1_1' => 0, 'tlsv1_2' => 0);
+				foreach(array_keys($protocols) as $key)
+					$protocols[$key] = $sslprobe->$key;
+
 		?>
 			<tr>
 				<td><?php echo htmlspecialchars($e->org, ENT_NOQUOTES) ?></td>
 				<td><a href="/view.php?domain=<?php echo urlencode($e->domain); ?>"><?php echo htmlspecialchars($title, ENT_NOQUOTES) ?></a></td>
+				<?php
+				foreach($protocols as $key => $num):
+					$msg = 'OK';
+					$color = 'green';
+					switch($key) {
+					case 'sslv2': $msg = 'ERR'; $color = 'red'; break;
+					case 'sslv3': $msg = 'ERR'; $color = 'red'; break;
+					case 'tlsv1': break;
+					case 'tlsv1_1': break;
+					case 'tlsv1_2': break;
+					}
+				?>
+				<td><span style="background: <?php echo $color ?>; margin: 3px; font-weight: bold; color:white"><?php if($num > 0) echo $msg; ?></span></td>
+				<?php endforeach; ?>
 			</tr>
-				<?php endwhile; ?>
-			<?php endforeach; ?>
-		<?php endfor; ?>
+			<?php endforeach; /* services */?>
+		<?php endfor; /* iterate 10 */ ?>
 		<?php if($j == 10): ?><tr><td colspan="2">...</td></tr><?php endif; ?>
 		</tbody>
 	</table>
