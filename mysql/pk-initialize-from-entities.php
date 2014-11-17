@@ -2,6 +2,13 @@
 <?php
 /**
  * Protokollen - create services and add service groups
+ *
+ * Usage:
+ * $ ./pk-initialize-from-entities.php [since (timespec)]
+ *
+ * Example:
+ * $ ./pk-initialize-from-entities.php
+ * $ ./pk-initialize-from-entities.php '1 hour ago'
  */
 
 require_once('../php/ServiceGroup.class.php');
@@ -10,9 +17,17 @@ require_once('../php/ServiceGroup.class.php');
 $p = new ProtokollenBase();
 $sg = new ServiceGroup();
 
+$since = '2014-01-01';
+if($argc > 1)
+	$since = $argv[1];
+
 foreach($p->listEntityDomains() as $domain) {
 	/* Load entity */
 	$e = $p->getEntityByDomain($domain);
+
+	/* Skip entities older than $since */
+	if(strtotime($e->created) < strtotime($since))
+		continue;
 
 	/* Compile list of web hostnames */
 	$hostnames = array();
