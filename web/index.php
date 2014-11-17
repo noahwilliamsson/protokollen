@@ -173,7 +173,7 @@ foreach($categories as $cat):
 		<?php
 		for($i = 0, $j = 0; $i < count($entityIds) && $j < 10; $i++):
 			$e = $p->getEntityById($entityIds[$i]);
-			$services = $p->listServices($e->id, Protokollen::SERVICE_TYPE_HTTPS);
+			$services = $p->listServices($e->id, ProtokollenBase::SERVICE_TYPE_HTTPS);
 			foreach($services as $svc):
 
 				$grp = $p->getServiceGroup($svc->id);
