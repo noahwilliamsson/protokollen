@@ -130,7 +130,7 @@ padding-bottom: 20px;
 require_once('flot.php');
 
 $categories = array();
-$q = 'SELECT DISTINCT cat FROM entities WHERE id > 1';
+$q = 'SELECT cat FROM entities WHERE id > 1 GROUP BY cat ORDER BY COUNT(*) DESC, cat';
 $r = $m->query($q);
 while($row = $r->fetch_object())
 	$categories[] = $row->cat;
