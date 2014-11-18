@@ -226,7 +226,7 @@ function svgForDomain($domain) {
 	file_put_contents($filename, $dot);
 
 	/* Generate SVG */
-	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=12,15', '-Tsvg');
+	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=18,22', '-Tsvg');
 	$args[] = escapeshellarg($filename);
 	$command = implode(' ', $args);
 
