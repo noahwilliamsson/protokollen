@@ -437,9 +437,9 @@ class ProtokollenBase {
 		$q = 'INSERT INTO logs SET service_id=?, json_id=?, hostname=?,
 			service=?, `log`=?, created=NOW()';
 		$st = $m->prepare($q);
+		$service = "$svc->service_name ($svc->service_type)";
 		$st->bind_param('iisss', $svcId, $jsonId, $hostname,
-				"$svc->service_name ($svc->service_type)",
-				$msg);
+				$service, $msg);
 		$id = NULL;
 		if(!$st->execute()) {
 			$err = "Log entry add ($svcId, $hostname) failed: $m->error";
