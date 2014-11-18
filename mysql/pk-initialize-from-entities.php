@@ -117,11 +117,10 @@ foreach($p->listEntityDomains() as $domain) {
 	if($e->domain_email === NULL)
 		continue;
 
-
 	/* SMTP: Create service and service group */
 	$groupSmtp = array();
 	$hostnames = array();
-	$rrset = dns_get_record($e->domain, DNS_MX);
+	$rrset = dns_get_record($e->domain_email, DNS_MX);
 	foreach($rrset as $rr) {
 		$obj = new stdClass();
 		$obj->hostname = $rr['target'];
