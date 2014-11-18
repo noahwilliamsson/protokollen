@@ -228,7 +228,7 @@ class TestSslprobe extends ServiceGroup {
 				$hostname, $sslv2, $sslv3, $tlsv1,
 				$tlsv1_1, $tlsv1_2,
 				implode(', ', $arr));
-		$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
+		$this->logEntry($svc->id, $hostname, $log, $jsonId);
 	}
 
 	/**
