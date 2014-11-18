@@ -35,6 +35,10 @@ class ProtokollenBase {
 		return $this->m;
 	}
 
+	/**
+	 * List entity IDs
+	 * @returns Array of IDs, throws on error
+	 */
 	function listEntityIds() {
 		$m = $this->m;
 		$st = $m->prepare('SELECT id FROM entities WHERE id > 1');
@@ -53,6 +57,10 @@ class ProtokollenBase {
 		return $arr;
 	}
 
+	/**
+	 * List entity domains
+	 * @returns Array of domains, throws on error
+	 */
 	function listEntityDomains() {
 		$m = $this->m;
 		$st = $m->prepare('SELECT domain FROM entities WHERE id > 1');
@@ -71,6 +79,11 @@ class ProtokollenBase {
 		return $arr;
 	}
 
+	/**
+	 * Get entity object by ID
+	 * @param $entityId Entity ID
+	 * @returns Object or NULL, throws on error
+	 */
 	function getEntityById($entityId) {
 		$m = $this->m;
 		$st = $m->prepare('SELECT * FROM entities WHERE id=?');
@@ -88,6 +101,11 @@ class ProtokollenBase {
 		return $row;
 	}
 
+	/**
+	 * Get entity object by domain
+	 * @param $domain Domain
+	 * @returns Object or NULL, throws on error
+	 */
 	function getEntityByDomain($domain) {
 		$m = $this->m;
 		$st = $m->prepare('SELECT * FROM entities WHERE domain=?');
@@ -103,6 +121,57 @@ class ProtokollenBase {
 		$st->close();
 
 		return $row;
+	}
+
+	/**
+	 * Add entity
+	 * @param $domain Domain
+	 * @param $emailDomain E-mail domain
+	 * @param $categories Categories
+	 * @param $url URL
+	 * @param $org Organization
+	 * @param $orgShort Organization short
+	 * @param $orgGroup Organization group
+	 * @returns ID of entity, throws on error
+	 */
+	function addEntity($domain, $emailDomain, $categories, $url, $org, $orgShort = NULL, $orgGroup = NULL) {
+		$e = $this->getEntityByDomain($domain);
+		if($e !== NULL) {
+			return $e->id;
+		}
+
+		$q = 'INSERT INTO entities
+			SET domain=?, domain_email=?, kia_cats=?, url=?,
+			org=?, org_short=?, org_group=?, created=NOW()';
+		if(($st = $this->m->prepare($q)) === FALSE) {
+			$err = "Add entity ($domain, $emailDomain)"
+				." failed: ". $this->m->error;
+			throw new Exception($err);
+		}
+		$st->bind_param('sssssss', $domain, $emailDomain, $categories,
+				$url, $org, $orgShort, $orgGroup);
+		if(!$st->execute()) {
+			$err = "Add entity ($domain, $emailDomain)"
+				." failed: ". $this->m->error;
+			throw new Exception($err);
+		}
+
+		$id = $st->insert_id;
+		$st->close();
+
+		return $id;
+	}
+
+	function setEntityKiaDetails($entityId, $objectId, $categories) {
+		$q = 'UPDATE entities SET kia_object_id=?, kia_cats=?, updated=updated WHERE id=?';
+		$st = $this->m->prepare($q);
+		$st->bind_param('isi', $objectId, $categories, $entityId);
+		if(!$st->execute()) {
+			$err = "Update entity ($entityId, $objectId, $categories)"
+				." failed: ". $this->m->error;
+			throw new Exception($err);
+		}
+		$st->close();
 	}
 
 	function getServiceById($svcId) {
