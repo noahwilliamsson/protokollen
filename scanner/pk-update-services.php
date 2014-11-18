@@ -37,8 +37,8 @@ foreach($entities as $entityId) {
 			foreach(dns_get_record($svc->service_name, DNS_MX) as $rr) {
 				$obj = new stdClass();
 				$obj->hostname = $rr['target'];
-				$obj->prio = $rr['pri'];
 				$obj->port = 25;
+				$obj->prio = $rr['pri'];
 				$obj->protocol = 'smtp';
 				$group[] = $obj;
 
@@ -54,8 +54,8 @@ foreach($entities as $entityId) {
 			foreach(dns_get_record($svc->service_name, DNS_NS) as $rr) {
 				$obj = new stdClass();
 				$obj->hostname = $rr['target'];
-				$obj->prio = 0;
 				$obj->port = 53;
+				$obj->prio = 0;
 				$obj->protocol = 'dns';
 				$group[] = $obj;
 
