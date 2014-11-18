@@ -435,7 +435,7 @@ class ProtokollenBase {
 		$m = $this->m;
 		$svc = $this->getServiceById($svcId);
 		$q = 'INSERT INTO logs SET service_id=?, json_id=?, hostname=?,
-			service=?, `log`=?, created=NOW()');
+			service=?, `log`=?, created=NOW()';
 		$st = $m->prepare($q);
 		$st->bind_param('iisss', $svcId, $jsonId, $hostname,
 				"$svc->service_name ($svc->service_type)",
