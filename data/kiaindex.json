@@ -1,0 +1,3492 @@
+[
+    {
+        "title": "www.aftonbladet.se",
+        "domain": "www.aftonbladet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=7&kyear=2014&kweek=45",
+        "objectId": 7,
+        "position": 1,
+        "unique": 5145327,
+        "visits": 20231482,
+        "pageviews": 72487733,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "Expressen.se",
+        "domain": "expressen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=144&kyear=2014&kweek=45",
+        "objectId": 144,
+        "position": 2,
+        "unique": 3191273,
+        "visits": 9140406,
+        "pageviews": 33303152,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "blocket.se",
+        "domain": "blocket.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=63&kyear=2014&kweek=45",
+        "objectId": 63,
+        "position": 3,
+        "unique": 3058664,
+        "visits": 9011367,
+        "pageviews": 150766529,
+        "categories": [
+            "K\u00f6p och s\u00e4lj"
+        ]
+    },
+    {
+        "title": "hitta.se",
+        "domain": "hitta.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=215&kyear=2014&kweek=45",
+        "objectId": 215,
+        "position": 4,
+        "unique": 2057669,
+        "visits": 3652174,
+        "pageviews": 10943250,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "hemnet.se",
+        "domain": "hemnet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=212&kyear=2014&kweek=45",
+        "objectId": 212,
+        "position": 5,
+        "unique": 1724700,
+        "visits": 3941382,
+        "pageviews": 20001639,
+        "categories": [
+            "Bostad k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "Eniro.se",
+        "domain": "eniro.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=139&kyear=2014&kweek=45",
+        "objectId": 139,
+        "position": 6,
+        "unique": 1722956,
+        "visits": 2671632,
+        "pageviews": 9151007,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "DN.se",
+        "domain": "dn.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=123&kyear=2014&kweek=45",
+        "objectId": 123,
+        "position": 7,
+        "unique": 1570349,
+        "visits": 4450258,
+        "pageviews": 13641520,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "svd.se",
+        "domain": "svd.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=525&kyear=2014&kweek=45",
+        "objectId": 525,
+        "position": 8,
+        "unique": 1443495,
+        "visits": 3055392,
+        "pageviews": 10160697,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "prisjakt.nu",
+        "domain": "prisjakt.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=432&kyear=2014&kweek=45",
+        "objectId": 432,
+        "position": 9,
+        "unique": 999299,
+        "visits": 1565288,
+        "pageviews": 5652009,
+        "categories": [
+            "Prisj\u00e4mf\u00f6relse"
+        ]
+    },
+    {
+        "title": "familjeliv.se",
+        "domain": "familjeliv.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=146&kyear=2014&kweek=45",
+        "objectId": 146,
+        "position": 10,
+        "unique": 957766,
+        "visits": 1347095,
+        "pageviews": 3774739,
+        "categories": [
+            "Familj"
+        ]
+    },
+    {
+        "title": "SF Bio",
+        "domain": "www.sf.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=461&kyear=2014&kweek=45",
+        "objectId": 461,
+        "position": 11,
+        "unique": 824887,
+        "visits": 1220998,
+        "pageviews": 5717740,
+        "categories": [
+            "TV & film",
+            "Biljetter"
+        ]
+    },
+    {
+        "title": "di.se",
+        "domain": "di.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=115&kyear=2014&kweek=45",
+        "objectId": 115,
+        "position": 12,
+        "unique": 778347,
+        "visits": 3018307,
+        "pageviews": 15888699,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "tv.nu",
+        "domain": "tv.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=581&kyear=2014&kweek=45",
+        "objectId": 581,
+        "position": 13,
+        "unique": 715554,
+        "visits": 1856930,
+        "pageviews": 6229231,
+        "categories": [
+            "TV tabl\u00e5er"
+        ]
+    },
+    {
+        "title": "laget.se",
+        "domain": "laget.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=293&kyear=2014&kweek=45",
+        "objectId": 293,
+        "position": 14,
+        "unique": 607087,
+        "visits": 1375581,
+        "pageviews": 4894341,
+        "categories": [
+            "Familj",
+            "Sport"
+        ]
+    },
+    {
+        "title": "Klart.se",
+        "domain": "klart.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=823&kyear=2014&kweek=45",
+        "objectId": 823,
+        "position": 15,
+        "unique": 530678,
+        "visits": 1331337,
+        "pageviews": 3448520,
+        "categories": []
+    },
+    {
+        "title": "Newsner.com",
+        "domain": "newsner.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=1351&kyear=2014&kweek=45",
+        "objectId": 1351,
+        "position": 16,
+        "unique": 526434,
+        "visits": 725336,
+        "pageviews": 1081583,
+        "categories": []
+    },
+    {
+        "title": "Ratsit.se",
+        "domain": "ratsit.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=440&kyear=2014&kweek=45",
+        "objectId": 440,
+        "position": 17,
+        "unique": 466531,
+        "visits": 720541,
+        "pageviews": 3026224,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "Nyheter24.se",
+        "domain": "nyheter24.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1343&kyear=2014&kweek=45",
+        "objectId": 1343,
+        "position": 18,
+        "unique": 462812,
+        "visits": 840540,
+        "pageviews": 3040076,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "gp.se",
+        "domain": "gp.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=190&kyear=2014&kweek=45",
+        "objectId": 190,
+        "position": 19,
+        "unique": 457312,
+        "visits": 1176934,
+        "pageviews": 3434135,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "tasteline.com",
+        "domain": "tasteline.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=548&kyear=2014&kweek=45",
+        "objectId": 548,
+        "position": 20,
+        "unique": 444226,
+        "visits": 603245,
+        "pageviews": 1493626,
+        "categories": [
+            "Mat"
+        ]
+    },
+    {
+        "title": "allabolag.se",
+        "domain": "allabolag.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=16&kyear=2014&kweek=45",
+        "objectId": 16,
+        "position": 21,
+        "unique": 435792,
+        "visits": 791431,
+        "pageviews": 5119944,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "Sydsvenskan.se",
+        "domain": "sydsvenskan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=544&kyear=2014&kweek=45",
+        "objectId": 544,
+        "position": 22,
+        "unique": 417180,
+        "visits": 857916,
+        "pageviews": 2193295,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Ticnet.se",
+        "domain": "ticnet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=561&kyear=2014&kweek=45",
+        "objectId": 561,
+        "position": 25,
+        "unique": 341070,
+        "visits": 437557,
+        "pageviews": 3243742,
+        "categories": [
+            "Biljetter"
+        ]
+    },
+    {
+        "title": "improveme.se",
+        "domain": "improveme.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=241&kyear=2014&kweek=45",
+        "objectId": 241,
+        "position": 27,
+        "unique": 339126,
+        "visits": 920775,
+        "pageviews": 1673229,
+        "categories": [
+            "H\u00e4lsa & livsstil",
+            "Mode & sk\u00f6nhet"
+        ]
+    },
+    {
+        "title": "Byggahus.se",
+        "domain": "byggahus.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=81&kyear=2014&kweek=45",
+        "objectId": 81,
+        "position": 28,
+        "unique": 298112,
+        "visits": 439626,
+        "pageviews": 1171167,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "Kokaihop.se",
+        "domain": "kokaihop.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=273&kyear=2014&kweek=45",
+        "objectId": 273,
+        "position": 29,
+        "unique": 295951,
+        "visits": 436782,
+        "pageviews": 925959,
+        "categories": [
+            "Mat"
+        ]
+    },
+    {
+        "title": "svenskafans.com",
+        "domain": "svenskafans.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=533&kyear=2014&kweek=45",
+        "objectId": 533,
+        "position": 30,
+        "unique": 269785,
+        "visits": 744343,
+        "pageviews": 2612547,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "SweClockers.com",
+        "domain": "sweclockers.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=541&kyear=2014&kweek=45",
+        "objectId": 541,
+        "position": 31,
+        "unique": 266349,
+        "visits": 562598,
+        "pageviews": 2577007,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "hd.se",
+        "domain": "hd.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=206&kyear=2014&kweek=45",
+        "objectId": 206,
+        "position": 32,
+        "unique": 263238,
+        "visits": 662881,
+        "pageviews": 2008884,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Metro.se",
+        "domain": "metro.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1027&kyear=2014&kweek=45",
+        "objectId": 1027,
+        "position": 33,
+        "unique": 257589,
+        "visits": 362392,
+        "pageviews": 823606,
+        "categories": [
+            "Dagspress riks",
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Reseguiden",
+        "domain": "Reseguiden.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=447&kyear=2014&kweek=45",
+        "objectId": 447,
+        "position": 34,
+        "unique": 234976,
+        "visits": 314995,
+        "pageviews": 1408468,
+        "categories": [
+            "Resor"
+        ]
+    },
+    {
+        "title": "Kissies",
+        "domain": "www.kissies.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=652&kyear=2014&kweek=45",
+        "objectId": 652,
+        "position": 36,
+        "unique": 217021,
+        "visits": 696686,
+        "pageviews": 1171787,
+        "categories": []
+    },
+    {
+        "title": "for.me",
+        "domain": "for.me",
+        "source": "http:\/\/www.kiaindex.se?object_id=1269&kyear=2014&kweek=45",
+        "objectId": 1269,
+        "position": 37,
+        "unique": 215331,
+        "visits": 547902,
+        "pageviews": 1075102,
+        "categories": []
+    },
+    {
+        "title": "Vimedbarn.se",
+        "domain": "vimedbarn.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=721&kyear=2014&kweek=45",
+        "objectId": 721,
+        "position": 38,
+        "unique": 207864,
+        "visits": 658736,
+        "pageviews": 1158681,
+        "categories": [
+            "Familj"
+        ]
+    },
+    {
+        "title": "Spray.se",
+        "domain": "spray.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=494&kyear=2014&kweek=45",
+        "objectId": 494,
+        "position": 39,
+        "unique": 207747,
+        "visits": 729695,
+        "pageviews": 2372548,
+        "categories": [
+            "Portal"
+        ]
+    },
+    {
+        "title": "Myshowroom.se",
+        "domain": "myshowroom.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=696&kyear=2014&kweek=45",
+        "objectId": 696,
+        "position": 40,
+        "unique": 206211,
+        "visits": 562010,
+        "pageviews": 959919,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "Bytbil",
+        "domain": "www.bytbil.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=83&kyear=2014&kweek=45",
+        "objectId": 83,
+        "position": 41,
+        "unique": 203573,
+        "visits": 351867,
+        "pageviews": 4233149,
+        "categories": [
+            "Motor k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "Bloggplatsen.se",
+        "domain": "bloggplatsen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=708&kyear=2014&kweek=45",
+        "objectId": 708,
+        "position": 42,
+        "unique": 195435,
+        "visits": 328104,
+        "pageviews": 627772,
+        "categories": []
+    },
+    {
+        "title": "internetmedicin.se",
+        "domain": "internetmedicin.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=243&kyear=2014&kweek=45",
+        "objectId": 243,
+        "position": 43,
+        "unique": 189977,
+        "visits": 293830,
+        "pageviews": 515373,
+        "categories": [
+            "H\u00e4lsa & livsstil",
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "placera.nu",
+        "domain": "placera.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=420&kyear=2014&kweek=45",
+        "objectId": 420,
+        "position": 45,
+        "unique": 189508,
+        "visits": 734745,
+        "pageviews": 2307535,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "devote.se",
+        "domain": "devote.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=114&kyear=2014&kweek=45",
+        "objectId": 114,
+        "position": 46,
+        "unique": 187418,
+        "visits": 505358,
+        "pageviews": 1296438,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "unt.se",
+        "domain": "unt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=591&kyear=2014&kweek=45",
+        "objectId": 591,
+        "position": 47,
+        "unique": 178849,
+        "visits": 470512,
+        "pageviews": 1129660,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Careerbuilder",
+        "domain": "Careerbuilder.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=87&kyear=2014&kweek=45",
+        "objectId": 87,
+        "position": 48,
+        "unique": 174021,
+        "visits": 220140,
+        "pageviews": 526871,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "blocket Jobb",
+        "domain": "www.blocket.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1084&kyear=2014&kweek=45",
+        "objectId": 1084,
+        "position": 49,
+        "unique": 166314,
+        "visits": 213081,
+        "pageviews": 835560,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "Tyda.se",
+        "domain": "tyda.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1342&kyear=2014&kweek=45",
+        "objectId": 1342,
+        "position": 50,
+        "unique": 164921,
+        "visits": 345671,
+        "pageviews": 1378265,
+        "categories": [
+            "Lexikon"
+        ]
+    },
+    {
+        "title": "dt.se",
+        "domain": "dt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=111&kyear=2014&kweek=45",
+        "objectId": 111,
+        "position": 51,
+        "unique": 160545,
+        "visits": 399499,
+        "pageviews": 1229252,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "monster.se",
+        "domain": "monster.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=349&kyear=2014&kweek=45",
+        "objectId": 349,
+        "position": 52,
+        "unique": 153969,
+        "visits": 212299,
+        "pageviews": 746828,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "kuriren.nu",
+        "domain": "kuriren.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=286&kyear=2014&kweek=45",
+        "objectId": 286,
+        "position": 53,
+        "unique": 153724,
+        "visits": 373986,
+        "pageviews": 800215,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Metrojobb.se",
+        "domain": "metrojobb.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=774&kyear=2014&kweek=45",
+        "objectId": 774,
+        "position": 54,
+        "unique": 148797,
+        "visits": 215310,
+        "pageviews": 532533,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "corren.se",
+        "domain": "corren.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=97&kyear=2014&kweek=45",
+        "objectId": 97,
+        "position": 55,
+        "unique": 148514,
+        "visits": 480786,
+        "pageviews": 1265485,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "nt.se",
+        "domain": "nt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=394&kyear=2014&kweek=45",
+        "objectId": 394,
+        "position": 56,
+        "unique": 144448,
+        "visits": 408950,
+        "pageviews": 1141435,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "bt.se",
+        "domain": "bt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=79&kyear=2014&kweek=45",
+        "objectId": 79,
+        "position": 57,
+        "unique": 144390,
+        "visits": 419832,
+        "pageviews": 995705,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "vk.se",
+        "domain": "vk.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=616&kyear=2014&kweek=45",
+        "objectId": 616,
+        "position": 58,
+        "unique": 144308,
+        "visits": 502795,
+        "pageviews": 1716482,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Alltomstockholm",
+        "domain": "www.alltomstockolm.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=33&kyear=2014&kweek=45",
+        "objectId": 33,
+        "position": 59,
+        "unique": 143704,
+        "visits": 163340,
+        "pageviews": 299224,
+        "categories": [
+            "N\u00f6je"
+        ]
+    },
+    {
+        "title": "etc.se",
+        "domain": "etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1299&kyear=2014&kweek=45",
+        "objectId": 1299,
+        "position": 60,
+        "unique": 143632,
+        "visits": 213377,
+        "pageviews": 303417,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "nwt.se",
+        "domain": "nwt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=396&kyear=2014&kweek=45",
+        "objectId": 396,
+        "position": 61,
+        "unique": 143592,
+        "visits": 318016,
+        "pageviews": 721365,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "icakuriren.se",
+        "domain": "icakuriren.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=230&kyear=2014&kweek=45",
+        "objectId": 230,
+        "position": 62,
+        "unique": 138005,
+        "visits": 249375,
+        "pageviews": 465598,
+        "categories": [
+            "Mat",
+            "Veckopress",
+            "H\u00e4lsa & livsstil",
+            "N\u00f6je"
+        ]
+    },
+    {
+        "title": "resume.se",
+        "domain": "resume.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=448&kyear=2014&kweek=45",
+        "objectId": 448,
+        "position": 63,
+        "unique": 133889,
+        "visits": 249475,
+        "pageviews": 708396,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "va.se",
+        "domain": "va.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=597&kyear=2014&kweek=45",
+        "objectId": 597,
+        "position": 64,
+        "unique": 132217,
+        "visits": 188823,
+        "pageviews": 527158,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "Hippson.se",
+        "domain": "hippson.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=214&kyear=2014&kweek=45",
+        "objectId": 214,
+        "position": 65,
+        "unique": 132041,
+        "visits": 239096,
+        "pageviews": 378122,
+        "categories": []
+    },
+    {
+        "title": "improveme.se",
+        "domain": "improveme.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1226&kyear=2014&kweek=45",
+        "objectId": 1226,
+        "position": 66,
+        "unique": 131869,
+        "visits": 259803,
+        "pageviews": 501164,
+        "categories": []
+    },
+    {
+        "title": "na.se",
+        "domain": "na.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=372&kyear=2014&kweek=45",
+        "objectId": 372,
+        "position": 67,
+        "unique": 128658,
+        "visits": 405692,
+        "pageviews": 1199115,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Fragbite.se",
+        "domain": "fragbite.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1340&kyear=2014&kweek=45",
+        "objectId": 1340,
+        "position": 68,
+        "unique": 128403,
+        "visits": 272033,
+        "pageviews": 762503,
+        "categories": [
+            "Spel"
+        ]
+    },
+    {
+        "title": "qruiser.com",
+        "domain": "qruiser.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=437&kyear=2014&kweek=45",
+        "objectId": 437,
+        "position": 69,
+        "unique": 127873,
+        "visits": 500288,
+        "pageviews": 15540333,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "IDG.se startsida",
+        "domain": "www.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=233&kyear=2014&kweek=45",
+        "objectId": 233,
+        "position": 70,
+        "unique": 127575,
+        "visits": 334865,
+        "pageviews": 910644,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "Proff",
+        "domain": "www.proff.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=135&kyear=2014&kweek=45",
+        "objectId": 135,
+        "position": 71,
+        "unique": 127342,
+        "visits": 143543,
+        "pageviews": 458111,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "Ny Teknik",
+        "domain": "nyteknik.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=401&kyear=2014&kweek=45",
+        "objectId": 401,
+        "position": 72,
+        "unique": 124755,
+        "visits": 219438,
+        "pageviews": 0,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "thelocal.se",
+        "domain": "thelocal.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=558&kyear=2014&kweek=45",
+        "objectId": 558,
+        "position": 73,
+        "unique": 123135,
+        "visits": 203043,
+        "pageviews": 688277,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "gd.se",
+        "domain": "gd.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=181&kyear=2014&kweek=45",
+        "objectId": 181,
+        "position": 74,
+        "unique": 123025,
+        "visits": 208567,
+        "pageviews": 492870,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Vibil\u00e4gare.se",
+        "domain": "Vibil\u00e4gare.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=607&kyear=2014&kweek=45",
+        "objectId": 607,
+        "position": 75,
+        "unique": 121777,
+        "visits": 173261,
+        "pageviews": 521276,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "nsd.se",
+        "domain": "nsd.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=393&kyear=2014&kweek=45",
+        "objectId": 393,
+        "position": 76,
+        "unique": 120675,
+        "visits": 395448,
+        "pageviews": 989263,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "kurera.se",
+        "domain": "kurera.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1268&kyear=2014&kweek=45",
+        "objectId": 1268,
+        "position": 77,
+        "unique": 118900,
+        "visits": 138045,
+        "pageviews": 211060,
+        "categories": [
+            "H\u00e4lsa & livsstil"
+        ]
+    },
+    {
+        "title": "vf.se",
+        "domain": "vf.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=603&kyear=2014&kweek=45",
+        "objectId": 603,
+        "position": 78,
+        "unique": 116248,
+        "visits": 301257,
+        "pageviews": 591130,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Dagens Media",
+        "domain": "www.dagensmedia.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=106&kyear=2014&kweek=45",
+        "objectId": 106,
+        "position": 79,
+        "unique": 115327,
+        "visits": 185534,
+        "pageviews": 0,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Metromode.se",
+        "domain": "metromode.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1028&kyear=2014&kweek=45",
+        "objectId": 1028,
+        "position": 80,
+        "unique": 112860,
+        "visits": 331663,
+        "pageviews": 644894,
+        "categories": [
+            "Mode & sk\u00f6nhet"
+        ]
+    },
+    {
+        "title": "styleroom.se",
+        "domain": "styleroom.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=519&kyear=2014&kweek=45",
+        "objectId": 519,
+        "position": 81,
+        "unique": 112806,
+        "visits": 142805,
+        "pageviews": 518412,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "Dayviews.com",
+        "domain": "dayviews.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=1339&kyear=2014&kweek=45",
+        "objectId": 1339,
+        "position": 82,
+        "unique": 112780,
+        "visits": 182119,
+        "pageviews": 1700764,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "stoppapressarna.se",
+        "domain": "stoppapressarna.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1157&kyear=2014&kweek=45",
+        "objectId": 1157,
+        "position": 83,
+        "unique": 112588,
+        "visits": 289821,
+        "pageviews": 634865,
+        "categories": []
+    },
+    {
+        "title": "Leta",
+        "domain": "Leta.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=298&kyear=2014&kweek=45",
+        "objectId": 298,
+        "position": 84,
+        "unique": 108695,
+        "visits": 553727,
+        "pageviews": 1511848,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "bokat.se",
+        "domain": "bokat.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=69&kyear=2014&kweek=45",
+        "objectId": 69,
+        "position": 85,
+        "unique": 107213,
+        "visits": 242425,
+        "pageviews": 1191359,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "Jobbsafari.se",
+        "domain": "jobbsafari.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=257&kyear=2014&kweek=45",
+        "objectId": 257,
+        "position": 86,
+        "unique": 104944,
+        "visits": 144851,
+        "pageviews": 588970,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "ekuriren.se",
+        "domain": "ekuriren.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=133&kyear=2014&kweek=45",
+        "objectId": 133,
+        "position": 87,
+        "unique": 103538,
+        "visits": 221295,
+        "pageviews": 571365,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Viivilla.se",
+        "domain": "viivilla.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=611&kyear=2014&kweek=45",
+        "objectId": 611,
+        "position": 88,
+        "unique": 99910,
+        "visits": 118232,
+        "pageviews": 237839,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "smp.se",
+        "domain": "smp.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=473&kyear=2014&kweek=45",
+        "objectId": 473,
+        "position": 89,
+        "unique": 99570,
+        "visits": 257788,
+        "pageviews": 556037,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Matklubben.se",
+        "domain": "matklubben.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=324&kyear=2014&kweek=45",
+        "objectId": 324,
+        "position": 90,
+        "unique": 98319,
+        "visits": 123520,
+        "pageviews": 366974,
+        "categories": [
+            "Mat"
+        ]
+    },
+    {
+        "title": "Doktorn.com",
+        "domain": "doktorn.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=1191&kyear=2014&kweek=45",
+        "objectId": 1191,
+        "position": 91,
+        "unique": 96645,
+        "visits": 111952,
+        "pageviews": 197246,
+        "categories": [
+            "H\u00e4lsa & livsstil"
+        ]
+    },
+    {
+        "title": "st.nu",
+        "domain": "st.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=497&kyear=2014&kweek=45",
+        "objectId": 497,
+        "position": 92,
+        "unique": 94535,
+        "visits": 246206,
+        "pageviews": 687010,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Aff\u00e4rsv\u00e4rlden",
+        "domain": "www.affarsvarlden.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=6&kyear=2014&kweek=45",
+        "objectId": 6,
+        "position": 94,
+        "unique": 90220,
+        "visits": 207186,
+        "pageviews": 0,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "Webbkameror.se",
+        "domain": "webbkameror.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=621&kyear=2014&kweek=45",
+        "objectId": 621,
+        "position": 95,
+        "unique": 90040,
+        "visits": 197171,
+        "pageviews": 1318435,
+        "categories": [
+            "\u00d6vrigt"
+        ]
+    },
+    {
+        "title": "kristianstadsbladet.se",
+        "domain": "kristianstadsbladet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=283&kyear=2014&kweek=45",
+        "objectId": 283,
+        "position": 96,
+        "unique": 88696,
+        "visits": 191734,
+        "pageviews": 514835,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "qx.se",
+        "domain": "qx.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=438&kyear=2014&kweek=45",
+        "objectId": 438,
+        "position": 97,
+        "unique": 88666,
+        "visits": 218826,
+        "pageviews": 364028,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "Passagen.se",
+        "domain": "passagen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=410&kyear=2014&kweek=45",
+        "objectId": 410,
+        "position": 98,
+        "unique": 88228,
+        "visits": 154333,
+        "pageviews": 535116,
+        "categories": [
+            "Portal"
+        ]
+    },
+    {
+        "title": "FEMME",
+        "domain": " www.femme.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=976&kyear=2014&kweek=45",
+        "objectId": 976,
+        "position": 99,
+        "unique": 87517,
+        "visits": 282038,
+        "pageviews": 443319,
+        "categories": [
+            "Familj"
+        ]
+    },
+    {
+        "title": "iform.se",
+        "domain": "iform.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=236&kyear=2014&kweek=45",
+        "objectId": 236,
+        "position": 100,
+        "unique": 87047,
+        "visits": 105325,
+        "pageviews": 242292,
+        "categories": [
+            "\u00d6vrigt"
+        ]
+    },
+    {
+        "title": "allehanda.se",
+        "domain": "allehanda.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=17&kyear=2014&kweek=45",
+        "objectId": 17,
+        "position": 101,
+        "unique": 86784,
+        "visits": 243267,
+        "pageviews": 746070,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "golf.se",
+        "domain": "golf.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=188&kyear=2014&kweek=45",
+        "objectId": 188,
+        "position": 102,
+        "unique": 86023,
+        "visits": 216996,
+        "pageviews": 671564,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "bilpriser.se",
+        "domain": "bilpriser.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1093&kyear=2014&kweek=45",
+        "objectId": 1093,
+        "position": 103,
+        "unique": 85607,
+        "visits": 143872,
+        "pageviews": 1320755,
+        "categories": [
+            "Motor k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "Fotosidan.se",
+        "domain": "fotosidan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=165&kyear=2014&kweek=45",
+        "objectId": 165,
+        "position": 104,
+        "unique": 85392,
+        "visits": 183047,
+        "pageviews": 1275182,
+        "categories": [
+            "Foto\/bilder"
+        ]
+    },
+    {
+        "title": "AllaStudier.se",
+        "domain": "allastudier.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=792&kyear=2014&kweek=45",
+        "objectId": 792,
+        "position": 105,
+        "unique": 83379,
+        "visits": 103923,
+        "pageviews": 401254,
+        "categories": [
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "Hamsterpaj.net",
+        "domain": "hamsterpaj.net",
+        "source": "http:\/\/www.kiaindex.se?object_id=1341&kyear=2014&kweek=45",
+        "objectId": 1341,
+        "position": 106,
+        "unique": 82294,
+        "visits": 104413,
+        "pageviews": 236405,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "op.se",
+        "domain": "op.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=407&kyear=2014&kweek=45",
+        "objectId": 407,
+        "position": 107,
+        "unique": 81862,
+        "visits": 197309,
+        "pageviews": 554609,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "dagenssamhalle.se",
+        "domain": "dagenssamhalle.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=108&kyear=2014&kweek=45",
+        "objectId": 108,
+        "position": 108,
+        "unique": 80644,
+        "visits": 103327,
+        "pageviews": 202991,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "zatzy.com",
+        "domain": "zatzy.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=637&kyear=2014&kweek=45",
+        "objectId": 637,
+        "position": 109,
+        "unique": 79640,
+        "visits": 97950,
+        "pageviews": 158202,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Sk\u00e5nskan.se",
+        "domain": "Sk\u00e5nskan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=469&kyear=2014&kweek=45",
+        "objectId": 469,
+        "position": 110,
+        "unique": 79482,
+        "visits": 160059,
+        "pageviews": 412639,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Spisa.nu",
+        "domain": "spisa.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=1043&kyear=2014&kweek=45",
+        "objectId": 1043,
+        "position": 111,
+        "unique": 79403,
+        "visits": 95557,
+        "pageviews": 181844,
+        "categories": [
+            "Mat"
+        ]
+    },
+    {
+        "title": "lakartidningen.se",
+        "domain": "lakartidningen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=632&kyear=2014&kweek=45",
+        "objectId": 632,
+        "position": 112,
+        "unique": 79311,
+        "visits": 101411,
+        "pageviews": 150939,
+        "categories": [
+            "H\u00e4lsa & livsstil",
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "helagotland.se",
+        "domain": "helagotland.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=207&kyear=2014&kweek=45",
+        "objectId": 207,
+        "position": 114,
+        "unique": 73997,
+        "visits": 263640,
+        "pageviews": 712102,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "vlt.se",
+        "domain": "vlt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=617&kyear=2014&kweek=45",
+        "objectId": 617,
+        "position": 115,
+        "unique": 73745,
+        "visits": 243079,
+        "pageviews": 749736,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "helahalsingland.se",
+        "domain": "helahalsingland.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=208&kyear=2014&kweek=45",
+        "objectId": 208,
+        "position": 116,
+        "unique": 69933,
+        "visits": 173665,
+        "pageviews": 559716,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "horsespot.se",
+        "domain": "horsespot.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=947&kyear=2014&kweek=45",
+        "objectId": 947,
+        "position": 117,
+        "unique": 69190,
+        "visits": 244077,
+        "pageviews": 609428,
+        "categories": []
+    },
+    {
+        "title": "brollopstorget.se",
+        "domain": "brollopstorget.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=77&kyear=2014&kweek=45",
+        "objectId": 77,
+        "position": 118,
+        "unique": 68840,
+        "visits": 82055,
+        "pageviews": 192227,
+        "categories": [
+            "Familj"
+        ]
+    },
+    {
+        "title": "Aktiespararna.se",
+        "domain": "aktiespararna.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=862&kyear=2014&kweek=45",
+        "objectId": 862,
+        "position": 119,
+        "unique": 68148,
+        "visits": 110300,
+        "pageviews": 379744,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "freeride.se",
+        "domain": "freeride.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=168&kyear=2014&kweek=45",
+        "objectId": 168,
+        "position": 120,
+        "unique": 67994,
+        "visits": 123709,
+        "pageviews": 514694,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "Minbebis.com",
+        "domain": "minbebis.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=336&kyear=2014&kweek=45",
+        "objectId": 336,
+        "position": 121,
+        "unique": 67526,
+        "visits": 108788,
+        "pageviews": 190677,
+        "categories": [
+            "Familj"
+        ]
+    },
+    {
+        "title": "dagensmedicin.se",
+        "domain": "dagensmedicin.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=673&kyear=2014&kweek=45",
+        "objectId": 673,
+        "position": 123,
+        "unique": 64986,
+        "visits": 92506,
+        "pageviews": 295737,
+        "categories": [
+            "H\u00e4lsa & livsstil",
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "jnytt.se",
+        "domain": "jnytt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=680&kyear=2014&kweek=45",
+        "objectId": 680,
+        "position": 124,
+        "unique": 64195,
+        "visits": 203305,
+        "pageviews": 643477,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "computersweden.idg.se",
+        "domain": "computersweden.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=95&kyear=2014&kweek=45",
+        "objectId": 95,
+        "position": 125,
+        "unique": 63812,
+        "visits": 101050,
+        "pageviews": 178450,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "manpower.se",
+        "domain": "manpower.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=689&kyear=2014&kweek=45",
+        "objectId": 689,
+        "position": 126,
+        "unique": 63236,
+        "visits": 80242,
+        "pageviews": 339292,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "dagen.se",
+        "domain": "dagen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=103&kyear=2014&kweek=45",
+        "objectId": 103,
+        "position": 127,
+        "unique": 62517,
+        "visits": 103517,
+        "pageviews": 183651,
+        "categories": [
+            "Dagspress riks"
+        ]
+    },
+    {
+        "title": "studentum.se",
+        "domain": "studentum.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=515&kyear=2014&kweek=45",
+        "objectId": 515,
+        "position": 128,
+        "unique": 62406,
+        "visits": 76495,
+        "pageviews": 284489,
+        "categories": [
+            "Student"
+        ]
+    },
+    {
+        "title": "aditrorecruit.com",
+        "domain": "aditrorecruit.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=746&kyear=2014&kweek=45",
+        "objectId": 746,
+        "position": 129,
+        "unique": 59647,
+        "visits": 97997,
+        "pageviews": 1351553,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "Politism.se",
+        "domain": "politism.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1270&kyear=2014&kweek=45",
+        "objectId": 1270,
+        "position": 130,
+        "unique": 59576,
+        "visits": 78254,
+        "pageviews": 115483,
+        "categories": []
+    },
+    {
+        "title": "Jogg.se",
+        "domain": "jogg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=258&kyear=2014&kweek=45",
+        "objectId": 258,
+        "position": 131,
+        "unique": 58003,
+        "visits": 118898,
+        "pageviews": 544212,
+        "categories": [
+            "H\u00e4lsa & livsstil"
+        ]
+    },
+    {
+        "title": "sporthoj.com",
+        "domain": "sporthoj.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=487&kyear=2014&kweek=45",
+        "objectId": 487,
+        "position": 132,
+        "unique": 56731,
+        "visits": 98572,
+        "pageviews": 319086,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Lektion.se",
+        "domain": "lektion.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=296&kyear=2014&kweek=45",
+        "objectId": 296,
+        "position": 133,
+        "unique": 56363,
+        "visits": 86440,
+        "pageviews": 1190657,
+        "categories": [
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "eurosport.se",
+        "domain": "eurosport.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=143&kyear=2014&kweek=45",
+        "objectId": 143,
+        "position": 134,
+        "unique": 56293,
+        "visits": 104815,
+        "pageviews": 361177,
+        "categories": [
+            "Sport",
+            "TV & film"
+        ]
+    },
+    {
+        "title": "norran.se",
+        "domain": "norran.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=384&kyear=2014&kweek=45",
+        "objectId": 384,
+        "position": 135,
+        "unique": 56019,
+        "visits": 185463,
+        "pageviews": 569560,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "arbetarbladet.se",
+        "domain": "arbetarbladet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=40&kyear=2014&kweek=45",
+        "objectId": 40,
+        "position": 136,
+        "unique": 55488,
+        "visits": 115172,
+        "pageviews": 323517,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "bltsydostran.se",
+        "domain": "bltsydostran.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=892&kyear=2014&kweek=45",
+        "objectId": 892,
+        "position": 138,
+        "unique": 53665,
+        "visits": 173212,
+        "pageviews": 379345,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "sla.se",
+        "domain": "sla.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1251&kyear=2014&kweek=45",
+        "objectId": 1251,
+        "position": 139,
+        "unique": 52585,
+        "visits": 77849,
+        "pageviews": 140304,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "pitea-tidningen.se",
+        "domain": "pitea-tidningen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=419&kyear=2014&kweek=45",
+        "objectId": 419,
+        "position": 140,
+        "unique": 51672,
+        "visits": 160490,
+        "pageviews": 371561,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "hant.se",
+        "domain": "hant.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1355&kyear=2014&kweek=45",
+        "objectId": 1355,
+        "position": 141,
+        "unique": 50462,
+        "visits": 56100,
+        "pageviews": 91561,
+        "categories": []
+    },
+    {
+        "title": "sn.se",
+        "domain": "sn.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=475&kyear=2014&kweek=45",
+        "objectId": 475,
+        "position": 145,
+        "unique": 49030,
+        "visits": 134328,
+        "pageviews": 369651,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "illvet.se",
+        "domain": "illvet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=238&kyear=2014&kweek=45",
+        "objectId": 238,
+        "position": 146,
+        "unique": 47915,
+        "visits": 57630,
+        "pageviews": 175336,
+        "categories": [
+            "Veckopress"
+        ]
+    },
+    {
+        "title": "Realtid.se",
+        "domain": "realtid.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=441&kyear=2014&kweek=45",
+        "objectId": 441,
+        "position": 147,
+        "unique": 46934,
+        "visits": 94098,
+        "pageviews": 261771,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "offentligajobb.se",
+        "domain": "offentligajobb.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=405&kyear=2014&kweek=45",
+        "objectId": 405,
+        "position": 148,
+        "unique": 46790,
+        "visits": 71944,
+        "pageviews": 243946,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "Kampanjjakt.se",
+        "domain": "kampanjjakt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1285&kyear=2014&kweek=45",
+        "objectId": 1285,
+        "position": 149,
+        "unique": 46678,
+        "visits": 58068,
+        "pageviews": 108343,
+        "categories": []
+    },
+    {
+        "title": "ttela.se",
+        "domain": "ttela.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=576&kyear=2014&kweek=45",
+        "objectId": 576,
+        "position": 150,
+        "unique": 46315,
+        "visits": 137338,
+        "pageviews": 479593,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Autopower.se",
+        "domain": "autopower.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=45&kyear=2014&kweek=45",
+        "objectId": 45,
+        "position": 151,
+        "unique": 45817,
+        "visits": 78116,
+        "pageviews": 397299,
+        "categories": []
+    },
+    {
+        "title": "blimamma.se",
+        "domain": "blimamma.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=765&kyear=2014&kweek=45",
+        "objectId": 765,
+        "position": 152,
+        "unique": 45593,
+        "visits": 66245,
+        "pageviews": 119309,
+        "categories": []
+    },
+    {
+        "title": "barometern.se",
+        "domain": "barometern.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=52&kyear=2014&kweek=45",
+        "objectId": 52,
+        "position": 153,
+        "unique": 44076,
+        "visits": 109743,
+        "pageviews": 302087,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "techworld.idg.se",
+        "domain": "techworld.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=552&kyear=2014&kweek=45",
+        "objectId": 552,
+        "position": 154,
+        "unique": 43657,
+        "visits": 65612,
+        "pageviews": 101221,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "marathon.se",
+        "domain": "marathon.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=322&kyear=2014&kweek=45",
+        "objectId": 322,
+        "position": 155,
+        "unique": 43288,
+        "visits": 58635,
+        "pageviews": 125801,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "Objektvision.se",
+        "domain": "objektvision.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=403&kyear=2014&kweek=45",
+        "objectId": 403,
+        "position": 156,
+        "unique": 42548,
+        "visits": 65645,
+        "pageviews": 493135,
+        "categories": [
+            "Bostad k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "ystadsallehanda.se",
+        "domain": "ystadsallehanda.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=636&kyear=2014&kweek=45",
+        "objectId": 636,
+        "position": 157,
+        "unique": 42360,
+        "visits": 102590,
+        "pageviews": 319006,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "lt.se",
+        "domain": "lt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=306&kyear=2014&kweek=45",
+        "objectId": 306,
+        "position": 158,
+        "unique": 41526,
+        "visits": 113778,
+        "pageviews": 316191,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "dagensPs.se",
+        "domain": "dagensps.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=107&kyear=2014&kweek=45",
+        "objectId": 107,
+        "position": 159,
+        "unique": 41496,
+        "visits": 74436,
+        "pageviews": 250630,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "odla.nu",
+        "domain": "odla.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=404&kyear=2014&kweek=45",
+        "objectId": 404,
+        "position": 160,
+        "unique": 41248,
+        "visits": 44176,
+        "pageviews": 57665,
+        "categories": [
+            "Hobby"
+        ]
+    },
+    {
+        "title": "utsidan.se",
+        "domain": "utsidan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=596&kyear=2014&kweek=45",
+        "objectId": 596,
+        "position": 161,
+        "unique": 41197,
+        "visits": 62015,
+        "pageviews": 193888,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "aktivtraning.se",
+        "domain": "aktivtraning.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=9&kyear=2014&kweek=45",
+        "objectId": 9,
+        "position": 163,
+        "unique": 39735,
+        "visits": 47523,
+        "pageviews": 122618,
+        "categories": []
+    },
+    {
+        "title": "GAFFA.se",
+        "domain": "gaffa.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=795&kyear=2014&kweek=45",
+        "objectId": 795,
+        "position": 165,
+        "unique": 39069,
+        "visits": 53166,
+        "pageviews": 111633,
+        "categories": [
+            "N\u00f6je"
+        ]
+    },
+    {
+        "title": "Bovision.se",
+        "domain": "bovision.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=74&kyear=2014&kweek=45",
+        "objectId": 74,
+        "position": 166,
+        "unique": 36978,
+        "visits": 50617,
+        "pageviews": 221581,
+        "categories": [
+            "Bostad k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "Jesper.nu",
+        "domain": "jesper.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=254&kyear=2014&kweek=45",
+        "objectId": 254,
+        "position": 167,
+        "unique": 36192,
+        "visits": 59616,
+        "pageviews": 283543,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "poloniainfo.se",
+        "domain": "poloniainfo.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1280&kyear=2014&kweek=45",
+        "objectId": 1280,
+        "position": 168,
+        "unique": 35371,
+        "visits": 78122,
+        "pageviews": 252031,
+        "categories": []
+    },
+    {
+        "title": "ltz.se",
+        "domain": "ltz.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=307&kyear=2014&kweek=45",
+        "objectId": 307,
+        "position": 169,
+        "unique": 33672,
+        "visits": 71754,
+        "pageviews": 200189,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "118100.se",
+        "domain": "118100.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=2&kyear=2014&kweek=45",
+        "objectId": 2,
+        "position": 171,
+        "unique": 33611,
+        "visits": 44752,
+        "pageviews": 140200,
+        "categories": [
+            "S\u00f6k"
+        ]
+    },
+    {
+        "title": "ATL.nu",
+        "domain": "atl.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=1098&kyear=2014&kweek=45",
+        "objectId": 1098,
+        "position": 172,
+        "unique": 33500,
+        "visits": 77755,
+        "pageviews": 186633,
+        "categories": []
+    },
+    {
+        "title": "folkbladet.se",
+        "domain": "folkbladet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=161&kyear=2014&kweek=45",
+        "objectId": 161,
+        "position": 173,
+        "unique": 33346,
+        "visits": 67916,
+        "pageviews": 148041,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Morningstar.se",
+        "domain": "morningstar.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=353&kyear=2014&kweek=45",
+        "objectId": 353,
+        "position": 174,
+        "unique": 33035,
+        "visits": 110060,
+        "pageviews": 444417,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "dalademokraten.se",
+        "domain": "dalademokraten.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=110&kyear=2014&kweek=45",
+        "objectId": 110,
+        "position": 175,
+        "unique": 32783,
+        "visits": 58962,
+        "pageviews": 157382,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "hn.se",
+        "domain": "hn.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=219&kyear=2014&kweek=45",
+        "objectId": 219,
+        "position": 176,
+        "unique": 32619,
+        "visits": 93438,
+        "pageviews": 322444,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Mascus",
+        "domain": "www.mascus.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1239&kyear=2014&kweek=45",
+        "objectId": 1239,
+        "position": 177,
+        "unique": 32571,
+        "visits": 41622,
+        "pageviews": 298343,
+        "categories": [
+            "Motor k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "hallandsposten.se",
+        "domain": "hallandsposten.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=200&kyear=2014&kweek=45",
+        "objectId": 200,
+        "position": 178,
+        "unique": 32012,
+        "visits": 94650,
+        "pageviews": 376035,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Foretagande.se",
+        "domain": "foretagande.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=821&kyear=2014&kweek=45",
+        "objectId": 821,
+        "position": 179,
+        "unique": 31861,
+        "visits": 36318,
+        "pageviews": 55451,
+        "categories": []
+    },
+    {
+        "title": "Fokus.se",
+        "domain": "fokus.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1288&kyear=2014&kweek=45",
+        "objectId": 1288,
+        "position": 180,
+        "unique": 30906,
+        "visits": 36287,
+        "pageviews": 52815,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "alltombostad.se",
+        "domain": "alltombostad.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=24&kyear=2014&kweek=45",
+        "objectId": 24,
+        "position": 181,
+        "unique": 30860,
+        "visits": 35428,
+        "pageviews": 58997,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "dagbladet.se",
+        "domain": "dagbladet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=102&kyear=2014&kweek=45",
+        "objectId": 102,
+        "position": 182,
+        "unique": 30593,
+        "visits": 55301,
+        "pageviews": 134725,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "mvt.se",
+        "domain": "mvt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1271&kyear=2014&kweek=45",
+        "objectId": 1271,
+        "position": 183,
+        "unique": 30382,
+        "visits": 81621,
+        "pageviews": 223751,
+        "categories": []
+    },
+    {
+        "title": "kurser.se",
+        "domain": "kurser.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=287&kyear=2014&kweek=45",
+        "objectId": 287,
+        "position": 184,
+        "unique": 30317,
+        "visits": 34692,
+        "pageviews": 121763,
+        "categories": [
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "vt.se",
+        "domain": "vt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=619&kyear=2014&kweek=45",
+        "objectId": 619,
+        "position": 185,
+        "unique": 29784,
+        "visits": 89973,
+        "pageviews": 226356,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "mammasidan.se",
+        "domain": "mammasidan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=974&kyear=2014&kweek=45",
+        "objectId": 974,
+        "position": 186,
+        "unique": 29532,
+        "visits": 36465,
+        "pageviews": 82685,
+        "categories": []
+    },
+    {
+        "title": "mentoronline.se",
+        "domain": "mentoronline.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=327&kyear=2014&kweek=45",
+        "objectId": 327,
+        "position": 187,
+        "unique": 28392,
+        "visits": 40171,
+        "pageviews": 64797,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "internetworld.idg.se",
+        "domain": "internetworld.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=245&kyear=2014&kweek=45",
+        "objectId": 245,
+        "position": 188,
+        "unique": 28269,
+        "visits": 36133,
+        "pageviews": 49641,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "bike.se",
+        "domain": "bike.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=784&kyear=2014&kweek=45",
+        "objectId": 784,
+        "position": 189,
+        "unique": 28203,
+        "visits": 47903,
+        "pageviews": 201249,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Gravid.se",
+        "domain": "gravid.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=770&kyear=2014&kweek=45",
+        "objectId": 770,
+        "position": 191,
+        "unique": 26675,
+        "visits": 34438,
+        "pageviews": 76416,
+        "categories": []
+    },
+    {
+        "title": "Redeye.se",
+        "domain": "redeye.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=825&kyear=2014&kweek=45",
+        "objectId": 825,
+        "position": 192,
+        "unique": 26611,
+        "visits": 45148,
+        "pageviews": 99512,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "gymnasium.se",
+        "domain": "gymnasium.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=194&kyear=2014&kweek=45",
+        "objectId": 194,
+        "position": 193,
+        "unique": 26392,
+        "visits": 31676,
+        "pageviews": 112470,
+        "categories": [
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "Norrask\u00e5ne.se",
+        "domain": "Norrask\u00e5ne.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=386&kyear=2014&kweek=45",
+        "objectId": 386,
+        "position": 194,
+        "unique": 26145,
+        "visits": 54494,
+        "pageviews": 138453,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "bilsport.se",
+        "domain": "bilsport.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=59&kyear=2014&kweek=45",
+        "objectId": 59,
+        "position": 195,
+        "unique": 25073,
+        "visits": 36521,
+        "pageviews": 89514,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "folkbladet.nu",
+        "domain": "folkbladet.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=160&kyear=2014&kweek=45",
+        "objectId": 160,
+        "position": 196,
+        "unique": 24366,
+        "visits": 63580,
+        "pageviews": 187551,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "ridsport.se",
+        "domain": "ridsport.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=449&kyear=2014&kweek=45",
+        "objectId": 449,
+        "position": 197,
+        "unique": 23237,
+        "visits": 37903,
+        "pageviews": 101686,
+        "categories": [
+            "Sport"
+        ]
+    },
+    {
+        "title": "Bilgaraget.se",
+        "domain": "bilgaraget.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=822&kyear=2014&kweek=45",
+        "objectId": 822,
+        "position": 198,
+        "unique": 23110,
+        "visits": 27607,
+        "pageviews": 93618,
+        "categories": [
+            "Motor",
+            "Motor k\u00f6p & s\u00e4lj"
+        ]
+    },
+    {
+        "title": "skovdenyheter.se",
+        "domain": "skovdenyheter.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1017&kyear=2014&kweek=45",
+        "objectId": 1017,
+        "position": 199,
+        "unique": 22935,
+        "visits": 44159,
+        "pageviews": 116724,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "DagensTV",
+        "domain": "www.dagenstv.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=109&kyear=2014&kweek=45",
+        "objectId": 109,
+        "position": 200,
+        "unique": 21668,
+        "visits": 42699,
+        "pageviews": 130414,
+        "categories": [
+            "TV tabl\u00e5er"
+        ]
+    },
+    {
+        "title": "husohem.se",
+        "domain": "husohem.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=728&kyear=2014&kweek=45",
+        "objectId": 728,
+        "position": 201,
+        "unique": 21335,
+        "visits": 24369,
+        "pageviews": 38157,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "gds.se",
+        "domain": "gds.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=647&kyear=2014&kweek=45",
+        "objectId": 647,
+        "position": 203,
+        "unique": 20312,
+        "visits": 24042,
+        "pageviews": 66714,
+        "categories": []
+    },
+    {
+        "title": "norrteljetidning.se",
+        "domain": "norrteljetidning.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=389&kyear=2014&kweek=45",
+        "objectId": 389,
+        "position": 204,
+        "unique": 20071,
+        "visits": 60899,
+        "pageviews": 150483,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "loading.se",
+        "domain": "loading.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=304&kyear=2014&kweek=45",
+        "objectId": 304,
+        "position": 205,
+        "unique": 19663,
+        "visits": 49276,
+        "pageviews": 209660,
+        "categories": [
+            "Spel"
+        ]
+    },
+    {
+        "title": "nlt.se",
+        "domain": "nlt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=380&kyear=2014&kweek=45",
+        "objectId": 380,
+        "position": 206,
+        "unique": 19583,
+        "visits": 60473,
+        "pageviews": 190072,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Ingenj\u00f6rsjobb",
+        "domain": "www.ingenjorsjobb.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1236&kyear=2014&kweek=45",
+        "objectId": 1236,
+        "position": 207,
+        "unique": 19417,
+        "visits": 27651,
+        "pageviews": 52731,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "Zoonen.com",
+        "domain": "zoonen.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=638&kyear=2014&kweek=45",
+        "objectId": 638,
+        "position": 208,
+        "unique": 19238,
+        "visits": 22985,
+        "pageviews": 39398,
+        "categories": [
+            "Hobby"
+        ]
+    },
+    {
+        "title": "kkuriren.se",
+        "domain": "kkuriren.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=270&kyear=2014&kweek=45",
+        "objectId": 270,
+        "position": 209,
+        "unique": 19088,
+        "visits": 45688,
+        "pageviews": 139380,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Sysidan.se",
+        "domain": "sysidan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=545&kyear=2014&kweek=45",
+        "objectId": 545,
+        "position": 210,
+        "unique": 19014,
+        "visits": 24360,
+        "pageviews": 62406,
+        "categories": [
+            "Hobby"
+        ]
+    },
+    {
+        "title": "Rejsa.nu",
+        "domain": "rejsa.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=1088&kyear=2014&kweek=45",
+        "objectId": 1088,
+        "position": 211,
+        "unique": 18985,
+        "visits": 45751,
+        "pageviews": 334690,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Hem & Hyra",
+        "domain": "www.hemhyra.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1081&kyear=2014&kweek=45",
+        "objectId": 1081,
+        "position": 212,
+        "unique": 18095,
+        "visits": 21767,
+        "pageviews": 43075,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "trelleborgsallehanda.se",
+        "domain": "trelleborgsallehanda.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=574&kyear=2014&kweek=45",
+        "objectId": 574,
+        "position": 213,
+        "unique": 17820,
+        "visits": 44115,
+        "pageviews": 133057,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "resdagboken.se",
+        "domain": "resdagboken.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=444&kyear=2014&kweek=45",
+        "objectId": 444,
+        "position": 214,
+        "unique": 17704,
+        "visits": 21116,
+        "pageviews": 72437,
+        "categories": [
+            "Resor"
+        ]
+    },
+    {
+        "title": "it24.idg.se",
+        "domain": "it24.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=248&kyear=2014&kweek=45",
+        "objectId": 248,
+        "position": 215,
+        "unique": 16972,
+        "visits": 26192,
+        "pageviews": 44994,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "Travronden.se",
+        "domain": "travronden.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1298&kyear=2014&kweek=45",
+        "objectId": 1298,
+        "position": 216,
+        "unique": 16757,
+        "visits": 53071,
+        "pageviews": 152625,
+        "categories": []
+    },
+    {
+        "title": "BusinessClass.se",
+        "domain": "businessclass.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=996&kyear=2014&kweek=45",
+        "objectId": 996,
+        "position": 217,
+        "unique": 16588,
+        "visits": 35306,
+        "pageviews": 219361,
+        "categories": [
+            "Resor"
+        ]
+    },
+    {
+        "title": "Tjuvlyssnat.se",
+        "domain": "tjuvlyssnat.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1234&kyear=2014&kweek=45",
+        "objectId": 1234,
+        "position": 218,
+        "unique": 16351,
+        "visits": 38601,
+        "pageviews": 100861,
+        "categories": []
+    },
+    {
+        "title": "dagensarbete.se",
+        "domain": "dagensarbete.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=104&kyear=2014&kweek=45",
+        "objectId": 104,
+        "position": 219,
+        "unique": 15463,
+        "visits": 18798,
+        "pageviews": 28091,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "nvp.se",
+        "domain": "nvp.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=395&kyear=2014&kweek=45",
+        "objectId": 395,
+        "position": 220,
+        "unique": 14706,
+        "visits": 26583,
+        "pageviews": 53512,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "cio.idg.se",
+        "domain": "cio.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=90&kyear=2014&kweek=45",
+        "objectId": 90,
+        "position": 221,
+        "unique": 14681,
+        "visits": 18008,
+        "pageviews": 23820,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "utbildning.se",
+        "domain": "utbildning.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=594&kyear=2014&kweek=45",
+        "objectId": 594,
+        "position": 222,
+        "unique": 14313,
+        "visits": 15909,
+        "pageviews": 48742,
+        "categories": [
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "horseworld.se",
+        "domain": "horseworld.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1233&kyear=2014&kweek=45",
+        "objectId": 1233,
+        "position": 223,
+        "unique": 13865,
+        "visits": 39507,
+        "pageviews": 78629,
+        "categories": []
+    },
+    {
+        "title": "halsa.se",
+        "domain": "halsa.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=846&kyear=2014&kweek=45",
+        "objectId": 846,
+        "position": 224,
+        "unique": 13492,
+        "visits": 15233,
+        "pageviews": 20956,
+        "categories": [
+            "H\u00e4lsa & livsstil"
+        ]
+    },
+    {
+        "title": "Ehandel.se",
+        "domain": "ehandel.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1082&kyear=2014&kweek=45",
+        "objectId": 1082,
+        "position": 225,
+        "unique": 13473,
+        "visits": 25511,
+        "pageviews": 77444,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Ingenj\u00f6rskarri\u00e4r",
+        "domain": "www.ingenjorskarriar.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1283&kyear=2014&kweek=45",
+        "objectId": 1283,
+        "position": 226,
+        "unique": 13106,
+        "visits": 15041,
+        "pageviews": 0,
+        "categories": [
+            "Arbete och rekrytering"
+        ]
+    },
+    {
+        "title": "tidningenharjedalen.se",
+        "domain": "tidningenharjedalen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1305&kyear=2014&kweek=45",
+        "objectId": 1305,
+        "position": 227,
+        "unique": 12645,
+        "visits": 16821,
+        "pageviews": 27048,
+        "categories": []
+    },
+    {
+        "title": "M3 mobil",
+        "domain": "mobil.m3.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1169&kyear=2014&kweek=45",
+        "objectId": 1169,
+        "position": 228,
+        "unique": 12533,
+        "visits": 19010,
+        "pageviews": 22563,
+        "categories": []
+    },
+    {
+        "title": "mariestadstidningen.se",
+        "domain": "mariestadstidningen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1250&kyear=2014&kweek=45",
+        "objectId": 1250,
+        "position": 229,
+        "unique": 12478,
+        "visits": 26128,
+        "pageviews": 55484,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Dopguiden.se",
+        "domain": "dopguiden.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=799&kyear=2014&kweek=45",
+        "objectId": 799,
+        "position": 230,
+        "unique": 12441,
+        "visits": 14978,
+        "pageviews": 40945,
+        "categories": []
+    },
+    {
+        "title": "ostrasmaland.se",
+        "domain": "ostrasmaland.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=643&kyear=2014&kweek=45",
+        "objectId": 643,
+        "position": 231,
+        "unique": 12339,
+        "visits": 22640,
+        "pageviews": 60713,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "nationalgeographic.se",
+        "domain": "nationalgeographic.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=374&kyear=2014&kweek=45",
+        "objectId": 374,
+        "position": 232,
+        "unique": 12244,
+        "visits": 14483,
+        "pageviews": 39651,
+        "categories": [
+            "\u00d6vrigt"
+        ]
+    },
+    {
+        "title": "eposten.se",
+        "domain": "eposten.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1262&kyear=2014&kweek=45",
+        "objectId": 1262,
+        "position": 233,
+        "unique": 11935,
+        "visits": 18154,
+        "pageviews": 33622,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "ut.se",
+        "domain": "ut.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=593&kyear=2014&kweek=45",
+        "objectId": 593,
+        "position": 234,
+        "unique": 11415,
+        "visits": 28588,
+        "pageviews": 58161,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "husbilochhusvagn.se",
+        "domain": "husbilochhusvagn.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=785&kyear=2014&kweek=45",
+        "objectId": 785,
+        "position": 235,
+        "unique": 10277,
+        "visits": 12983,
+        "pageviews": 43030,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "veteranen.se",
+        "domain": "veteranen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=601&kyear=2014&kweek=45",
+        "objectId": 601,
+        "position": 236,
+        "unique": 9796,
+        "visits": 13038,
+        "pageviews": 26947,
+        "categories": [
+            "\u00d6vrigt"
+        ]
+    },
+    {
+        "title": "Byggv\u00e4rlden",
+        "domain": "www.byggvarlden.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=82&kyear=2014&kweek=45",
+        "objectId": 82,
+        "position": 237,
+        "unique": 9790,
+        "visits": 12830,
+        "pageviews": 24168,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "KyrkansTidning.se",
+        "domain": "kyrkanstidning.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=289&kyear=2014&kweek=45",
+        "objectId": 289,
+        "position": 238,
+        "unique": 8841,
+        "visits": 13820,
+        "pageviews": 28540,
+        "categories": [
+            "\u00d6vrigt"
+        ]
+    },
+    {
+        "title": "barnsajten.se",
+        "domain": "barnsajten.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=975&kyear=2014&kweek=45",
+        "objectId": 975,
+        "position": 239,
+        "unique": 8794,
+        "visits": 9795,
+        "pageviews": 21956,
+        "categories": []
+    },
+    {
+        "title": "miljoaktuellt.idg.se",
+        "domain": "miljoaktuellt.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=332&kyear=2014&kweek=45",
+        "objectId": 332,
+        "position": 240,
+        "unique": 8763,
+        "visits": 12159,
+        "pageviews": 24727,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "bblat.se",
+        "domain": "bblat.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=667&kyear=2014&kweek=45",
+        "objectId": 667,
+        "position": 241,
+        "unique": 8687,
+        "visits": 24032,
+        "pageviews": 57534,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "pctidningen.se",
+        "domain": "pctidningen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=414&kyear=2014&kweek=45",
+        "objectId": 414,
+        "position": 242,
+        "unique": 8488,
+        "visits": 10051,
+        "pageviews": 27125,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "Bank24.nu",
+        "domain": "bank24.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=1300&kyear=2014&kweek=45",
+        "objectId": 1300,
+        "position": 243,
+        "unique": 8189,
+        "visits": 9599,
+        "pageviews": 15148,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "Betapet.se",
+        "domain": "betapet.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=56&kyear=2014&kweek=45",
+        "objectId": 56,
+        "position": 244,
+        "unique": 8128,
+        "visits": 41529,
+        "pageviews": 185694,
+        "categories": [
+            "Spel"
+        ]
+    },
+    {
+        "title": "salaallehanda.com",
+        "domain": "salaallehanda.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=677&kyear=2014&kweek=45",
+        "objectId": 677,
+        "position": 246,
+        "unique": 7505,
+        "visits": 21173,
+        "pageviews": 58437,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Arbetarskydd",
+        "domain": "www.arbetarskydd.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=41&kyear=2014&kweek=45",
+        "objectId": 41,
+        "position": 247,
+        "unique": 7330,
+        "visits": 8269,
+        "pageviews": 0,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Laholmstidning.se",
+        "domain": "laholmstidning.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=646&kyear=2014&kweek=45",
+        "objectId": 646,
+        "position": 248,
+        "unique": 7072,
+        "visits": 12069,
+        "pageviews": 25047,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "fagersta-posten.se",
+        "domain": "fagersta-posten.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=676&kyear=2014&kweek=45",
+        "objectId": 676,
+        "position": 249,
+        "unique": 6865,
+        "visits": 17568,
+        "pageviews": 58576,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Lag o Avtal",
+        "domain": "www.lag-avtal.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=291&kyear=2014&kweek=45",
+        "objectId": 291,
+        "position": 250,
+        "unique": 6857,
+        "visits": 7808,
+        "pageviews": 0,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Sverigeresor.se",
+        "domain": "sverigeresor.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=537&kyear=2014&kweek=45",
+        "objectId": 537,
+        "position": 251,
+        "unique": 6656,
+        "visits": 7871,
+        "pageviews": 21472,
+        "categories": [
+            "Resor"
+        ]
+    },
+    {
+        "title": "Telekom idag",
+        "domain": "Telekom idag",
+        "source": "http:\/\/www.kiaindex.se?object_id=723&kyear=2014&kweek=45",
+        "objectId": 723,
+        "position": 252,
+        "unique": 6252,
+        "visits": 9446,
+        "pageviews": 16881,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Upphandling24",
+        "domain": "upphandling24.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=592&kyear=2014&kweek=45",
+        "objectId": 592,
+        "position": 253,
+        "unique": 6221,
+        "visits": 9750,
+        "pageviews": 19428,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "digitalfotoforalla.se",
+        "domain": "digitalfotoforalla.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=117&kyear=2014&kweek=45",
+        "objectId": 117,
+        "position": 254,
+        "unique": 6026,
+        "visits": 8209,
+        "pageviews": 40471,
+        "categories": [
+            "Foto\/bilder"
+        ]
+    },
+    {
+        "title": "Bobattre.se",
+        "domain": "bobattre.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=838&kyear=2014&kweek=45",
+        "objectId": 838,
+        "position": 255,
+        "unique": 5993,
+        "visits": 6414,
+        "pageviews": 12294,
+        "categories": [
+            "Bostad"
+        ]
+    },
+    {
+        "title": "klassiker.nu",
+        "domain": "klassiker.nu",
+        "source": "http:\/\/www.kiaindex.se?object_id=786&kyear=2014&kweek=45",
+        "objectId": 786,
+        "position": 256,
+        "unique": 5966,
+        "visits": 8616,
+        "pageviews": 35704,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "folket.se",
+        "domain": "folket.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=162&kyear=2014&kweek=45",
+        "objectId": 162,
+        "position": 257,
+        "unique": 5831,
+        "visits": 6447,
+        "pageviews": 13679,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "lundagard.se",
+        "domain": "lundagard.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=311&kyear=2014&kweek=45",
+        "objectId": 311,
+        "position": 258,
+        "unique": 5754,
+        "visits": 7311,
+        "pageviews": 12958,
+        "categories": [
+            "Student",
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "trailer.se",
+        "domain": "trailer.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=571&kyear=2014&kweek=45",
+        "objectId": 571,
+        "position": 259,
+        "unique": 5421,
+        "visits": 8861,
+        "pageviews": 18892,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Barnsidan.se",
+        "domain": "barnsidan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=51&kyear=2014&kweek=45",
+        "objectId": 51,
+        "position": 260,
+        "unique": 5305,
+        "visits": 6064,
+        "pageviews": 7829,
+        "categories": [
+            "Familj"
+        ]
+    },
+    {
+        "title": "avestatidning.com",
+        "domain": "avestatidning.com",
+        "source": "http:\/\/www.kiaindex.se?object_id=675&kyear=2014&kweek=45",
+        "objectId": 675,
+        "position": 261,
+        "unique": 5247,
+        "visits": 12994,
+        "pageviews": 32561,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "capdesign.idg.se",
+        "domain": "capdesign.idg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=86&kyear=2014&kweek=45",
+        "objectId": 86,
+        "position": 262,
+        "unique": 4952,
+        "visits": 5489,
+        "pageviews": 9356,
+        "categories": [
+            "it"
+        ]
+    },
+    {
+        "title": "evertiq.se",
+        "domain": "evertiq.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=847&kyear=2014&kweek=45",
+        "objectId": 847,
+        "position": 264,
+        "unique": 4310,
+        "visits": 9489,
+        "pageviews": 17365,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "NynashamnsPosten",
+        "domain": "nhp.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=400&kyear=2014&kweek=45",
+        "objectId": 400,
+        "position": 265,
+        "unique": 3718,
+        "visits": 7859,
+        "pageviews": 19455,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Gratis I Skolan",
+        "domain": "Gratis I Skolan",
+        "source": "http:\/\/www.kiaindex.se?object_id=722&kyear=2014&kweek=45",
+        "objectId": 722,
+        "position": 266,
+        "unique": 3166,
+        "visits": 3488,
+        "pageviews": 13269,
+        "categories": [
+            "Utbildning"
+        ]
+    },
+    {
+        "title": "sportbilen.se",
+        "domain": "sportbilen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=484&kyear=2014&kweek=45",
+        "objectId": 484,
+        "position": 267,
+        "unique": 2927,
+        "visits": 5438,
+        "pageviews": 11075,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Kvalitetsmagasinet",
+        "domain": "Kvalitetsmagasinet",
+        "source": "http:\/\/www.kiaindex.se?object_id=725&kyear=2014&kweek=45",
+        "objectId": 725,
+        "position": 268,
+        "unique": 2554,
+        "visits": 2915,
+        "pageviews": 5799,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Milj\u00f6 och Utveckling",
+        "domain": "Milj\u00f6 och Utveckling",
+        "source": "http:\/\/www.kiaindex.se?object_id=724&kyear=2014&kweek=45",
+        "objectId": 724,
+        "position": 270,
+        "unique": 2142,
+        "visits": 2399,
+        "pageviews": 3903,
+        "categories": [
+            "Fackpress"
+        ]
+    },
+    {
+        "title": "Fyndb\u00f6rsen.se",
+        "domain": "fyndbors.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=172&kyear=2014&kweek=45",
+        "objectId": 172,
+        "position": 271,
+        "unique": 1860,
+        "visits": 3906,
+        "pageviews": 23372,
+        "categories": [
+            "K\u00f6p och s\u00e4lj"
+        ]
+    },
+    {
+        "title": "gatbilar.se",
+        "domain": "gatbilar.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=180&kyear=2014&kweek=45",
+        "objectId": 180,
+        "position": 274,
+        "unique": 1440,
+        "visits": 1770,
+        "pageviews": 7647,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "malmo.etc.se",
+        "domain": "malmo.etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1293&kyear=2014&kweek=45",
+        "objectId": 1293,
+        "position": 275,
+        "unique": 1438,
+        "visits": 1552,
+        "pageviews": 2514,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Portalen.se",
+        "domain": "portalen.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1273&kyear=2014&kweek=45",
+        "objectId": 1273,
+        "position": 276,
+        "unique": 1286,
+        "visits": 1601,
+        "pageviews": 4384,
+        "categories": []
+    },
+    {
+        "title": "alltommc.se",
+        "domain": "alltommc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=31&kyear=2014&kweek=45",
+        "objectId": 31,
+        "position": 277,
+        "unique": 1128,
+        "visits": 1948,
+        "pageviews": 6407,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "automobil.se",
+        "domain": "automobil.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=783&kyear=2014&kweek=45",
+        "objectId": 783,
+        "position": 278,
+        "unique": 1120,
+        "visits": 1217,
+        "pageviews": 1878,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Konstkalendern.se",
+        "domain": "konstkalendern.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=278&kyear=2014&kweek=45",
+        "objectId": 278,
+        "position": 279,
+        "unique": 985,
+        "visits": 1100,
+        "pageviews": 5352,
+        "categories": [
+            "\u00d6vrigt"
+        ]
+    },
+    {
+        "title": "antikochauktion.se",
+        "domain": "antikochauktion.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1380&kyear=2014&kweek=45",
+        "objectId": 1380,
+        "position": 280,
+        "unique": 943,
+        "visits": 1064,
+        "pageviews": 2256,
+        "categories": [
+            "K\u00f6p och s\u00e4lj"
+        ]
+    },
+    {
+        "title": "stockholm.etc.se",
+        "domain": "stockholm.etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1294&kyear=2014&kweek=45",
+        "objectId": 1294,
+        "position": 281,
+        "unique": 926,
+        "visits": 1029,
+        "pageviews": 2253,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "goteborg.etc.se",
+        "domain": "goteborg.etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1295&kyear=2014&kweek=45",
+        "objectId": 1295,
+        "position": 282,
+        "unique": 795,
+        "visits": 931,
+        "pageviews": 1792,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "bergslagen.etc.se",
+        "domain": "bergslagen.etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1296&kyear=2014&kweek=45",
+        "objectId": 1296,
+        "position": 283,
+        "unique": 774,
+        "visits": 921,
+        "pageviews": 1791,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Trailerbeg.se",
+        "domain": "trailerbeg.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=54&kyear=2014&kweek=45",
+        "objectId": 54,
+        "position": 284,
+        "unique": 642,
+        "visits": 977,
+        "pageviews": 7667,
+        "categories": [
+            "K\u00f6p och s\u00e4lj"
+        ]
+    },
+    {
+        "title": "orebro.etc.se",
+        "domain": "orebro.etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1292&kyear=2014&kweek=45",
+        "objectId": 1292,
+        "position": 285,
+        "unique": 595,
+        "visits": 662,
+        "pageviews": 1186,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "riksettan.se",
+        "domain": "riksettan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=790&kyear=2014&kweek=45",
+        "objectId": 790,
+        "position": 286,
+        "unique": 433,
+        "visits": 528,
+        "pageviews": 1587,
+        "categories": []
+    },
+    {
+        "title": "smalandsfolkblad.etc.se",
+        "domain": "smalandsfolkblad.etc.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1297&kyear=2014&kweek=45",
+        "objectId": 1297,
+        "position": 287,
+        "unique": 277,
+        "visits": 321,
+        "pageviews": 726,
+        "categories": [
+            "Dagspress lokal"
+        ]
+    },
+    {
+        "title": "Spela.se",
+        "domain": "spela.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1004&kyear=2014&kweek=45",
+        "objectId": 1004,
+        "position": 288,
+        "unique": 145,
+        "visits": 226,
+        "pageviews": 326,
+        "categories": []
+    },
+    {
+        "title": "motorvarlden.se",
+        "domain": "motorvarlden.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=788&kyear=2014&kweek=45",
+        "objectId": 788,
+        "position": 289,
+        "unique": 144,
+        "visits": 160,
+        "pageviews": 228,
+        "categories": [
+            "Motor"
+        ]
+    },
+    {
+        "title": "Spel.se",
+        "domain": "spel.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1003&kyear=2014&kweek=45",
+        "objectId": 1003,
+        "position": 291,
+        "unique": 23,
+        "visits": 33,
+        "pageviews": 46,
+        "categories": []
+    },
+    {
+        "title": "Transportnytt",
+        "domain": "transportnytt.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1281&kyear=2014&kweek=45",
+        "objectId": 1281,
+        "position": 293,
+        "unique": 3,
+        "visits": 4,
+        "pageviews": 4,
+        "categories": []
+    },
+    {
+        "title": "Driva Eget",
+        "domain": "www.driva-eget.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=780&kyear=2014&kweek=45",
+        "objectId": 780,
+        "position": 294,
+        "unique": 1,
+        "visits": 1,
+        "pageviews": 1,
+        "categories": []
+    },
+    {
+        "title": "comboloan.se",
+        "domain": "comboloan.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=93&kyear=2014&kweek=45",
+        "objectId": 93,
+        "position": 295,
+        "unique": 0,
+        "visits": 0,
+        "pageviews": 0,
+        "categories": [
+            "Ekonomi"
+        ]
+    },
+    {
+        "title": "hotgossips.improveme.se",
+        "domain": "hotgossips.improveme.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1153&kyear=2014&kweek=45",
+        "objectId": 1153,
+        "position": 296,
+        "unique": 0,
+        "visits": 0,
+        "pageviews": 0,
+        "categories": [
+            "Sociala sajter"
+        ]
+    },
+    {
+        "title": "paow.se",
+        "domain": "paow.se",
+        "source": "http:\/\/www.kiaindex.se?object_id=1209&kyear=2014&kweek=45",
+        "objectId": 1209,
+        "position": 298,
+        "unique": 0,
+        "visits": 0,
+        "pageviews": 0,
+        "categories": []
+    }
+]
