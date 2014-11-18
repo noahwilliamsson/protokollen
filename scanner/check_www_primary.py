@@ -37,8 +37,8 @@ def check_url(url, resolve=None):
 	c.setopt(c.USERAGENT, userAgentFmt.format('www pref test'))
 	c.setopt(c.ENCODING, 'gzip')
 	c.setopt(c.FOLLOWLOCATION, 1)
-	c.setopt(c.CONNECTTIMEOUT, 10)
-	c.setopt(c.TIMEOUT, 10)
+	c.setopt(c.CONNECTTIMEOUT, 15)
+	c.setopt(c.TIMEOUT, 20)
 	if resolve:
 		c.setopt(c.RESOLVE, resolve)
 		hostname, port, ip = resolve[0].split(':', 2)
@@ -201,7 +201,7 @@ for i in xrange(1, len(sys.argv), 3):
 	sites.add((scheme, hostname))
 
 r = dns.resolver.Resolver()
-r.timeout = 10
+r.timeout = 15
 final_res = {}
 for scheme, hostport in sites:
 	if not scheme in final_res:
