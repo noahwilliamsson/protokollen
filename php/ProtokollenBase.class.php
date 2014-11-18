@@ -434,13 +434,12 @@ class ProtokollenBase {
 	function logEntry($svcId, $hostname, $msg, $jsonId = NULL) {
 		$m = $this->m;
 		$svc = $this->getServiceById($svcId);
-		$st = $m->prepare('INSERT INTO logs
-					SET service_id=?, json_id=?, hostname=?,
-					service=?, `log`=?, created=NOW()');
-			$st->bind_param('iisss', $svcId, $jsonId, $hostname,
-					$svc->service_name, $msg);
-		}
-
+		$q = 'INSERT INTO logs SET service_id=?, json_id=?, hostname=?,
+			service=?, `log`=?, created=NOW()');
+		$st = $m->prepare($q);
+		$st->bind_param('iisss', $svcId, $jsonId, $hostname,
+				"$svc->service_name ($svc->service_type)",
+				$msg);
 		$id = NULL;
 		if(!$st->execute()) {
 			$err = "Log entry add ($svcId, $hostname) failed: $m->error";
