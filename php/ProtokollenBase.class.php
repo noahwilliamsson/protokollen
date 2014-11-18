@@ -127,28 +127,27 @@ class ProtokollenBase {
 	 * Add entity
 	 * @param $domain Domain
 	 * @param $emailDomain E-mail domain
-	 * @param $categories Categories
 	 * @param $url URL
 	 * @param $org Organization
 	 * @param $orgShort Organization short
 	 * @param $orgGroup Organization group
 	 * @returns ID of entity, throws on error
 	 */
-	function addEntity($domain, $emailDomain, $categories, $url, $org, $orgShort = NULL, $orgGroup = NULL) {
+	function addEntity($domain, $emailDomain, $url, $org, $orgShort = NULL, $orgGroup = NULL) {
 		$e = $this->getEntityByDomain($domain);
 		if($e !== NULL) {
 			return $e->id;
 		}
 
 		$q = 'INSERT INTO entities
-			SET domain=?, domain_email=?, kia_cats=?, url=?,
+			SET domain=?, domain_email=?, url=?,
 			org=?, org_short=?, org_group=?, created=NOW()';
 		if(($st = $this->m->prepare($q)) === FALSE) {
 			$err = "Add entity ($domain, $emailDomain)"
 				." failed: ". $this->m->error;
 			throw new Exception($err);
 		}
-		$st->bind_param('sssssss', $domain, $emailDomain, $categories,
+		$st->bind_param('ssssss', $domain, $emailDomain, 
 				$url, $org, $orgShort, $orgGroup);
 		if(!$st->execute()) {
 			$err = "Add entity ($domain, $emailDomain)"
@@ -162,16 +161,87 @@ class ProtokollenBase {
 		return $id;
 	}
 
-	function setEntityKiaDetails($entityId, $objectId, $categories) {
-		$q = 'UPDATE entities SET kia_object_id=?, kia_cats=?, updated=updated WHERE id=?';
+	/**
+	 * Add entity tag
+	 * @param $entityId Entity ID
+	 * @param $tag Tag name
+	 * @returns ID of entity tag mapping row, throws on error
+	 */
+	function addEntityTag($entityId, $tag) {
+		$q = 'SELECT id FROM tags WHERE tag=?';
 		$st = $this->m->prepare($q);
-		$st->bind_param('isi', $objectId, $categories, $entityId);
-		if(!$st->execute()) {
-			$err = "Update entity ($entityId, $objectId, $categories)"
-				." failed: ". $this->m->error;
-			throw new Exception($err);
-		}
+		$st->bind_param('s', $tag);
+		$st->execute();
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
 		$st->close();
+
+		if($row === NULL) {
+			$q = 'INSERT INTO tags SET tag=?, created=NOW()';
+			$st = $this->m->prepare($q);
+			$st->bind_param('s', $tag);
+			$st->execute();
+			$tagId = $st->insert_id;
+			$st->close();
+		}
+		else {
+			$tagId = $row->id;
+		}
+
+		$q = 'SELECT * FROM entity_tags WHERE entity_id=? AND tag_id=?';
+		$st = $this->m->prepare($q);
+		$st->bind_param('ii', $entityId, $tagId);
+		$st->execute();
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+		if($row !== NULL)
+			return $row->id;
+
+		$q = 'INSERT INTO entity_tags
+			SET entity_id=?, tag_id=?, created=NOW()';
+		$st = $this->m->prepare($q);
+		$st->bind_param('ii', $entityId, $tagId);
+		$st->execute();
+		$id = $st->insert_id;
+		$st->close();
+
+		return $id;
+	}
+
+	/**
+	 * Add entity source
+	 * @param $entityId Entity ID
+	 * @param $source Source name
+	 * @param $sourceId Source id
+	 * @param $sourceUrl Source URL
+	 * @returns ID of entity source, throws on error
+	 */
+	function addEntitySource($entityId, $source, $sourceId, $sourceUrl = NULL) {
+
+		$q = 'SELECT * FROM entity_sources
+			WHERE entity_id=? AND source=? AND source_id=?';
+		$st = $this->m->prepare($q);
+		$st->bind_param('iss', $entityId, $source, $sourceId);
+		$st->execute();
+		$r = $st->get_result();
+		$row = $r->fetch_object();
+		$r->close();
+		$st->close();
+		if($row !== NULL)
+			return $row->id;
+
+		$q = 'INSERT INTO entity_sources SET entity_id=?, source=?,
+			source_id=?, source_url=?, created=NOW()';
+		$st = $this->m->prepare($q);
+		$st->bind_param('isss', $entityId, $source, $sourceId, $sourceUrl);
+		$st->execute();
+		$id = $st->insert_id;
+		$st->close();
+
+		return $id;
 	}
 
 	function getServiceById($svcId) {

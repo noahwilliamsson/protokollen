@@ -3,8 +3,11 @@
 /**
  * Import JSON from data/scrape-kiaindex.php tool
  */
+
 require_once('../php/ProtokollenBase.class.php');
+
 mb_internal_encoding('utf-8');
+
 
 if($argc != 2)
 	die("Usage: ${argv[0]} <kia.json>\n");
@@ -38,17 +41,15 @@ foreach($kiaSites as $site) {
 		break;
 	}
 
-	$cats = implode(', ', $site->categories);
-	if(empty($cats))
-		$cats = NULL;
-
-
 	$e = $p->getEntityByDomain($apex);
 	if($e === NULL) {
 		echo "No entity for $apex\n";
-		$id = $p->addEntity($apex, $emailDomain, $cats, $url, $site->title);
+		$id = $p->addEntity($apex, $emailDomain, $url, $site->title);
 		$e = $p->getEntityById($id);
 	}
 
-	$p->setEntityKiaDetails($e->id, $site->objectId, $cats);
+	foreach($site->categories as $category)
+		$p->addEntityTag($e->id, $category);
+
+	$p->addEntitySource($e->id, 'KIAindex.se', $site->objectId, $site->source);
 }

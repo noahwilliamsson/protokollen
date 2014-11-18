@@ -129,28 +129,31 @@ padding-bottom: 20px;
 
 require_once('flot.php');
 
-$categories = array();
-$q = 'SELECT cat FROM entities WHERE id > 1 GROUP BY cat ORDER BY COUNT(*) DESC, cat';
+$tags = array();
+$q = 'SELECT t.id, t.tag, COUNT(*) n FROM entity_tags et
+LEFT JOIN tags t ON et.tag_id=t.id
+GROUP BY et.tag_id
+ORDER BY n DESC, tag';
 $r = $m->query($q);
 while($row = $r->fetch_object())
-	$categories[] = $row->cat;
+	$tags[$row->tag] = $row->id;
 $r->close();
 
-foreach($categories as $cat):
+foreach($tags as $tag => $tagId):
 	$entityIds = array();
-	$q = 'SELECT id FROM entities WHERE cat="'. $m->escape_string($cat) .'"';
+	$q = 'SELECT entity_id FROM entity_tags WHERE tag_id="'. $m->escape_string($tagId) .'"';
 	$r = $m->query($q);
 	while($row = $r->fetch_object())
-		$entityIds[] = $row->id;
+		$entityIds[] = $row->entity_id;
 	$r->close();
 
 	$flots = makeFlots($entityIds);
 	list($flot, $flot2, $uniqueIps, $flot3) = $flots;
 
-	$hash = substr(md5($cat), 0, 8);
+	$hash = substr(md5($tag), 0, 8);
 ?>
 
-	<h2><?php echo htmlspecialchars($cat, ENT_NOQUOTES) ?></h2>
+	<h2><?php echo htmlspecialchars($tag, ENT_NOQUOTES) ?></h2>
 	<p>Antal unika IP-adresser: <?php echo count($uniqueIps) ?></p>
 	<!--
 	<div id="tls-status-1-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
