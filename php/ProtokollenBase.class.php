@@ -434,18 +434,10 @@ class ProtokollenBase {
 	function logEntry($svcId, $hostname, $msg, $jsonId = NULL) {
 		$m = $this->m;
 		$svc = $this->getServiceById($svcId);
-		if($jsonId) {
-			$st = $m->prepare('INSERT INTO logs
+		$st = $m->prepare('INSERT INTO logs
 					SET service_id=?, json_id=?, hostname=?,
 					service=?, `log`=?, created=NOW()');
 			$st->bind_param('iisss', $svcId, $jsonId, $hostname,
-					$svc->service_name, $msg);
-		}
-		else {
-			$st = $m->prepare('INSERT INTO logs
-					SET service_id=?, hostname=?,
-					service=?, `log`=?, created=NOW()');
-			$st->bind_param('isss', $svcId, $hostname,
 					$svc->service_name, $msg);
 		}
 
