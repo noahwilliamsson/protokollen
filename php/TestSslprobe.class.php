@@ -90,7 +90,7 @@ class TestSslprobe extends ServiceGroup {
 	 * @param $svcGroupId Service group ID
 	 * @param $hostname Hostname in service group
 	 * @param $json JSON output from sslprobe
-	 *
+	 * @returns Row ID, throws on error
 	 */
 	function importJson($svcId, $svcGrpId, $hostname, $json) {
 		$m = $this->getMySQLHandle();
@@ -166,21 +166,30 @@ class TestSslprobe extends ServiceGroup {
 				}
 			}
 
-			$log = sprintf('SSLv2:%d, SSLv3:%d, TLSv1:%d,'
-					.' TLSv1.1:%d, TLSv1.2:%d',
-					$probe->protocols[0]->supported,
-					$probe->protocols[1]->supported,
-					$probe->protocols[2]->supported,
-					$probe->protocols[3]->supported,
-					$probe->protocols[4]->supported);
+			/* Default log value */
+			$log = sprintf('SSLv2:%s, SSLv3:%s, TLSv1:%s,'
+					.' TLSv1.1:%s, TLSv1.2:%s',
+					$probe->protocols[0]->supported? 'YES': 'NO',
+					$probe->protocols[1]->supported? 'YES': 'NO',
+					$probe->protocols[2]->supported? 'YES': 'NO',
+					$probe->protocols[3]->supported? 'YES': 'NO',
+					$probe->protocols[4]->supported? 'YES': 'NO');
 			$changes[$probe->ip] = $log;
 			if($row === NULL)
 				continue;
 
 			$arr = $this->computeSslprobeChanges($probe, $svc->id,
 							$row->json_sha256);
-			if(!empty($arr))
+			/* Update log value unless empty */
+			if(!empty($arr)) {
 				$changes[$probe->ip] = implode('. ', $arr);
+			}
+			else {
+				/**
+				 * Previous probe not found, likely because
+				 * this probe was against a new IP address
+				 */
+			}
 		} /* End foreach */
 
 
@@ -199,6 +208,7 @@ class TestSslprobe extends ServiceGroup {
 				." failed: ". $m->error;
 			throw new Exception($err);
 		}
+		$id = $st->insert_id;
 		$st->close();
 
 		if($row) {
@@ -221,14 +231,16 @@ class TestSslprobe extends ServiceGroup {
 		foreach($changes as $ip => $change)
 			$arr[] = "$ip [$change]";
 
-		$log = sprintf('%s sslprobe %s: %s [SSLv2:%d,'
-				.' SSLv3:%d, TLSv1:%d, TLSv1.1:%d,'
-				.' TLSv1.2:%d] (%s)', $svc->service_type,
+		$log = sprintf('%s sslprobe %s: %s [SSLv2:%s,'
+				.' SSLv3:%s, TLSv1:%s, TLSv1.1:%s,'
+				.' TLSv1.2:%s] (%s)', $svc->service_type,
 				$row === NULL? 'created': 'changed',
-				$hostname, $sslv2, $sslv3, $tlsv1,
-				$tlsv1_1, $tlsv1_2,
+				$hostname, $sslv2? 'YES': 'NO',
+				$sslv3? 'YES': 'NO', $tlsv1? 'YES': 'NO',
+				$tlsv1_1? 'YES': 'NO', $tlsv1_2? 'YES': 'NO',
 				implode(', ', $arr));
 		$this->logEntry($svc->id, $hostname, $log, $jsonId);
+		return $id;
 	}
 
 	/**
