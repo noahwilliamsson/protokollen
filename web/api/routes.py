@@ -15,7 +15,6 @@ class Entities(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	org = db.Column(db.String(255))
 	org_group = db.Column(db.String(255))
-	cat = db.Column(db.String(255))
 	domain = db.Column(db.String(255))
 	domain_email = db.Column(db.String(255))
 	url = db.Column(db.String(255))
