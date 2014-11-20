@@ -21,10 +21,27 @@ class Entities(db.Model):
 	created = db.Column(db.DateTime)
 	updated = db.Column(db.DateTime)
 
+class EntitySources(db.Model):
+	__tablename__ = 'entity_sources'
+	id = db.Column(db.Integer, primary_key = True)
+	entity_id = db.Column(db.Integer)
+	source = db.Column(db.String(255))
+	source_id = db.Column(db.String(255))
+	source_url = db.Column(db.String(255))
+	created = db.Column(db.DateTime)
+	updated = db.Column(db.DateTime)
+
+class EntityTags(db.Model):
+	__tablename__ = 'entity_tags'
+	id = db.Column(db.Integer, primary_key = True)
+	entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'))
+	tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'))
+	created = db.Column(db.DateTime)
+
 class Logs(db.Model):
 	__tablename__ = 'logs'
 	id = db.Column(db.Integer, primary_key = True)
-	service_id = db.Column(db.Integer)
+	service_id = db.Column(db.Integer, db.ForeignKey('services.id'))
 	json_id = db.Column(db.Integer)
 	hostname = db.Column(db.String(255))
 	service = db.Column(db.String(64))
@@ -34,7 +51,7 @@ class Logs(db.Model):
 class Services(db.Model):
 	__tablename__ = 'services'
 	id = db.Column(db.Integer, primary_key = True)
-	entity_id = db.Column(db.Integer)
+	entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'))
 	entity_domain = db.Column(db.String(255))
 	service_type = db.Column(db.String(255))
 	service_name = db.Column(db.String(255))
@@ -42,14 +59,29 @@ class Services(db.Model):
 	created = db.Column(db.DateTime)
 	updated = db.Column(db.DateTime)
 
+class ServiceGroups(db.Model):
+	__tablename__ = 'svc_groups'
+	id = db.Column(db.Integer, primary_key = True)
+	json = db.Column(db.Text)
+	hash = db.Column(db.String(64))
+	created = db.Column(db.DateTime)
+	updated = db.Column(db.DateTime)
+
 class SvcGroupMap(db.Model):
 	__tablename__ = 'svc_group_map'
 	id = db.Column(db.Integer, primary_key = True)
-	service_id = db.Column(db.Integer)
-	svc_group_id = db.Column(db.Integer)
+	service_id = db.Column(db.Integer, db.ForeignKey('services.id'))
+	svc_group_id = db.Column(db.Integer, db.ForeignKey('svc_groups.id'))
 	entry_type = db.Column(db.Enum('current', 'revision'))
 	created = db.Column(db.DateTime)
 	updated = db.Column(db.DateTime)
+
+class Tags(db.Model):
+	__tablename__ = 'tags'
+	id = db.Column(db.Integer, primary_key = True)
+	tag = db.Column(db.String(255))
+	created = db.Column(db.DateTime)
+
 
 @app.route('/')
 def index():
@@ -63,7 +95,7 @@ def entities(id=None):
 			res = Entities.query.filter_by(id=id).limit(100).offset(0).all()
 		else:
 			res = Entities.query.limit(100).offset(0).all()
-		
+
 		list = []
 		for r in res:
 			d = {
@@ -88,7 +120,7 @@ def services(id=None):
 			res = Services.query.filter_by(id=id).limit(100).offset(0).all()
 		else:
 			res = Services.query.limit(100).offset(0).all()
-		
+
 		list = []
 		for r in res:
 			d = {
@@ -113,7 +145,7 @@ def logs(id=None):
 			res = Logs.query.filter_by(id=id).limit(100).offset(0).all()
 		else:
 			res = Logs.query.limit(100).offset(0).all()
-		
+
 		list = []
 		for r in res:
 			d = {
@@ -122,6 +154,48 @@ def logs(id=None):
 			'hostname': r.hostname,
 			'service': r.service,
 			'log': r.log,
+			'created': r.created,
+			}
+			list.append(d)
+
+		return jsonify(items=list)
+
+@app.route('/servicegroups', methods=['GET'])
+@app.route('/servicegroups/<int:id>', methods=['GET'])
+def groups(id=None):
+	if request.method == 'GET':
+		if id:
+			res = ServiceGroups.query.filter_by(id=id).limit(100).offset(0).all()
+		else:
+			res = ServiceGroups.query.limit(100).offset(0).all()
+
+		list = []
+		for r in res:
+			d = {
+			'id': r.id,
+			'json': r.json,
+			'jsonHash': r.hash,
+			'created': r.created,
+			'updated': r.updated
+			}
+			list.append(d)
+
+		return jsonify(items=list)
+
+@app.route('/tags', methods=['GET'])
+@app.route('/tags/<int:id>', methods=['GET'])
+def tags(id=None):
+	if request.method == 'GET':
+		if id:
+			res = Tags.query.filter_by(id=id).limit(100).offset(0).all()
+		else:
+			res = Tags.query.limit(100).offset(0).all()
+
+		list = []
+		for r in res:
+			d = {
+			'id': r.id,
+			'tag': r.tag,
 			'created': r.created,
 			}
 			list.append(d)
