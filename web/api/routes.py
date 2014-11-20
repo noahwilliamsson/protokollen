@@ -4,7 +4,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://pk:protokoll@localhost/pk'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://pk:protokoll@127.0.0.1/pk?unix_socket=/run/mysqld/mysqld.sock'
 # Enable debugging to log errors to
 # /var/log/uwsgi/app/protokollen.log (or whatever)
 app.config['DEBUG'] = True
