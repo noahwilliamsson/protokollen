@@ -25,8 +25,8 @@ foreach($p->listEntityDomains() as $domain) {
 	/* Load entity */
 	$e = $p->getEntityByDomain($domain);
 
-	/* Skip entities older than $since */
-	if(strtotime($e->created) < strtotime($since))
+	/* Skip entities not modified since $since */
+	if(strtotime($e->updated) < strtotime($since))
 		continue;
 
 	/* Compile list of web hostnames */
