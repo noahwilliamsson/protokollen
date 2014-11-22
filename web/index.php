@@ -30,37 +30,9 @@ $sslprobeTest = new TestSslprobe();
 	<script src="flot/jquery.flot.js"></script>
 	<script src="flot/jquery.flot.pie.js"></script>
 	<script src="flot/jquery.flot.valuelabels.js"></script>
-<style type="text/css">
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-padding-top: 50px;
-padding-bottom: 20px;
-}
-</style>
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">Protokollen</a>
-			</div>
-			<div class="collapse navbar-collapse">
-				<ul class="nav navbar-nav">
-					<li class="active"><a href="/">Hem</a></li>
-					<li><a href="lists.php">Listor</a></li>
-					<li><a href="#medier">Medier</a></li>
-					<li><a href="#myndigheter">Myndigheter</a></li>
-					<li><a href="https://github.com/noahwilliamsson/protokollen">Om tjänsten</a></li>
-				</ul>
-			</div><!--/.nav-collapse -->
-		</div>
-	</div>
+	<?php include('nav.php'); ?>
 
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron">
@@ -160,7 +132,7 @@ foreach($tags as $tag => $tagId):
 	<div id="tls-status-2-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
 	-->
 	<div id="tls-status-3-<?php echo $hash ?>" style="width:350px;height:250px;float:left"></div>
-	<table class="table table-condensed" style="float:left; width:400px">
+	<table class="table table-condensed table-hover table-striped" style="float:left; width:400px">
 		<thead>
 			<tr>
 				<th>Org.</th>

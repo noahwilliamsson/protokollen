@@ -35,37 +35,9 @@ $ent = $p->getEntityByDomain($domain);
 	<script src="js/bootstrap.min.js"></script>
         <script src="flot/jquery.flot.js"></script>
         <script src="flot/jquery.flot.pie.js"></script>
-<style type="text/css">
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-padding-top: 50px;
-padding-bottom: 20px;
-}
-</style>
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">Protokollen</a>
-			</div>
-			<div class="collapse navbar-collapse">
-				<ul class="nav navbar-nav">
-					<li class="active"><a href="/">Hem</a></li>
-					<li><a href="lists.php">Listor</a></li>
-					<li><a href="#medier">Medier</a></li>
-					<li><a href="#myndigheter">Myndigheter</a></li>
-					<li><a href="https://github.com/noahwilliamsson/protokollen">Om tjänsten</a></li>
-				</ul>
-			</div><!--/.nav-collapse -->
-		</div>
-	</div>
+	<?php include('nav.php') ?>
 
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron">
