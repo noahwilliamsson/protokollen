@@ -61,7 +61,7 @@ for (domain, zone, nslist) in hostname_zone_nslist:
 	for ns in nslist:
 		try:
 			print "Attempting to query NS records for zone", zone, "at NS", ns
-			res = dns.query.udp(zone_q, ns, timeout=5)
+			res = dns.query.tcp(zone_q, ns, timeout=5)
 			if res.rcode() != 0:
 				print "DNSKEY query for zone", zone, "failed with rcode", res.rcode()
 				continue
@@ -86,7 +86,7 @@ for (domain, zone, nslist) in hostname_zone_nslist:
 		try:
 			# Attempt to validate the domain too
 			q = dns.message.make_query(domain, dns.rdatatype.A, want_dnssec=True)
-			res = dns.query.udp(q, ns, timeout=2)
+			res = dns.query.tcp(q, ns, timeout=5)
 			print "A query for domain",domain,"returned",len(res.answer),"answers"
 			# XXX - Figure out how to handly multiple answers RRs reliably
 			if res.rcode() != 0:
