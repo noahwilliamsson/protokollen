@@ -1,0 +1,3 @@
+:0 fw
+* ^To.*
+| /usr/bin/php /home/bouncetest/bouncetest-recv.php

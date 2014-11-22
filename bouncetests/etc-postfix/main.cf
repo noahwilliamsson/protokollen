@@ -1,0 +1,24 @@
+# Remember to change "example.com" here and in
+# /etc/postfix/{header_checks,virtual}
+# Finally use postmap(1) to update lookup tables:
+# 'postmap /etc/postfix/virtual'
+virtual_alias_domains = bouncetest.example.com
+virtual_alias_maps = hash:/etc/postfix/virtual
+
+# Turn on STARTTLS support
+smtp_use_tls=yes
+smtpd_use_tls=yes
+
+# Enable logging of TLS sessions
+smtp_tls_loglevel = 1
+smtpd_tls_loglevel = 1
+smtp_tls_note_starttls_offer = yes
+# Also note use of TLS in Received: headers
+smtpd_tls_received_header = yes
+
+# Use procmail to help deliver mail to the
+# bouncetest receiver script
+mailbox_command = procmail -a "$EXTENSION"
+
+# Hide local Received: header
+header_checks = regexp:/etc/postfix/header_checks
