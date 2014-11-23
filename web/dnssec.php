@@ -31,21 +31,6 @@ $sslprobeTest = new TestSslprobe();
 <body>
 	<?php include('nav.php') ?>
 
-	<!-- Main jumbotron for a primary marketing message or call to action -->
-	<div class="jumbotron">
-		<div class="container">
-			<p>Visa stödet för SSL/TLS på en sajt genom att skriva in domänen i rutan nedan.</p>
-
-			<form class="form-inline" role="form" method="get" action="/view.php">
-				<div class="form-group">
-					<label for="domain">Domän</label>
-					<input type="text" class="form-control" id="domain" name="domain" placeholder="example.se">
-				</div>
-				<button type="submit" class="btn btn-primary">Visa</button>
-			</form>
-		</div>
-	</div>
-
 	<div class="container">
 
 	<h2>DNSSEC-stöd på internettjänster (<?php echo strftime('%F') ?>)</h2>
