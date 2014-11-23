@@ -55,7 +55,7 @@ $sslprobeTest = new TestSslprobe();
 	<table class="table table-condensed" id="ipv6">
 		<thead>
 			<tr>
-				<th>Org.</th>
+				<th>Organisation</th>
 				<th>IPv6 OK</th>
 				<th>NS IPv6</th>
 				<th>MX IPv6</th>
@@ -76,12 +76,17 @@ $r->close();
 
 foreach($tags as $tag => $tagId):
 	$entityIds = array();
-	$q = 'SELECT entity_id FROM entity_tags WHERE tag_id="'. $m->escape_string($tagId) .'"';
+	$q = 'SELECT entity_id
+			FROM entity_tags et
+			LEFT JOIN entities e ON et.entity_id=e.id
+			WHERE tag_id="'. $m->escape_string($tagId) .'"
+			ORDER BY org';
 	$r = $m->query($q);
 	while($row = $r->fetch_object())
 		$entityIds[] = $row->entity_id;
 	$r->close();
 	
+	/* Accept a single NS and a single MX when considering IPv6 support */
 	$q = '	SELECT
 				SUM(IF(ns_ipv6>0 AND mx_ipv6>0 AND web_ipv6>0 AND web_total=web_ipv6, 1, 0)) ipv6_ok,
 				SUM(IF(ns_ipv6>0,1,0)) any_ns_ipv6,
@@ -117,6 +122,7 @@ foreach($tags as $tag => $tagId):
 				';
 		$r = $m->query($q);
 		$row = $r->fetch_object();
+		if(!$row) continue;
 		$r->close();
 		$title = $e->org;
 		if(mb_strlen($title) > 30)
