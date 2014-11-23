@@ -162,12 +162,11 @@ class ProtokollenBase {
 	}
 
 	/**
-	 * Add entity tag
-	 * @param $entityId Entity ID
+	 * Get tag object
 	 * @param $tag Tag name
-	 * @returns ID of entity tag mapping row, throws on error
+	 * @returns Tag object or NULL, throws on error
 	 */
-	function addEntityTag($entityId, $tag) {
+	function getTag($tag) {
 		$q = 'SELECT id FROM tags WHERE tag=?';
 		$st = $this->m->prepare($q);
 		$st->bind_param('s', $tag);
@@ -177,6 +176,17 @@ class ProtokollenBase {
 		$r->close();
 		$st->close();
 
+		return $row;
+	}
+
+	/**
+	 * Add entity tag
+	 * @param $entityId Entity ID
+	 * @param $tag Tag name
+	 * @returns ID of entity tag mapping row, throws on error
+	 */
+	function addEntityTag($entityId, $tag) {
+		$row = $this->getTag($tag);
 		if($row === NULL) {
 			$q = 'INSERT INTO tags SET tag=?, created=NOW()';
 			$st = $this->m->prepare($q);
