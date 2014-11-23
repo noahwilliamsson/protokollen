@@ -64,7 +64,7 @@ def get_zone_dnskeys(zone, ns_ip):
 		rdtype = dns.rdatatype.DNSKEY
 		rdclass = dns.rdataclass.IN
 		q = dns.message.make_query(zone, rdtype, want_dnssec=True)
-		r = dns.query.tcp(q, ns_ip, timeout=5)
+		r = dns.query.tcp(q, ns_ip, timeout=10)
 		if r.rcode() != 0:
 			err = 'DNSKEY query for zone {} failed with rcode: {}'.format(hostname, dns.rcode.to_text(r.rcode()))
 		elif len(r.answer) != 2:
@@ -86,7 +86,7 @@ def get_ds_key_tag_from_ns(zone, ns_ip):
 		rdtype = dns.rdatatype.DS
 		rdclass = dns.rdataclass.IN
 		q = dns.message.make_query(zone, rdtype, want_dnssec=True)
-		r = dns.query.tcp(q, ns_ip, timeout=5)
+		r = dns.query.tcp(q, ns_ip, timeout=10)
 		if r.rcode() != 0:
 			err = 'DS query for zone {} failed with rcode: {}'.format(hostname, dns.rcode.to_text(r.rcode()))
 		elif not r.answer:
@@ -134,7 +134,7 @@ for i in xrange(1, len(sys.argv), 3):
 	hostnames.add(sys.argv[i+1].lower())
 
 resolver = dns.resolver.Resolver()
-resolver.timeout = 5
+resolver.timeout = 10
 
 res = {}
 for hostname in hostnames:
@@ -263,7 +263,7 @@ for hostname in hostnames:
 	# Attempt to validate the domain too
 	try:
 		q = dns.message.make_query(domain, dns.rdatatype.ANY, want_dnssec=True)
-		r = dns.query.tcp(q, ns, timeout=5)
+		r = dns.query.tcp(q, ns, timeout=10)
 		if r.rcode() != 0:
 			name = domain.to_text(omit_final_dot=True)
 			err = 'ANY query for domain {} failed with rcode {}'.format(name, dns.rcode.to_text(r.rcode()))
