@@ -33,6 +33,11 @@ while [ $# -ge 3 ]; do
 		&& ./pk-import-dns-addresses.php "$svcId" "$svcGrpId" "$JSON" \
 		&& rm -f "$JSON"
 
+	# Update DNSSEC status regardless of service
+	test "$loop" = "1" && ./check_dnssec_status.py $@ > "$JSON" \
+		&& ./pk-import-dnssec-status.php "$svcId" "$svcGrpId" "$JSON" \
+		&& rm -f "$JSON"
+
 	case "$protocol" in
 	http )
 		test "$loop" = "1" && ./check_www_primary.py $@ > "$JSON" \

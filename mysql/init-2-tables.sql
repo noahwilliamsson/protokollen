@@ -47,7 +47,7 @@ CREATE TABLE `certs` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pem_sha256` (`pem_sha256`)
-) ENGINE=InnoDB AUTO_INCREMENT=768 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: X.509 cert store for scan data';
+) ENGINE=InnoDB AUTO_INCREMENT=807 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: X.509 cert store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `json` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `service_id` (`service_id`,`json_sha256`),
   CONSTRAINT `json_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=29336 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
+) ENGINE=InnoDB AUTO_INCREMENT=30825 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: JSON store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +155,7 @@ CREATE TABLE `logs` (
   KEY `json_id` (`json_id`),
   CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31677 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
+) ENGINE=InnoDB AUTO_INCREMENT=34146 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Log messages from scans';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +185,7 @@ CREATE TABLE `reports` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `entity_id` (`entity_id`,`created`),
   CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=860 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1757 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +230,7 @@ CREATE TABLE `svc_group_map` (
   KEY `svc_group_id` (`svc_group_id`),
   CONSTRAINT `svc_group_map_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `svc_group_map_ibfk_2` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3742 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Link between services and service groups, with revisions';
+) ENGINE=InnoDB AUTO_INCREMENT=3747 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Link between services and service groups, with revisions';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,10 +283,10 @@ CREATE TABLE `test_dns_addresses` (
   `entry_type` enum('current','revision') NOT NULL DEFAULT 'revision',
   `json_id` int(11) unsigned DEFAULT NULL,
   `json_sha256` varchar(64) DEFAULT NULL,
-  `num_hosts` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final URL (after redirects)',
-  `num_a` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final document title',
-  `num_aaaa` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final document title',
-  `num_cname` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Final document title',
+  `num_hosts` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of hosts',
+  `num_a` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of A records',
+  `num_aaaa` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of AAAA records',
+  `num_cname` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of CNAME records',
   `created` datetime NOT NULL,
   `until` datetime DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -297,7 +297,38 @@ CREATE TABLE `test_dns_addresses` (
   CONSTRAINT `test_dns_addresses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_dns_addresses_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_dns_addresses_ibfk_3` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7742 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Number of A, AAAA and CNAME records in a service group';
+) ENGINE=InnoDB AUTO_INCREMENT=8376 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Number of A, AAAA and CNAME records in a service group';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `test_dnssec_statuses`
+--
+
+DROP TABLE IF EXISTS `test_dnssec_statuses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_dnssec_statuses` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `service_id` int(11) unsigned NOT NULL,
+  `svc_group_id` int(11) unsigned NOT NULL,
+  `entry_type` enum('current','revision') NOT NULL DEFAULT 'revision',
+  `json_id` int(11) unsigned DEFAULT NULL,
+  `json_sha256` varchar(64) DEFAULT NULL,
+  `num_hosts` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of hosts',
+  `num_dnskey` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of hosts with DNSKEY in zone',
+  `num_ds` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of hosts with DNSKEY at parent zone',
+  `num_secure` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Number of DNSSEC validated hosts',
+  `created` datetime NOT NULL,
+  `until` datetime DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `json_id` (`json_id`),
+  KEY `svc_group_id` (`svc_group_id`),
+  CONSTRAINT `test_dnssec_statuses_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_dnssec_statuses_ibfk_2` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_dnssec_statuses_ibfk_3` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Protokollen: DNSSEC validation of hosts in service group';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -319,7 +350,7 @@ CREATE TABLE `test_sslprobe_certs` (
   KEY `svc_group_id` (`svc_group_id`),
   CONSTRAINT `test_sslprobe_certs_ibfk_2` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_sslprobe_certs_ibfk_1` FOREIGN KEY (`cert_id`) REFERENCES `certs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3452 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: X.509 cert store for scan data';
+) ENGINE=InnoDB AUTO_INCREMENT=3643 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: X.509 cert store for scan data';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,7 +383,7 @@ CREATE TABLE `test_sslprobes` (
   CONSTRAINT `test_sslprobes_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_sslprobes_ibfk_2` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_sslprobes_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18249 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
+) ENGINE=InnoDB AUTO_INCREMENT=20538 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Basic TLS support status as returned from sslprobe runs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +413,7 @@ CREATE TABLE `test_www_prefs` (
   CONSTRAINT `test_www_prefs_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_www_prefs_ibfk_3` FOREIGN KEY (`json_id`) REFERENCES `json` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_www_prefs_ibfk_4` FOREIGN KEY (`svc_group_id`) REFERENCES `svc_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5584 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences webservers in a service group';
+) ENGINE=InnoDB AUTO_INCREMENT=5966 DEFAULT CHARSET=utf8 COMMENT='Protokollen: Website URL preferences webservers in a service group';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -394,4 +425,4 @@ CREATE TABLE `test_www_prefs` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-22 18:46:02
+-- Dump completed on 2014-11-23 15:23:05
