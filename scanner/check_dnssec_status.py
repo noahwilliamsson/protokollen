@@ -74,6 +74,8 @@ def get_zone_dnskeys(zone, ns_ip):
 			rr_rrsig = r.find_rrset(r.answer, zone, rdclass, dns.rdatatype.RRSIG, rdtype)
 	except dns.exception.Timeout:
 		err = 'Timeout while querying zone {} for DNSKEY'.format(hostname)
+	except EOFError:
+		err = 'Network I/O error'
 	return err, rr_dnskey, rr_rrsig
 
 def get_ds_key_tag_from_ns(zone, ns_ip):
@@ -96,6 +98,8 @@ def get_ds_key_tag_from_ns(zone, ns_ip):
 				ds.add(rr.key_tag)
 	except dns.exception.Timeout:
 		err = 'Timeout while querying zone {} for DS'.format(hostname)
+	except EOFError:
+		err = 'Network I/O error'
 	except:
 		pass
 	return err, ds
@@ -282,5 +286,7 @@ for hostname in hostnames:
 		res[hostname]['error'] = err
 	except dns.dnssec.ValidationFailure as e:
 		res[hostname]['error'] = str(e)
+	except EOFError:
+		res[hostname]['error'] = 'Network I/O error'
 
 print json.dumps(res, indent=2, sort_keys=True)
