@@ -117,7 +117,8 @@ class TestDnssecStatus extends ServiceGroup {
 		$st = $m->prepare($q);
 		$st->bind_param('i', $svc->id);
 		if(!$st->execute()) {
-			$err = "DNSSEC status lookup ($svc->id) failed: $m->error";
+			$err = "DNSSEC status lookup ($svc->id) failed:"
+				." $m->error";
 			throw new Exception($err);
 		}
 
@@ -148,13 +149,13 @@ class TestDnssecStatus extends ServiceGroup {
 		$st->close();
 
 		if($row !== NULL) {
-			$q = 'UPDATE test_dnssec_statuses SET entry_type="revision",
-				until=NOW() WHERE id=?';
+			$q = 'UPDATE test_dnssec_statuses SET
+				entry_type="revision", until=NOW() WHERE id=?';
 			$st = $m->prepare($q);
 			$st->bind_param('i', $row->id);
 			if(!$st->execute()) {
-				$err = "DNSSEC status revision update ($svc->id) failed:"
-					." $m->error";
+				$err = "DNSSEC status revision update"
+					." ($svc->id) failed: $m->error";
 				throw new Exception($err);
 			}
 
@@ -163,18 +164,21 @@ class TestDnssecStatus extends ServiceGroup {
 
 		/* Log changes */
 		if($row === NULL) {
-			$log = "DNSSEC status created: DNSKEY/DS/secure $numDnskey/$numDs/$numSecure";
+			$log = "DNSSEC status created: Hosts/DNSKEY/DS/Secure"
+				." $numHosts/$numDnskey/$numDs/$numSecure";
 			$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
 			return $id;
 		}
 
 		$changes = array();
+		if($row->num_hosts != $numHosts)
+			$changes[] = "Hosts [$row->num_hosts -> $numHosts]";
 		if($row->num_dnskey != $numDnskey)
 			$changes[] = "DNSKEY [$row->num_dnskey -> $numDnskey]";
 		if($row->num_ds != $numDs)
 			$changes[] = "DS [$row->num_ds  -> $numDs]";
 		if($row->num_secure != $numSecure)
-			$changes[] = "secure [$row->num_secure -> $numSecure]";
+			$changes[] = "Secure [$row->num_secure -> $numSecure]";
 
 		if(!empty($changes)) {
 			$log = 'DNSSEC status changed: '. implode(', ', $changes);
