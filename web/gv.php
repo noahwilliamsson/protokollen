@@ -17,6 +17,7 @@ require_once('../php/ServiceGroup.class.php');
 require_once('../php/TestWwwPreferences.class.php');
 require_once('../php/TestSslprobe.class.php');
 require_once('../php/TestDnsAddresses.class.php');
+require_once('../php/TestDnssecStatus.class.php');
 require_once(dirname(__FILE__) .'/tlsbox.php');
 
 
@@ -56,6 +57,7 @@ function svgForDomain($domain) {
 	$testWww = new TestWwwPreferences();
 	$testSslprobe = new TestSslprobe();
 	$testDnsAddrs = new TestDnsAddresses();
+	$testDnssec = new TestDnssecStatus();
 	foreach($p->listServices($e->id) as $svc) {
 		$label = array('<f0>'. $svc->service_type, '<f1>'. $svc->service_name);
 		if(!empty($svc->service_desc))
@@ -67,6 +69,11 @@ function svgForDomain($domain) {
 
 		/* Load service group */
 		$grp = $p->getServiceGroup($svc->id);
+		if(!$grp)
+			continue;
+
+		/* Load DNSSEC status for hostnames in service group */
+		$dnssec = $testDnssec->getItem($svc->id, $grp->id);
 
 		/* Load web preferences for service group */
 		$prefs = $testWww->getItem($svc->id, $grp->id);
@@ -124,6 +131,18 @@ function svgForDomain($domain) {
 		foreach($grp->json as $svcHost) {
 
 			$label = array(sprintf('<p0>%s-server %s', $svc->service_type, $svcHost->hostname));
+
+			/* Add DNSSEC note in vhost box */
+			if($dnssec !== NULL) foreach($dnssec->json as $hostname => $obj) {
+				$dnssecHostId = preg_replace('@dnssec[^A-Za-z0-9]@', '_', $svcHost->hostname);
+				if($svcHost->hostname === $hostname) {
+					if($obj->secure)
+						$label[] = sprintf('<%s> DNSSEC: OK (%s)', $dnssecHostId, $hostname);
+					else
+						$label[] = sprintf('<%s> DNSSEC: %s', $dnssecHostId, $obj->error);
+				}
+			}
+
 
 			$seenNodesSvc = array();
 			$nodeIdx = 1;
