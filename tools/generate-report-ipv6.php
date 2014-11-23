@@ -6,6 +6,7 @@
 require_once('../php/ServiceGroup.class.php');
 require_once('../php/TestWwwPreferences.class.php');
 require_once('../php/TestDnsAddresses.class.php');
+require_once('../php/TestDnssecStatus.class.php');
 require_once('../php/TestSslprobe.class.php');
 
 $p = new ServiceGroup();
@@ -50,18 +51,22 @@ foreach($idList as $entityId) {
 		$st->close();
 	}
 
-	$q = 'UPDATE reports SET dnssec=?,
-			ns_total=?, ns_ipv4=?, ns_ipv6=?,
-			mx_total=?, mx_ipv4=?, mx_ipv6=?, mx_starttls=?,
-			web_total=?, web_ipv4=?, web_ipv6=?,
+	$q = 'UPDATE reports SET
+			ns_total=?, ns_ipv4=?, ns_ipv6=?, ns_dnssec=?,
+			mx_total=?, mx_ipv4=?, mx_ipv6=?, mx_dnssec=?,
+			mx_starttls=?,
+			web_total=?, web_ipv4=?, web_ipv6=?, web_dnssec=?,
 			https=? WHERE id=?';
-	$st = $m->prepare($q);
-	$st->bind_param('iiiiiiiiiiisi', $report->dnssec,
-					$report->ns->total, $report->ns->ipv4, $report->ns->ipv6,
-					$report->mx->total, $report->mx->ipv4, $report->mx->ipv6,
-					$report->mx->starttls, $report->web->total,
-					$report->web->ipv4, $report->web->ipv6, $report->https,
-					$id);
+	$st = $m->prepare($q) or die("ERROR: $m->error, SQL: $q\n");
+	$st->bind_param('iiiiiiiiiiiiisi',
+					$report->ns->total, $report->ns->ipv4,
+					$report->ns->ipv6, $report->ns->dnssec,
+					$report->mx->total, $report->mx->ipv4,
+					$report->mx->ipv6, $report->mx->dnssec,
+					$report->mx->starttls,
+					$report->web->total, $report->web->ipv4,
+					$report->web->ipv6, $report->web->dnssec,
+					$report->https, $id);
 	$st->execute();
 	$st->close();
 
@@ -71,22 +76,24 @@ foreach($idList as $entityId) {
 
 function reportEntityIpv6($entityId) {
 	$report = (object)array(
-		'dnssec' => 0,
 		'ns' => (object)array(
 			'total' => 0,
 			'ipv4' => 0,
 			'ipv6' => 0,
+			'dnssec' => 0,
 		),
 		'mx' => (object)array(
 			'total' => 0,
 			'ipv4' => 0,
 			'ipv6' => 0,
+			'dnssec' => 0,
 			'starttls' => 0,
 		),
 		'web' => (object)array(
 			'total' => 0,
 			'ipv4' => 0,
 			'ipv6' => 0,
+			'dnssec' => 0,
 		),
 		'https' => 'no',
 	);
@@ -94,20 +101,27 @@ function reportEntityIpv6($entityId) {
 	$p = new ServiceGroup();
 	$e = $p->getEntityById($entityId);
 	$testDns = new TestDnsAddresses();
+	$testDnssec = new TestDnssecStatus();
+	$testSslprobe = new TestSslprobe();
+	$testWww = new TestWwwPreferences();
+
 	foreach($p->listServices($e->id, ProtokollenBase::SERVICE_TYPE_DNS) as $svc) {
 		$grp = $p->getServiceGroup($svc->id);
 		if($grp === NULL)
 			break;
 		$item = $testDns->getItem($svc->id, $grp->id);
-		if(!$item)
-			continue;
-
-		foreach($item->json->records as $hostname => $obj) {
+		if($item) foreach($item->json->records as $hostname => $obj) {
 			$report->ns->total++;
 			if(count($obj->a))
 				$report->ns->ipv4++;
 			if(count($obj->aaaa))
 				$report->ns->ipv6++;
+		}
+
+		$item = $testDnssec->getItem($svc->id, $grp->id);
+		if($item) foreach($item->json as $hostname => $obj) {
+			if($obj->secure)
+				$report->ns->dnssec++;
 		}
 	}
 
@@ -117,10 +131,7 @@ function reportEntityIpv6($entityId) {
 			break;
 
 		$item = $testDns->getItem($svc->id, $grp->id);
-		if(!$item)
-			continue;
-
-		foreach($item->json->records as $hostname => $obj) {
+		if($item) foreach($item->json->records as $hostname => $obj) {
 			$report->mx->total++;
 			if(count($obj->a))
 				$report->mx->ipv4++;
@@ -128,11 +139,16 @@ function reportEntityIpv6($entityId) {
 				$report->mx->ipv6++;
 		}
 
-		$test = new TestSslprobe();
+		$item = $testDnssec->getItem($svc->id, $grp->id);
+		if($item) foreach($item->json as $hostname => $obj) {
+			if($obj->secure)
+				$report->mx->dnssec++;
+		}
+
 		foreach($grp->json as $svcHost) {
 			$numIps = 0;
 			$numIpsWithStarttls = 0;
-			$item = $test->getItem($svc->id, $grp->id, $svcHost->hostname);
+			$item = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
 			if($item === NULL)
 				continue;
 
@@ -155,6 +171,7 @@ function reportEntityIpv6($entityId) {
 	}
 
 	$webUrls = array();
+	$webDnssec = array();
 	foreach($p->listServices($e->id) as $svc) {
 		if($svc->service_type !== ProtokollenBase::SERVICE_TYPE_HTTP
 			&& $svc->service_type !==  ProtokollenBase::SERVICE_TYPE_HTTPS)
@@ -163,6 +180,12 @@ function reportEntityIpv6($entityId) {
 		$grp = $p->getServiceGroup($svc->id);
 		if($grp === NULL)
 			continue;
+
+		/* Check DNSSEC status on web service */
+		$item = $testDnssec->getItem($svc->id, $grp->id);
+		if($item) foreach($item->json as $hostname => $obj) {
+			$webDnssec[$hostname] = $obj->secure;
+		}
 
 		/* Attempt to find www. host */
 		$hasWww = FALSE;
@@ -173,13 +196,11 @@ function reportEntityIpv6($entityId) {
 			break;
 		}
 
-		if(!$hasWww) {
+		if(!$hasWww)
 			continue;
-		}
 
 		/* Make sure WWW service is valid */
-		$test = new TestWwwPreferences();
-		$item = $test->getItem($svc->id, $grp->id);
+		$item = $testWww->getItem($svc->id, $grp->id);
 		if(!$item)
 			continue;
 		$obj = $item->json;
@@ -196,7 +217,18 @@ function reportEntityIpv6($entityId) {
 	}
 
 	foreach(array_unique($hostnames) as $hostname) {
+		/**
+		 * Because the above loop consider the final URLs and not
+		 * the actual service hosts, this won't work in the case
+		 * when the service group {exampl.com, www.example.com}
+		 * have a final URL of http://some-other-zone.com
+		 */
 		$report->web->total++;
+		if(isset($webDnssec[$hostname])) {
+			if($webDnssec[$hostname])
+				$report->web->dnssec++;
+		}
+
 		$rrset = dns_get_record($hostname, DNS_A);
 		if(count($rrset))
 			$report->web->ipv4++;
