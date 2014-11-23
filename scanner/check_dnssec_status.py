@@ -281,8 +281,9 @@ for hostname in hostnames:
 		for rr in r.answer:
 			if rr.rdtype == dns.rdatatype.RRSIG:
 				continue
+			rrset = r.find_rrset(r.answer, domain, rr.rdclass, rr.rdtype)
 			rrsig = r.find_rrset(r.answer, domain, rr.rdclass, dns.rdatatype.RRSIG, rr.rdtype)
-			dns.dnssec.validate(rr, rrsig, {zone: zone_dnskeys})
+			dns.dnssec.validate(rrset, rrsig, {zone: zone_dnskeys})
 
 		if res[hostname]['ds'] and res[hostname]['dnskey']:
 			res[hostname]['secure'] = True
