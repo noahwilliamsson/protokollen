@@ -20,16 +20,6 @@ require_once('../php/TestDnsAddresses.class.php');
 require_once(dirname(__FILE__) .'/tlsbox.php');
 
 
-if(isset($argc)) {
-	$domain = 'aftonbladet.se';
-	if($argc > 1)
-		$domain = $argv[1];
-
-	$svg = svgForDomain($domain);
-	die($svg);
-}
-
-
 if(function_exists('headers_sent') && !headers_sent()) {
 	if(isset($_GET['d'])) {
 		header('Content-Type: image/svg+xml');
@@ -37,7 +27,6 @@ if(function_exists('headers_sent') && !headers_sent()) {
 		die($svg);
 	}
 }
-
 
 /**
  * Generate SVG for entity
@@ -164,11 +153,6 @@ function svgForDomain($domain) {
 			}
 
 			/* Link service set host to vhost box */
-			/*
-			echo sprintf("svc_set_%d:%s -> svc_set_%d_vhosts_%s\n",
-						$ss->id, preg_replace('@[^A-Za-z0-9]@', 'A', $svcHost->hostname),
-						$ss->id, preg_replace('@[^A-Za-z0-9]@', 'A', $svcHost->hostname));
-			*/
 			echo sprintf("svc_%d:f1 -> %s\n", $svc->id, $vhostBoxId);
 			echo "\n";
 		}
