@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 /**
- * Protokollen - import JSON from check_http_primary.py
+ * Protokollen - import JSON from check_dns_address_records.py
  */
 
 require_once('../php/TestDnsAddresses.class.php');
 
 
 if($argc != 4)
-	die("Usage: ${argv[0]} <service ID> <service group ID> <domain.tld.json>\n");
+	die("Usage: ${argv[0]} <service ID> <service group ID> <service-group.json>\n");
 
 $svcId = $argv[1];
 $svcGrpId = $argv[2];
