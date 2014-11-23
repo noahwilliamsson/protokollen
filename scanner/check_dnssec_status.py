@@ -2,6 +2,12 @@
 #
 # Protokollen - DNSSEC validation test
 #
+# Requires dnspython from 2014-09-04 or later for DNSSEC validation
+# to work completely.  The domain 'gavle.se' is known to fail to
+# validate with dnspython <= 1.12.0.  Install the latest version
+# by cloning https://github.com/rthalley/dnspython and running
+# (cd dnspythons && sudo ./setup.py install)
+#
 # Test beds:
 #	 - sigok.verteiltesysteme.net
 #	 - sigfail.verteiltesysteme.net
