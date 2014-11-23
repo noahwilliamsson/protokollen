@@ -37,10 +37,7 @@ $sslprobeTest = new TestSslprobe();
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron">
 		<div class="container">
-			<!--
-			<h1>Visa sajt</h1>
-			-->
-			<p>Visa stödet för SSL/TLS på en sajt genom att skriva in domänen i rutan nedan.</p>
+			<p>Visa stödet för moderna internetprotokoll på en sajt genom att skriva in domänen i rutan nedan.</p>
 
 			<form class="form-inline" role="form" method="get" action="/view.php">
 				<div class="form-group">
@@ -53,6 +50,9 @@ $sslprobeTest = new TestSslprobe();
 	</div>
 
 	<div class="container">
+	<p><strong>TODO</strong> Mindre detaljer här. Det faktiska SSL/TLS-protokollen är ointressanta jämfört med huruvida https stöds alls och om det finns stöd för forward secrecy. Protokolldetaljerna borde nog bo på en egen sida.</p>
+	<p><strong>TODO</strong> Hämta data från en summary tabell istället så det inte går så långsamt.</p>
+	<p><strong>TODO</strong> Någon slags var-har-jag-hamnat-och-vad-betyder-allt sida hade varit bra.</p>
 	<script>
 	function labelFormatter(label, series) {
 		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label.toUpperCase().replace('V','v').replace('_','.') + "<br/>" + Math.round(series.percent) + "% (n=" + series.data[0][1] +")</div>";

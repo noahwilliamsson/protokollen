@@ -2,6 +2,8 @@
 require_once('../php/ServiceGroup.class.php');
 require_once('../php/TestWwwPreferences.class.php');
 require_once('../php/TestSslprobe.class.php');
+require_once('../php/TestDnsAddresses.class.php');
+require_once('../php/TestDnssecStatus.class.php');
 
 if(!isset($_GET['domain'])) {
 	header('Location: /');
@@ -53,7 +55,12 @@ $ent = $p->getEntityByDomain($domain);
 			</form>
 		</div>
 	</div>
+
 	<div class="container">
+		<h2>Graf över internettjänster</h2>
+		<p><strong>TODO</strong> Lägg varje tjänsttyp (DNS, mejl, webb, ..) i egna flikar(?) för att reducera innehållet i grafen. Eller kanske kryssrutor för att välja vad som ska visas i grafen.<br />
+		<strong>TODO</strong> Just nu är grafen en platt bild (PNG) men SVG är ett möjligt alternativ som bl.a. erbjuder klickbara länkar på bildytan. SVG är f.n. avstängt eftersom graphviz/dot ibland producerar trasig markup när det förekommer Unicode text.
+		</p>
 		<!--
 		This works but gives no clickable links..
 		-->
@@ -74,59 +81,97 @@ $ent = $p->getEntityByDomain($domain);
 		endif;
 		?>
 	</div>
+
 	<div class="container">
+		<h2>Lista över tjänster</h2>
+		<p><strong>TODO</strong> Det här borde grupperas under flikar och presenteras på ett snyggare sätt.</p>
 		<?php
 		foreach($p->listServices($ent->id) as $svc):
+			/*
 			if($svc->service_type === ProtokollenBase::SERVICE_TYPE_DNS) continue;
 			if($svc->service_type === ProtokollenBase::SERVICE_TYPE_SMTP) continue;
+			*/
 
 			$grp = $p->getServiceGroup($svc->id);
-			$wwwPrefsTest = new TestWwwPreferences();
-			$prefs = $wwwPrefsTest->getItem($svc->id, $grp->id);
+			$testWww = new TestWwwPreferences();
+			$testDnssec = new TestDnssecStatus();
+			$testDnsAddrs = new TestDnsAddresses();
+			$prefs = $testWww->getItem($svc->id, $grp->id);
+			$dnssec = $testDnssec->getItem($svc->id, $grp->id);
+			$addrs = $testDnsAddrs->getItem($svc->id, $grp->id);
 		?>
 		<div class="panel panel-default">
-		  <div class="panel-heading">
-			<h3 class="panel-title">
-			<?php
-			$title = $svc->service_name;
-			if(!empty($svc->service_desc))
-					$title .= ' ('. $svc->service_desc .')';
-			echo htmlspecialchars($title, ENT_NOQUOTES);
-			if($prefs !== NULL):
-				foreach($prefs as $key => $value):
-				switch($key) {
-				case 'url':
-					if(empty($value))
-						break;
-					$scheme = parse_url($value, PHP_URL_SCHEME);
-					echo '<span class="label label-success">'. htmlspecialchars($scheme, ENT_NOQUOTES) .'</span>';
-					break;
-				case 'errors':
-					if(!empty($value))
-						echo '<span class="label label-danger">HTTP error</span>';
-					break;
-				}
-				echo ' ';
-				endforeach;
-			endif;
-			?>
-			</h3>
-		  </div>
+			<div class="panel-heading">
+				<h3 class="panel-title">
 
-		  <div class="panel-body">
-			<?php if($prefs !== NULL): ?>
+				<?php
+				$title = $svc->service_name;
+				if(!empty($svc->service_desc))
+						$title .= ' ('. $svc->service_desc .')';
+				echo htmlspecialchars($title, ENT_NOQUOTES);
+				if($prefs !== NULL):
+					foreach($prefs as $key => $value):
+					switch($key) {
+					case 'url':
+						if(empty($value))
+							break;
+						$scheme = parse_url($value, PHP_URL_SCHEME);
+						echo '<span class="label label-success">'. htmlspecialchars($scheme, ENT_NOQUOTES) .'</span>';
+						break;
+					case 'errors':
+						if(!empty($value))
+							echo '<span class="label label-danger">HTTP error</span>';
+						break;
+					}
+					echo ' ';
+					endforeach;
+				endif;
+				?>
+				</h3>
+			</div>
+
+			<div class="panel-body">
+				<?php if($prefs !== NULL): ?>
+					<h4>Webbtest</h4>
+
 					<?php if($prefs->title): ?>
-					<a href="<?php echo htmlspecialchars($prefs->url); ?>"><?php echo htmlspecialchars($prefs->title, ENT_NOQUOTES); ?></a>
+					<p>
+					<strong>Föredragen webbplats:</strong>
+					<a href="<?php echo htmlspecialchars($prefs->url); ?>"><?php echo htmlspecialchars($prefs->title, ENT_NOQUOTES); ?></a> (<?php echo htmlspecialchars(parse_url($prefs->url, PHP_URL_HOST), ENT_NOQUOTES) ?>)
+					</p>
 					<?php endif; ?>
+
 					<!-- List group -->
-				  <ul class="list-group">
-					<?php if($prefs->errors): ?>
-					<li class="list-group-item list-group-item-danger"><span class="label label-warning">error</span> <?php echo htmlspecialchars($prefs->errors, ENT_NOQUOTES); ?></li>
-					<?php endif; ?>
-				  </ul>
-			<?php endif; // prefs ?>
-		  </div>
-		</div>
+					<ul class="list-group">
+						<?php if($prefs->errors): ?>
+						<li class="list-group-item list-group-item-danger"><span class="label label-warning">error</span> <?php echo htmlspecialchars($prefs->errors, ENT_NOQUOTES); ?></li>
+						<?php endif; ?>
+					</ul>
+					<?php
+					$str = json_encode($prefs->json, JSON_PRETTY_PRINT);
+					?>
+					<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
+
+				<?php endif; // prefs ?>
+
+				<?php
+				if($dnssec !== NULL):
+					$str = json_encode($dnssec->json, JSON_PRETTY_PRINT);
+				?>
+				<h4>DNSSEC</h4>
+				<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
+				<?php endif; ?>
+
+				<?php
+				if($grp !== NULL):
+					$str = json_encode($grp->json, JSON_PRETTY_PRINT);
+				?>
+				<h4>Service group</h4>
+				<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
+				<?php endif; ?>
+
+			</div> <!-- /.panel-body -->
+		</div> <!-- /.panel -->
 
 		<?php endforeach; // services ?>
 	</div>

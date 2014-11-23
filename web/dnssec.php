@@ -34,9 +34,11 @@ $sslprobeTest = new TestSslprobe();
 	<div class="container">
 
 	<h2>DNSSEC-stöd på internettjänster (<?php echo strftime('%F') ?>)</h2>
-	<!--
-	<table class="table table-condensed table-hover table-striped" id="dnssec">
-	-->
+
+	<p><a href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC</a> är viktigt för trovärdigheten eftersom protokollet ger verifierbara svar på DNS-frågor. Det förhindrar att en elak tredje part kan skicka falska svar på DNS-uppslag.</p>
+
+	<p>För att få <em>DNSSEC OK</em> krävs att alla namnservrar (NS) är säkrade med DNSSEC, att alla mejlservrarna (MX) är säkrade med DNSSEC (om man hanterar mejl på domänen) och att de domäner som används för webben är säkrade med DNSSEC.</p>
+
 	<table class="table table-condensed" id="dnssec">
 		<thead>
 			<tr>
