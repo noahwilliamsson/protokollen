@@ -3,7 +3,7 @@
 # Protokollen - count DNS record types for service group
 #
 # -*- coding: utf-8 -*-
-# vim: ts=4 sts=4 sw=8 noexpandtab
+# vim: ts=4 sts=4 sw=4 noexpandtab
 #
 from __future__ import absolute_import
 import sys
