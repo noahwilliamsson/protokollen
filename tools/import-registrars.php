@@ -40,7 +40,7 @@ if(preg_match_all('@>([a-z0-9.-]*)</a>@', $data, $matches)) foreach($matches[1] 
 
 	$e = $p->getEntityByDomain($apex);
 	if($e === NULL) {
-		echo "No entity for $apex\n";
+		echo "Creating entity for $apex\n";
 		$id = $p->addEntity($apex, $emailDomain, $url, $apex);
 		$e = $p->getEntityById($id);
 	}

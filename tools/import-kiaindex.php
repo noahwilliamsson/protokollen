@@ -43,7 +43,7 @@ foreach($kiaSites as $site) {
 
 	$e = $p->getEntityByDomain($apex);
 	if($e === NULL) {
-		echo "No entity for $apex\n";
+		echo "Creating entity for $apex\n";
 		$id = $p->addEntity($apex, $emailDomain, $url, $site->title);
 		$e = $p->getEntityById($id);
 	}
