@@ -28,8 +28,10 @@ def get_nameservers(zone):
 			ns_set.add(rr.to_text())
 	except dns.exception.Timeout:
 		err = 'Timeout while fetching nameservers for zone'
+	except dns.resolver.NoAnswer:
+		err = 'Zone nameservers could not be reached'
 	except dns.resolver.NoNameservers:
-		err = 'Zone has no nameservers'
+		err = 'Zone nameservers could not be reached'
 	except dns.resolver.NXDOMAIN:
 		err = 'Zone not found'
 	return err, ns_set
