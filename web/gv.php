@@ -114,7 +114,7 @@ function svgForDomain($domain) {
 
 
 		/* Load DNS addresses for hostnames in service group */
-		$addrs = $testDnsAddrs->getItem($svc->id, $grp->id, $svcHost->hostname);
+		$addrs = $testDnsAddrs->getItem($svc->id, $grp->id);
 		if(!$addrs)
 			continue;
 
