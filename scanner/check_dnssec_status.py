@@ -161,6 +161,10 @@ for hostname in hostnames:
 		parent = dns.resolver.zone_for_name(parent_name)
 		res[hostname]['parent'] = parent.to_unicode(omit_final_dot=True).lower()
 		#print "Found parent zone",parent
+	except dns.resolver.NoNameservers:
+		err = 'No nameservers could be reached while attempting to find zone for hostname'
+		res[hostname]['error'] = err
+		continue
 	except dns.exception.Timeout:
 		err = 'Timeout while attempting to find zone for hostname'
 		res[hostname]['error'] = err
