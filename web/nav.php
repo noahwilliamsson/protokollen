@@ -18,13 +18,13 @@
         <li class="dropdown <?php if(in_array($_SERVER['PHP_SELF'], array('/dnssec.php', '/ipv6.php'))) echo 'active' ?>">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Listor <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li  <?php if($_SERVER['PHP_SELF'] === '/dnssec.php') echo 'class="active"' ?>><a href="dnssec.php">DNSSEC-stöd på internettjänster</a></li>
-            <li  <?php if($_SERVER['PHP_SELF'] === '/ipv6.php') echo 'class="active"' ?>><a href="ipv6.php">Nåbarhet över IPv6</a></li>
+            <li  <?php if($_SERVER['PHP_SELF'] === '/dnssec.php') echo 'class="active"' ?>><a href="dnssec.php">Domänsäkerhet (DNSSEC)</a></li>
+            <li  <?php if($_SERVER['PHP_SELF'] === '/ipv6.php') echo 'class="active"' ?>><a href="ipv6.php">Nåbarhet (IPv6)</a></li>
           </ul>
         </li>
 		-->
-            <li  <?php if($_SERVER['PHP_SELF'] === '/dnssec.php') echo 'class="active"' ?>><a href="dnssec.php">DNSSEC-stöd på internettjänster</a></li>
-            <li  <?php if($_SERVER['PHP_SELF'] === '/ipv6.php') echo 'class="active"' ?>><a href="ipv6.php">Nåbarhet över IPv6</a></li>
+            <li  <?php if($_SERVER['PHP_SELF'] === '/dnssec.php') echo 'class="active"' ?>><a href="dnssec.php">Domänsäkerhet (DNSSEC)</a></li>
+            <li  <?php if($_SERVER['PHP_SELF'] === '/ipv6.php') echo 'class="active"' ?>><a href="ipv6.php">Nåbarhet (IPv6)</a></li>
             <li  <?php if($_SERVER['PHP_SELF'] === '/smtp.php') echo 'class="active"' ?>><a href="#">Mejlsäkerhet</a></li>
             <li  <?php if($_SERVER['PHP_SELF'] === '/https.php') echo 'class="active"' ?>><a href="#">Webbsäkerhet</a></li>
             <li  <?php if($_SERVER['PHP_SELF'] === '/api.php') echo 'class="active"' ?>><a href="#">Data API</a></li>
