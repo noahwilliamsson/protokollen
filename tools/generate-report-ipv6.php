@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Determine IPv6 support on services
+ * Update summary table (reports) from scan data
  */
 require_once('../php/ServiceGroup.class.php');
 require_once('../php/TestWwwPreferences.class.php');
@@ -55,15 +55,29 @@ foreach($idList as $entityId) {
 			ns_total=?, ns_ipv4=?, ns_ipv6=?, ns_dnssec=?,
 			mx_total=?, mx_ipv4=?, mx_ipv6=?, mx_dnssec=?,
 			mx_starttls=?,
+			mx_ip_total=?, mx_ip_country_se=?, mx_ip_country_other=?,
+			mx_ip_country_unknown=?, mx_ip_starttls=?, mx_ip_starttls_pfs=?,
+			mx_ip_starttls_sslv2=?, mx_ip_starttls_sslv3=?,
+			mx_ip_starttls_tlsv1=?, mx_ip_starttls_tlsv1_1=?,
+			mx_ip_starttls_tlsv1_2=?,
 			web_total=?, web_ipv4=?, web_ipv6=?, web_dnssec=?,
 			https=? WHERE id=?';
 	$st = $m->prepare($q) or die("ERROR: $m->error, SQL: $q\n");
-	$st->bind_param('iiiiiiiiiiiiisi',
+	$st->bind_param('iiiiiiiiiiiiiiiiiiiiiiiisi',
 					$report->ns->total, $report->ns->ipv4,
 					$report->ns->ipv6, $report->ns->dnssec,
 					$report->mx->total, $report->mx->ipv4,
 					$report->mx->ipv6, $report->mx->dnssec,
 					$report->mx->starttls,
+					$report->mx->ip->total, $report->mx->ip->country_se,
+					$report->mx->ip->country_other,
+					$report->mx->ip->country_unknown,
+					$report->mx->ip->starttls, $report->mx->ip->starttls_pfs,
+					$report->mx->ip->starttls_sslv2,
+					$report->mx->ip->starttls_sslv3,
+					$report->mx->ip->starttls_tlsv1,
+					$report->mx->ip->starttls_tlsv1_1,
+					$report->mx->ip->starttls_tlsv1_2,
 					$report->web->total, $report->web->ipv4,
 					$report->web->ipv6, $report->web->dnssec,
 					$report->https, $id);
@@ -88,6 +102,19 @@ function reportEntityIpv6($entityId) {
 			'ipv6' => 0,
 			'dnssec' => 0,
 			'starttls' => 0,
+			'ip' => (object)array(
+				'total' => 0,
+				'country_se' => 0,
+				'country_other' => 0,
+				'country_unknown' => 0,
+				'starttls' => 0,
+				'starttls_sslv2' => 0,
+				'starttls_sslv3' => 0,
+				'starttls_tlsv1' => 0,
+				'starttls_tlsv1_1' => 0,
+				'starttls_tlsv1_2' => 0,
+				'starttls_pfs' => 0,
+			)
 		),
 		'web' => (object)array(
 			'total' => 0,
@@ -148,23 +175,70 @@ function reportEntityIpv6($entityId) {
 		foreach($grp->json as $svcHost) {
 			$numIps = 0;
 			$numIpsWithStarttls = 0;
+
 			$item = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
 			if($item === NULL)
 				continue;
 
+			$numConnections = 0;
 			foreach($item->json as $probe) {
 				$numIps++;
+				$report->mx->ip->total++;
+				if(strstr($probe->ip, ':')) {
+					/* No support for IPv6 addresses yet */
+					$report->mx->ip->country_unknown++;
+				}
+				else {
+					$ccTLD = geoip_country_code_by_name($probe->ip);
+					if(!strcmp($ccTLD, 'SE'))
+						$report->mx->ip->country_se++;
+					else
+						$report->mx->ip->country_other++;
+				}
+
+				$haveStarttls = FALSE;
+				$havePfs = FALSE;
 				foreach($probe->protocols as $proto) {
-					/* Ignore SSLv2 in STARTTLS */
-					if($proto->version < 768)
+					/* Note that SMTP works */
+					if($proto->establishedConnections > 0)
+						$numConnections++;
+
+					/* Ignore probes that produced an error */
+					if($proto->lastError !== NULL)
 						continue;
+
 					if(!$proto->supported)
 						continue;
-					$numIpsWithStarttls++;
-					break;
+
+					switch($proto->version) {
+					case 2: $report->mx->ip->starttls_sslv2++; break;
+					case 768: $report->mx->ip->starttls_sslv3++; break;
+					case 769: $report->mx->ip->starttls_tlsv1++; break;
+					case 770: $report->mx->ip->starttls_tlsv1_1++; break;
+					case 771: $report->mx->ip->starttls_tlsv1_2++; break;
+					default: break;
+					}
+
+					foreach($proto->cipherSuites as $cs) {
+						if(strstr($cs->name, 'DHE') || strstr($cs->name, 'EDH')) {
+							$havePfs = TRUE;
+							break;
+						}
+					}
+
+					$haveStarttls = TRUE;;
 				}
+
+				if($haveStarttls) {
+					$report->mx->ip->starttls++;
+					$numIpsWithStarttls++;
+				}
+
+				if($havePfs)
+					$report->mx->ip->starttls_pfs++;
 			}
 
+			/* Note that all IP addresses for this hostname support STARTTLS */
 			if($numIps > 0 && $numIps === $numIpsWithStarttls)
 				$report->mx->starttls++;
 		}
