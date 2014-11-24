@@ -25,6 +25,8 @@
 		-->
             <li  <?php if($_SERVER['PHP_SELF'] === '/dnssec.php') echo 'class="active"' ?>><a href="dnssec.php">DNSSEC-stöd på internettjänster</a></li>
             <li  <?php if($_SERVER['PHP_SELF'] === '/ipv6.php') echo 'class="active"' ?>><a href="ipv6.php">Nåbarhet över IPv6</a></li>
+            <li  <?php if($_SERVER['PHP_SELF'] === '/smtp.php') echo 'class="active"' ?>><a href="#">Mejlsäkerhet</a></li>
+            <li  <?php if($_SERVER['PHP_SELF'] === '/https.php') echo 'class="active"' ?>><a href="#">Webbsäkerhet</a></li>
             <li  <?php if($_SERVER['PHP_SELF'] === '/api.php') echo 'class="active"' ?>><a href="#">Data API</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

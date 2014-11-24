@@ -44,7 +44,7 @@ $ent = $p->getEntityByDomain($domain);
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron">
 		<div class="container">
-			<p>Visa stödet för SSL/TLS på en sajt genom att skriva in domänen i rutan nedan.</p>
+			<p>Visa stödet för moderna internetprotokoll på en sajt genom att skriva in domänen i rutan nedan.</p>
 
 			<form class="form-inline" role="form" method="get" action="/view.php">
 				<div class="form-group">
