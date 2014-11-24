@@ -30,11 +30,11 @@ CREATE TABLE `entities` (
   `domain` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `domain_email` varchar(255) DEFAULT NULL,
-  `created` datetime NOT NULL DEFAULT '2014-11-22 17:45:00',
+  `created` datetime NOT NULL DEFAULT '2014-11-24 13:10:00',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `domain` (`domain`)
-) ENGINE=InnoDB AUTO_INCREMENT=1023 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
+) ENGINE=InnoDB AUTO_INCREMENT=1071 DEFAULT CHARSET=utf8 COMMENT='Protokollen: List of organizations';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +147,7 @@ INSERT INTO `entities` VALUES (104,'Ny Teknik',NULL,'Talentum Sweden AB','nytekn
 INSERT INTO `entities` VALUES (105,'F S Data',NULL,NULL,'fsdata.se','https://fsdata.se','fsdata.se','2013-06-20 00:00:00','2013-09-17 09:07:22');
 INSERT INTO `entities` VALUES (106,'Binero',NULL,NULL,'binero.se','http://www.binero.se','binero.se','2013-06-20 00:00:00','2013-09-17 09:06:33');
 INSERT INTO `entities` VALUES (107,'Loopia',NULL,NULL,'loopia.se','https://www.loopia.se','loopia.se','2013-06-20 00:00:00','2013-09-17 09:08:30');
-INSERT INTO `entities` VALUES (108,'City Network',NULL,NULL,'citynetwork.se','https://www.citynetwork.se','citynetwork.se','2013-06-20 00:00:00','2013-09-17 09:06:53');
+INSERT INTO `entities` VALUES (108,'City Network',NULL,'City Network','citynetwork.se','https://www.citynetwork.se','citynetwork.se','2013-06-20 00:00:00','2014-11-24 02:19:17');
 INSERT INTO `entities` VALUES (109,'Crystone',NULL,NULL,'crystone.se','http://www.crystone.se','crystone.se','2013-06-20 00:00:00','2013-09-17 09:06:57');
 INSERT INTO `entities` VALUES (110,'Surftown',NULL,NULL,'surftown.se','http://surftown.se','surftown.se','2013-06-20 00:00:00','2013-09-17 09:10:14');
 INSERT INTO `entities` VALUES (111,'Föreningen för Digitala Fri- och Rättigheter','DFRI',NULL,'dfri.se','https://www.dfri.se','dfri.se','2013-06-20 00:00:00','2014-11-17 14:20:22');
@@ -1054,6 +1054,53 @@ INSERT INTO `entities` VALUES (1019,'yamito.se',NULL,NULL,'yamito.se','http://ww
 INSERT INTO `entities` VALUES (1020,'yask.se',NULL,NULL,'yask.se','http://www.yask.se','yask.se','2014-11-23 20:50:14','2014-11-23 19:50:14');
 INSERT INTO `entities` VALUES (1021,'ymex.se',NULL,NULL,'ymex.se','http://www.ymex.se','ymex.se','2014-11-23 20:50:14','2014-11-23 19:50:14');
 INSERT INTO `entities` VALUES (1022,'zitcom.dk',NULL,NULL,'zitcom.dk','http://www.zitcom.dk','zitcom.dk','2014-11-23 20:50:14','2014-11-23 19:50:14');
+INSERT INTO `entities` VALUES (1023,'Simon Josefsson Datakonsult',NULL,NULL,'josefsson.org','http://josefsson.org','josefsson.org','2014-11-23 21:23:00','2014-11-23 20:23:46');
+INSERT INTO `entities` VALUES (1024,'Folksam',NULL,NULL,'folksam.se','http://www.folksam.se','folksam.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1025,'Trygg Hansa',NULL,NULL,'trygghansa.se','http://www.trygghansa.se','trygghansa.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1026,'Dina Försäkringar',NULL,NULL,'dina.se','https://www.dina.se','dina.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1027,'Atea',NULL,NULL,'atea.se','http://www.atea.se','atea.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1028,'NSEC',NULL,NULL,'nsec.se','http://www.nsec.se','nsec.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1029,'Svenska Kraftnät',NULL,NULL,'svk.se','http://www.svk.se','svk.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1030,'ITjobb.se',NULL,NULL,'itjobb.se','http://www.itjobb.se','itjobb.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1031,'Europoint Networking',NULL,NULL,'europoint.se','https://europoint.se','europoint.se','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1032,'Simovits Consulting AB',NULL,NULL,'simovits.com','http://www.simovits.com','simovits.com','2014-11-24 00:20:00','2014-11-23 23:21:10');
+INSERT INTO `entities` VALUES (1033,'Bokus bokhandel',NULL,'Bokus','bokus.com','http://www.bokus.com','bokus.com','2014-11-24 00:20:00','2014-11-24 01:12:25');
+INSERT INTO `entities` VALUES (1034,'Dito',NULL,'Bokus','dito.se','https://dito.se','dito.se','2014-11-24 00:20:00','2014-11-24 01:12:25');
+INSERT INTO `entities` VALUES (1035,'Trygg E-Handel',NULL,NULL,'tryggehandel.se','http://www.tryggehandel.se','tryggehandel.se','2014-11-24 00:20:00','2014-11-24 01:12:25');
+INSERT INTO `entities` VALUES (1036,'Mynewsdesk',NULL,NULL,'mynewsdesk.com','http://www.mynewsdesk.com','mynewsdesk.com','2014-11-24 00:20:00','2014-11-24 01:12:25');
+INSERT INTO `entities` VALUES (1037,'Umeå universitet',NULL,NULL,'umu.se','http://www.umu.se','umu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1038,'Lunds universitet',NULL,NULL,'lu.se','http://lu.se','lu.se','2014-11-24 00:20:00','2014-11-24 01:12:25');
+INSERT INTO `entities` VALUES (1040,'Lunds tekniska högskola','LTH',NULL,'lth.se','http://www.lth.se','lth.se','2014-11-24 00:20:00','2014-11-24 01:18:57');
+INSERT INTO `entities` VALUES (1041,'Kungliga Tekniska högskolan','KTH',NULL,'kth.se','https://www.kth.se','kth.se','2014-11-24 00:20:00','2014-11-24 01:12:25');
+INSERT INTO `entities` VALUES (1042,'Göteborgs universitet',NULL,NULL,'gu.se','http://www.gu.se','gu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1043,'Malmö högskola','MAH',NULL,'mah.se','http://www.mah.se','mah.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1044,'Karlstad univsitet',NULL,NULL,'kau.se','http://www.kau.se','kau.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1045,'Karolinska institutet',NULL,NULL,'ki.se','http://ki.se','ki.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1046,'Linköpings universitet',NULL,NULL,'liu.se','http://www.liu.se','liu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1047,'Stockholms universitet',NULL,NULL,'su.se','http://www.su.se','su.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1048,'Sveriges lantbruksuniversitet',NULL,NULL,'slu.se','http://www.slu.se','slu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1049,'Linnéuniversitetet',NULL,NULL,'lnu.se','http://lnu.se','lnu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1050,'Luleå tekniska universitet',NULL,NULL,'ltu.se','http://www.ltu.se','ltu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1051,'Mittuniversitetet',NULL,NULL,'miun.se','http://www.miun.se','miun.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1052,'Uppsala universitet',NULL,NULL,'uu.se','http://www.uu.se','uu.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1053,'Örebro universitet',NULL,NULL,'oru.se','http://www.oru.se','oru.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1054,'Chalmers tekniska högskola',NULL,NULL,'chalmers.se','http://www.chalmers.se','chalmers.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1055,'Handelshögskolan i Stockholm',NULL,NULL,'hhs.se','https://www.hhs.se','hhs.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1056,'Blekinge tekniska högskola',NULL,NULL,'bth.se','http://www.bth.se','bth.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1057,'Mälardalens högskola',NULL,NULL,'mdh.se','http://www.mdh.se','mdh.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1058,'Högskolan i Jönköping',NULL,NULL,'hj.se','http://hj.se','hj.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1059,'Södertörns högskola',NULL,NULL,'sh.se','http://www.sh.se','sh.se','2014-11-24 00:20:00','2014-11-24 01:19:00');
+INSERT INTO `entities` VALUES (1060,'SUNET',NULL,NULL,'sunet.se','http://www.sunet.se','sunet.se','2014-11-24 00:20:00','2014-11-24 01:30:29');
+INSERT INTO `entities` VALUES (1061,'Bankid',NULL,NULL,'bankid.com','http://www.bankid.com','bankid.com','2014-11-24 00:20:00','2014-11-24 01:30:29');
+INSERT INTO `entities` VALUES (1062,'Qbranch',NULL,NULL,'qbranch.se','http://www.qbranch.se','qbranch.se','2014-11-24 00:20:00','2014-11-24 01:30:29');
+INSERT INTO `entities` VALUES (1063,'Basefarm',NULL,NULL,'basefarm.com','https://www.basefarm.com','basefarm.com','2014-11-24 00:20:00','2014-11-24 01:30:29');
+INSERT INTO `entities` VALUES (1064,'City Cloud',NULL,'City Network','citycloud.se','https://www.citycloud.se','citycloud.se','2014-11-24 03:18:20','2014-11-24 02:19:15');
+INSERT INTO `entities` VALUES (1065,'CGI',NULL,NULL,'cgi.se','http://www.cgi.se','cgi.se','2014-11-24 03:18:20','2014-11-24 02:19:15');
+INSERT INTO `entities` VALUES (1066,'Swish',NULL,NULL,'getswish.se','https://www.getswish.se',NULL,'2014-11-24 03:18:20','2014-11-24 02:19:15');
+INSERT INTO `entities` VALUES (1067,'Danske Bank',NULL,NULL,'danskebank.se','http://www.danskebank.se','danskebank.se','2014-11-24 03:18:20','2014-11-24 12:19:08');
+INSERT INTO `entities` VALUES (1068,'Patrafee AB',NULL,NULL,'patrafee.com','http://www.patrafee.com','patrafee.com','2014-11-24 12:18:20','2014-11-24 11:18:20');
+INSERT INTO `entities` VALUES (1069,'Valmyndigheten',NULL,NULL,'val.se','http://www.val.se','val.se','2014-11-24 12:18:20','2014-11-24 12:18:55');
+INSERT INTO `entities` VALUES (1070,'Riksgälden',NULL,NULL,'riksgalden.se','https://www.riksgalden.se','riksgalden.se','2014-11-24 12:18:20','2014-11-24 12:18:55');
 /*!40000 ALTER TABLE `entities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1068,11 +1115,11 @@ CREATE TABLE `tags` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tag` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_swedish_ci NOT NULL DEFAULT '',
   `tag_source` varchar(32) DEFAULT NULL,
-  `created` datetime NOT NULL,
+  `created` datetime NOT NULL DEFAULT '2014-11-24 00:29:00',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of tag names';
+) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: List of tag names';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1154,7 +1201,14 @@ INSERT INTO `tags` VALUES (126,'IT','kiaindex.se','2014-11-18 13:38:24','2014-11
 INSERT INTO `tags` VALUES (127,'Prisjämförelsesajter','Protokollen','2014-11-18 15:35:16','2014-11-21 17:46:14');
 INSERT INTO `tags` VALUES (128,'Utländska myndigheter','Protokollen','2014-11-18 15:36:40','2014-11-21 17:46:14');
 INSERT INTO `tags` VALUES (129,'Visselblåsarsajter','Protokollen','2014-11-22 11:27:00','2014-11-22 10:32:14');
-INSERT INTO `tags` VALUES (130,'Domänregistrarer (.SE)',NULL,'2014-11-23 20:49:40','2014-11-23 19:49:40');
+INSERT INTO `tags` VALUES (130,'Domänregistrarer (.SE)','Protokollen','2014-11-23 20:49:40','2014-11-23 23:14:40');
+INSERT INTO `tags` VALUES (131,'Playtjänster','Protokollen','2014-11-23 20:49:40','2014-11-23 19:49:40');
+INSERT INTO `tags` VALUES (132,'Försäkringsbolag','Protokollen','2014-11-24 00:20:00','2014-11-23 23:20:08');
+INSERT INTO `tags` VALUES (133,'Statistiktjänster','Protokollen','2014-11-24 00:28:00','2014-11-23 23:28:19');
+INSERT INTO `tags` VALUES (134,'Hemelektronik','Protokollen','2014-11-24 00:29:00','2014-11-23 23:29:48');
+INSERT INTO `tags` VALUES (135,'Idrott','Protokollen','2014-11-24 00:29:00','2014-11-23 23:31:37');
+INSERT INTO `tags` VALUES (136,'Högskolor och universitet','Protokollen','2014-11-24 00:29:00','2014-11-24 01:27:09');
+INSERT INTO `tags` VALUES (137,'Molntjänster','Protokollen','2014-11-24 00:29:00','2014-11-24 02:17:07');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1594,7 +1648,7 @@ CREATE TABLE `entity_tags` (
   KEY `tag_id` (`tag_id`),
   CONSTRAINT `entity_tags_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `entity_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1061 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Tags associated with entities';
+) ENGINE=InnoDB AUTO_INCREMENT=1177 DEFAULT CHARSET=utf8mb4 COMMENT='Protokollen: Tags associated with entities';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2662,6 +2716,122 @@ INSERT INTO `entity_tags` VALUES (1057,1019,130,'2014-11-23 20:50:13','2014-11-2
 INSERT INTO `entity_tags` VALUES (1058,1020,130,'2014-11-23 20:50:14','2014-11-23 19:50:14');
 INSERT INTO `entity_tags` VALUES (1059,1021,130,'2014-11-23 20:50:14','2014-11-23 19:50:14');
 INSERT INTO `entity_tags` VALUES (1060,1022,130,'2014-11-23 20:50:14','2014-11-23 19:50:14');
+INSERT INTO `entity_tags` VALUES (1061,501,130,'2014-11-23 21:42:00','2014-11-23 20:42:00');
+INSERT INTO `entity_tags` VALUES (1062,890,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1063,837,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1064,838,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1065,835,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1066,844,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1067,842,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1068,839,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1069,840,131,'2014-11-24 00:16:46','2014-11-23 23:16:46');
+INSERT INTO `entity_tags` VALUES (1070,850,15,'2014-11-24 00:17:59','2014-11-23 23:17:59');
+INSERT INTO `entity_tags` VALUES (1071,1023,15,'2014-11-24 00:17:59','2014-11-23 23:17:59');
+INSERT INTO `entity_tags` VALUES (1072,878,15,'2014-11-24 00:17:59','2014-11-23 23:17:59');
+INSERT INTO `entity_tags` VALUES (1073,836,31,'2014-11-24 00:18:26','2014-11-23 23:18:26');
+INSERT INTO `entity_tags` VALUES (1074,834,6,'2014-11-24 00:18:39','2014-11-23 23:18:39');
+INSERT INTO `entity_tags` VALUES (1075,843,11,'2014-11-24 00:19:12','2014-11-23 23:19:12');
+INSERT INTO `entity_tags` VALUES (1076,841,11,'2014-11-24 00:19:12','2014-11-23 23:19:12');
+INSERT INTO `entity_tags` VALUES (1077,847,131,'2014-11-24 00:19:30','2014-11-23 23:19:30');
+INSERT INTO `entity_tags` VALUES (1078,859,132,'2014-11-24 00:20:21','2014-11-23 23:20:21');
+INSERT INTO `entity_tags` VALUES (1079,1024,132,'2014-11-24 00:21:16','2014-11-23 23:21:16');
+INSERT INTO `entity_tags` VALUES (1080,880,132,'2014-11-24 00:21:16','2014-11-23 23:21:16');
+INSERT INTO `entity_tags` VALUES (1081,845,11,'2014-11-24 00:21:41','2014-11-23 23:21:41');
+INSERT INTO `entity_tags` VALUES (1082,846,31,'2014-11-24 00:21:53','2014-11-23 23:21:53');
+INSERT INTO `entity_tags` VALUES (1083,876,132,'2014-11-24 00:22:02','2014-11-23 23:22:02');
+INSERT INTO `entity_tags` VALUES (1084,831,32,'2014-11-24 00:22:24','2014-11-23 23:22:24');
+INSERT INTO `entity_tags` VALUES (1085,1025,132,'2014-11-24 00:23:37','2014-11-23 23:23:37');
+INSERT INTO `entity_tags` VALUES (1086,820,41,'2014-11-24 00:24:08','2014-11-23 23:24:08');
+INSERT INTO `entity_tags` VALUES (1087,821,15,'2014-11-24 00:25:04','2014-11-23 23:25:04');
+INSERT INTO `entity_tags` VALUES (1088,822,15,'2014-11-24 00:25:04','2014-11-23 23:25:04');
+INSERT INTO `entity_tags` VALUES (1089,823,15,'2014-11-24 00:25:04','2014-11-23 23:25:04');
+INSERT INTO `entity_tags` VALUES (1090,824,15,'2014-11-24 00:25:04','2014-11-23 23:25:04');
+INSERT INTO `entity_tags` VALUES (1091,827,15,'2014-11-24 00:25:04','2014-11-23 23:25:04');
+INSERT INTO `entity_tags` VALUES (1092,1026,132,'2014-11-24 00:25:56','2014-11-23 23:25:56');
+INSERT INTO `entity_tags` VALUES (1093,862,24,'2014-11-24 00:26:44','2014-11-23 23:26:44');
+INSERT INTO `entity_tags` VALUES (1094,863,24,'2014-11-24 00:26:44','2014-11-23 23:26:44');
+INSERT INTO `entity_tags` VALUES (1095,864,24,'2014-11-24 00:26:44','2014-11-23 23:26:44');
+INSERT INTO `entity_tags` VALUES (1096,865,24,'2014-11-24 00:26:44','2014-11-23 23:26:44');
+INSERT INTO `entity_tags` VALUES (1097,875,24,'2014-11-24 00:26:44','2014-11-23 23:26:44');
+INSERT INTO `entity_tags` VALUES (1098,888,15,'2014-11-24 00:26:55','2014-11-23 23:26:55');
+INSERT INTO `entity_tags` VALUES (1099,886,127,'2014-11-24 00:27:18','2014-11-23 23:27:18');
+INSERT INTO `entity_tags` VALUES (1100,886,115,'2014-11-24 00:27:22','2014-11-23 23:27:22');
+INSERT INTO `entity_tags` VALUES (1101,860,24,'2014-11-24 00:27:56','2014-11-23 23:27:56');
+INSERT INTO `entity_tags` VALUES (1102,861,24,'2014-11-24 00:27:56','2014-11-23 23:27:56');
+INSERT INTO `entity_tags` VALUES (1103,828,133,'2014-11-24 00:29:25','2014-11-23 23:29:25');
+INSERT INTO `entity_tags` VALUES (1104,829,133,'2014-11-24 00:29:25','2014-11-23 23:29:25');
+INSERT INTO `entity_tags` VALUES (1105,826,133,'2014-11-24 00:29:25','2014-11-23 23:29:25');
+INSERT INTO `entity_tags` VALUES (1106,889,2,'2014-11-24 00:29:33','2014-11-23 23:29:33');
+INSERT INTO `entity_tags` VALUES (1107,873,134,'2014-11-24 00:30:12','2014-11-23 23:30:12');
+INSERT INTO `entity_tags` VALUES (1108,871,134,'2014-11-24 00:30:12','2014-11-23 23:30:12');
+INSERT INTO `entity_tags` VALUES (1109,872,134,'2014-11-24 00:30:12','2014-11-23 23:30:12');
+INSERT INTO `entity_tags` VALUES (1110,874,134,'2014-11-24 00:30:12','2014-11-23 23:30:12');
+INSERT INTO `entity_tags` VALUES (1111,873,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1112,871,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1113,872,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1114,874,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1115,868,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1116,884,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1117,883,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1118,885,10,'2014-11-24 00:31:25','2014-11-23 23:31:25');
+INSERT INTO `entity_tags` VALUES (1119,849,135,'2014-11-24 00:32:00','2014-11-23 23:32:00');
+INSERT INTO `entity_tags` VALUES (1120,848,135,'2014-11-24 00:32:00','2014-11-23 23:32:00');
+INSERT INTO `entity_tags` VALUES (1121,660,135,'2014-11-24 00:32:00','2014-11-23 23:32:00');
+INSERT INTO `entity_tags` VALUES (1122,857,10,'2014-11-24 00:32:29','2014-11-23 23:32:29');
+INSERT INTO `entity_tags` VALUES (1123,882,10,'2014-11-24 00:32:29','2014-11-23 23:32:29');
+INSERT INTO `entity_tags` VALUES (1124,877,15,'2014-11-24 00:32:38','2014-11-23 23:32:38');
+INSERT INTO `entity_tags` VALUES (1125,870,109,'2014-11-24 00:33:24','2014-11-23 23:33:24');
+INSERT INTO `entity_tags` VALUES (1126,868,109,'2014-11-24 00:33:24','2014-11-23 23:33:24');
+INSERT INTO `entity_tags` VALUES (1127,866,109,'2014-11-24 00:33:24','2014-11-23 23:33:24');
+INSERT INTO `entity_tags` VALUES (1128,881,109,'2014-11-24 00:33:24','2014-11-23 23:33:24');
+INSERT INTO `entity_tags` VALUES (1129,867,109,'2014-11-24 00:33:24','2014-11-23 23:33:24');
+INSERT INTO `entity_tags` VALUES (1130,833,15,'2014-11-24 00:33:57','2014-11-23 23:33:57');
+INSERT INTO `entity_tags` VALUES (1131,832,15,'2014-11-24 00:34:05','2014-11-23 23:34:05');
+INSERT INTO `entity_tags` VALUES (1132,851,15,'2014-11-24 00:34:43','2014-11-23 23:34:43');
+INSERT INTO `entity_tags` VALUES (1133,853,15,'2014-11-24 00:34:43','2014-11-23 23:34:43');
+INSERT INTO `entity_tags` VALUES (1134,869,109,'2014-11-24 00:34:47','2014-11-23 23:34:47');
+INSERT INTO `entity_tags` VALUES (1135,830,15,'2014-11-24 00:34:56','2014-11-23 23:34:56');
+INSERT INTO `entity_tags` VALUES (1136,825,15,'2014-11-24 00:34:56','2014-11-23 23:34:56');
+INSERT INTO `entity_tags` VALUES (1137,1027,22,'2014-11-24 02:08:03','2014-11-24 01:08:03');
+INSERT INTO `entity_tags` VALUES (1138,1028,22,'2014-11-24 02:08:08','2014-11-24 01:08:08');
+INSERT INTO `entity_tags` VALUES (1139,1030,32,'2014-11-24 02:08:31','2014-11-24 01:08:31');
+INSERT INTO `entity_tags` VALUES (1140,1029,15,'2014-11-24 02:08:47','2014-11-24 01:08:47');
+INSERT INTO `entity_tags` VALUES (1141,1031,22,'2014-11-24 02:09:17','2014-11-24 01:09:17');
+INSERT INTO `entity_tags` VALUES (1142,1032,22,'2014-11-24 02:10:32','2014-11-24 01:10:32');
+INSERT INTO `entity_tags` VALUES (1143,1033,10,'2014-11-24 02:11:54','2014-11-24 01:11:54');
+INSERT INTO `entity_tags` VALUES (1144,1035,15,'2014-11-24 02:14:35','2014-11-24 01:14:35');
+INSERT INTO `entity_tags` VALUES (1145,1037,136,'2014-11-24 02:29:19','2014-11-24 01:29:19');
+INSERT INTO `entity_tags` VALUES (1146,1038,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1147,1040,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1148,1041,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1149,1042,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1150,1043,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1151,1044,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1152,1045,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1153,1046,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1154,1047,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1155,1048,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1156,1049,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1157,1050,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1158,1051,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1159,1052,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1160,1053,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1161,1054,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1162,1055,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1163,1056,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1164,1057,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1165,1058,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1166,1059,136,'2014-11-24 02:29:20','2014-11-24 01:29:20');
+INSERT INTO `entity_tags` VALUES (1167,1061,15,'2014-11-24 02:52:16','2014-11-24 01:52:16');
+INSERT INTO `entity_tags` VALUES (1168,1062,137,'2014-11-24 03:18:29','2014-11-24 02:18:29');
+INSERT INTO `entity_tags` VALUES (1169,1063,137,'2014-11-24 03:18:29','2014-11-24 02:18:29');
+INSERT INTO `entity_tags` VALUES (1170,877,137,'2014-11-24 03:18:29','2014-11-24 02:18:29');
+INSERT INTO `entity_tags` VALUES (1171,1064,137,'2014-11-24 03:18:29','2014-11-24 02:18:29');
+INSERT INTO `entity_tags` VALUES (1172,1065,137,'2014-11-24 03:21:12','2014-11-24 02:21:12');
+INSERT INTO `entity_tags` VALUES (1173,1068,130,'2014-11-24 12:59:44','2014-11-24 11:59:44');
+INSERT INTO `entity_tags` VALUES (1174,1069,6,'2014-11-24 13:18:17','2014-11-24 12:18:17');
+INSERT INTO `entity_tags` VALUES (1175,1067,24,'2014-11-24 13:20:58','2014-11-24 12:20:58');
+INSERT INTO `entity_tags` VALUES (1176,1070,6,'2014-11-24 13:22:11','2014-11-24 12:22:11');
 /*!40000 ALTER TABLE `entity_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -2674,4 +2844,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-23 20:54:22
+-- Dump completed on 2014-11-24 17:08:19
