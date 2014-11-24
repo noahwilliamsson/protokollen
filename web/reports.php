@@ -27,12 +27,13 @@ while($row = $r->fetch_object()) {
 		$arr = array();
 		foreach($row as $k => $v)
 			$arr[] = $k;
-		fputcsv($fd, $arr);
+		fputcsv($fd, $arr, "\t");
+		$didHeader = TRUE;
 	}
 	$arr = array();
 	foreach($row as $k => $v)
 		$arr[] = $v;
-	fputcsv($fd, $arr);
+	fputcsv($fd, $arr, "\t");
 }
 $r->close();
 fclose($fd);
