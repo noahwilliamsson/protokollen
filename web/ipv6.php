@@ -46,7 +46,7 @@ $sslprobeTest = new TestSslprobe();
 				<th>IPv6 OK</th>
 				<th>NS IPv6</th>
 				<th>MX IPv6</th>
-				<th>Web IPv6</th>
+				<th>Webb IPv6</th>
 			 </tr>
 		</thead>
 		<tbody>
@@ -103,7 +103,7 @@ foreach($tags as $tag => $tagId):
 		$e = $p->getEntityById($entityId);
 		$q = 'SELECT
 				IF(ns_ipv6>0 AND mx_ipv6>0 AND web_ipv6> 0 AND web_total=web_ipv6, 1, 0) ipv6_ok,
-				ns_ipv6 AS NS, mx_ipv6 AS MX, web_ipv6 AS Web
+				ns_ipv6 AS NS, mx_ipv6 AS MX, web_ipv6 AS Webb
 				FROM reports
 				WHERE entity_id='. $entityId .' AND created=CURDATE()
 				';

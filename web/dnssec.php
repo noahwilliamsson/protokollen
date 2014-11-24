@@ -47,7 +47,7 @@ $sslprobeTest = new TestSslprobe();
 				<th>DNSSEC OK</th>
 				<th>NS DNSSEC</th>
 				<th>MX DNSSEC</th>
-				<th>Web DNSSEC</th>
+				<th>Webb DNSSEC</th>
 			 </tr>
 		</thead>
 		<tbody>
@@ -103,8 +103,8 @@ foreach($tags as $tag => $tagId):
 		$e = $p->getEntityById($entityId);
 		$q = 'SELECT
 				IF(ns_dnssec=ns_total AND mx_dnssec=mx_total AND web_dnssec=web_total, 1, 0) dnssec_ok,
-				ns_dnssec AS NS, mx_dnssec AS MX, web_dnssec AS Web,
-				ns_total AS NS_total, mx_total AS MX_total, web_total AS Web_total
+				ns_dnssec AS NS, mx_dnssec AS MX, web_dnssec AS Webb,
+				ns_total AS NS_total, mx_total AS MX_total, web_total AS Webb_total
 				FROM reports
 				WHERE entity_id='. $entityId .' AND created=CURDATE()
 				';
