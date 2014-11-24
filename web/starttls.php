@@ -39,7 +39,7 @@ $sslprobeTest = new TestSslprobe();
 	<p>För att få <em>STARTTLS OK</em> krävs att alla mejlservrar har stöd för STARTTLS.</p>
 	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
 
-	<table class="table table-condensed table-striped" id="dnssec">
+	<table class="table table-condensed table-striped" id="starttls">
 		<thead>
 			<tr>
 				<th>Organisation</th>
@@ -79,7 +79,7 @@ foreach($tags as $tag => $tagId):
 	while($row = $r->fetch_object())
 		$entityIds[] = $row->entity_id;
 	$r->close();
-	
+
 	$q = '	SELECT
 				SUM(IF(mx_ip_starttls=mx_ip_total, 1, 0)) AS starttls_ok,
 				SUM(IF(mx_ip_country_se>0,1,0)) mx_ip_country_se,
@@ -100,9 +100,9 @@ foreach($tags as $tag => $tagId):
 	$header = $r->fetch_object();
 	$r->close();
 ?>
-	<tr id="dnssec-tag<?php echo $tagId ?>">
+	<tr id="starttls-tag<?php echo $tagId ?>">
 		<td>
-			<span class="glyphicon glyphicon-plus"></span><a href="#dnssec-tag<?php echo $tagId ?>" onclick="return false" data-toggle="collapse" data-target="tr.tag<?php echo $tagId ?>">
+			<span class="glyphicon glyphicon-plus"></span><a href="#starttls-tag<?php echo $tagId ?>" onclick="return false" data-toggle="collapse" data-target="tr.tag<?php echo $tagId ?>">
 			<?php echo htmlspecialchars($tag, ENT_NOQUOTES) ?></a>
 			(<?php echo count($entityIds) ?>st)
 		</td>
@@ -120,7 +120,7 @@ foreach($tags as $tag => $tagId):
 				IF(mx_ip_starttls=mx_ip_total, 1, 0) AS starttls_ok,
 				mx_ip_total, mx_ip_country_se, mx_ip_country_other,
 				mx_ip_country_unknown, mx_ip_starttls, mx_ip_starttls_pfs,
-				mx_ip_starttls_sslv2, mx_ip_starttls_sslv3, 
+				mx_ip_starttls_sslv2, mx_ip_starttls_sslv3,
 				mx_ip_starttls_tlsv1, mx_ip_starttls_tlsv1_1,
 				mx_ip_starttls_tlsv1_2
 				FROM reports
@@ -182,7 +182,7 @@ foreach($tags as $tag => $tagId):
 						else
 							$value = sprintf('%d av %d', $value, $row->mx_ip_total);
 					}
-					
+
 					if(in_array($key, array('mx_ip_country_other', 'mx_ip_starttls_sslv2'))) {
 						if($value > 0)
 							$class = 'warning';
