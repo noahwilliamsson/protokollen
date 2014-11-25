@@ -72,7 +72,7 @@ foreach($tags as $tag => $tagId):
 	while($row = $r->fetch_object())
 		$entityIds[] = $row->entity_id;
 	$r->close();
-	
+
 	$q = '	SELECT
 				SUM(IF(ns_dnssec=ns_total AND mx_dnssec=mx_total AND web_dnssec=web_total, 1, 0)) dnssec_ok,
 				SUM(IF(ns_dnssec = ns_total,1,0)) any_ns_dnssec,
@@ -162,10 +162,7 @@ foreach($tags as $tag => $tagId):
 	</table>
 
 		<hr/>
-
-		<footer>
-			<p>&copy; Cykla och vält Feb, 2014</p>
-		</footer>
-	</div> <!-- /container -->
+		<?php include('footer.php'); ?>
+	</div> <!-- /.container -->
 </body>
 </html>

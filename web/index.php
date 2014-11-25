@@ -42,7 +42,7 @@ $sslprobeTest = new TestSslprobe();
 			<form class="form-inline" role="form" method="get" action="/view.php">
 				<div class="form-group">
 					<label for="domain">Domän</label>
-					<input type="text" class="form-control" id="domain" name="domain" placeholder="example.se">
+					<input type="text" class="form-control" id="domain" name="domain" placeholder="example.se" />
 				</div>
 				<button type="submit" class="btn btn-primary">Visa</button>
 			</form>
@@ -50,54 +50,53 @@ $sslprobeTest = new TestSslprobe();
 	</div>
 
 	<div class="container">
-	<p><strong>TODO</strong> Mindre detaljer här. Det faktiska SSL/TLS-protokollen är ointressanta jämfört med huruvida https stöds alls och om det finns stöd för forward secrecy. Protokolldetaljerna borde nog bo på en egen sida.</p>
-	<p><strong>TODO</strong> Hämta data från en summary tabell istället så det inte går så långsamt.</p>
-	<p><strong>TODO</strong> Någon slags var-har-jag-hamnat-och-vad-betyder-allt sida hade varit bra.</p>
-	<script>
-	function labelFormatter(label, series) {
-		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label.toUpperCase().replace('V','v').replace('_','.') + "<br/>" + Math.round(series.percent) + "% (n=" + series.data[0][1] +")</div>";
-	}
-
-	var pieOpts = {
-    series: {
-	pie: {
-	    show: true,
-	    radius: 3/4,
-	    label: {
-		show: true,
-		radius: 3/4,
-		formatter: labelFormatter,
-		background: {
-		    opacity: 0.5,
-		    color: '#000'
+		<p><strong>TODO</strong> Mindre detaljer här. Det faktiska SSL/TLS-protokollen är ointressanta jämfört med huruvida https stöds alls och om det finns stöd för forward secrecy. Protokolldetaljerna borde nog bo på en egen sida.</p>
+		<p><strong>TODO</strong> Hämta data från en summary tabell istället så det inte går så långsamt.</p>
+		<p><strong>TODO</strong> Någon slags var-har-jag-hamnat-och-vad-betyder-allt sida hade varit bra.</p>
+		<script>
+		function labelFormatter(label, series) {
+			return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label.toUpperCase().replace('V','v').replace('_','.') + "<br/>" + Math.round(series.percent) + "% (n=" + series.data[0][1] +")</div>";
 		}
-	    }
-	}
-    },
-    legend: {
-	show: false
-    }
-	}
 
-	var barOpts = {
+		var pieOpts = {
 		series: {
-			bars: {
-				show: true,
-				barWidth: 0.6,
-				align: "center"
-			},
-			valueLabels: {
-				show: true
+		pie: {
+			show: true,
+			radius: 3/4,
+			label: {
+			show: true,
+			radius: 3/4,
+			formatter: labelFormatter,
+			background: {
+				opacity: 0.5,
+				color: '#000'
 			}
-		},
-		xaxis: {
-			tickLength: 0
+			}
 		}
-	};
+		},
+		legend: {
+		show: false
+		}
+		}
 
-	</script>
+		var barOpts = {
+			series: {
+				bars: {
+					show: true,
+					barWidth: 0.6,
+					align: "center"
+				},
+				valueLabels: {
+					show: true
+				}
+			},
+			xaxis: {
+				tickLength: 0
+			}
+		};
+		</script>
+
 <?php
-
 
 require_once('flot.php');
 
@@ -127,10 +126,6 @@ foreach($tags as $tag => $tagId):
 
 	<h2><?php echo htmlspecialchars($tag, ENT_NOQUOTES) ?></h2>
 	<p>Antal unika IP-adresser: <?php echo count($uniqueIps) ?></p>
-	<!--
-	<div id="tls-status-1-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
-	<div id="tls-status-2-<?php echo $hash ?>" style="width:250px;height:250px;float:left"></div>
-	-->
 	<div id="tls-status-3-<?php echo $hash ?>" style="width:350px;height:250px;float:left"></div>
 	<table class="table table-condensed table-hover table-striped" style="float:left; width:400px">
 		<thead>
@@ -204,8 +199,8 @@ foreach($tags as $tag => $tagId):
 		</tbody>
 	</table>
 	<hr style="clear:both"/>
-	<script>
 
+	<script>
 	<?php
 	$ticks = array();
 	$idx = 0;
@@ -225,10 +220,7 @@ endforeach;
 ?>
 
 		<hr/>
-
-		<footer>
-			<p>&copy; Cykla och vält Feb, 2014</p>
-		</footer>
-	</div> <!-- /container -->
+		<?php include('footer.php'); ?>
+	</div> <!-- /.container -->
 </body>
 </html>

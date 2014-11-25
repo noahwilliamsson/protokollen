@@ -188,10 +188,7 @@ $ent = $p->getEntityByDomain($domain);
 
 	<div class="container">
 		<hr/>
-
-		<footer>
-			<p>&copy; Cykla och vält Feb, 2014</p>
-		</footer>
-	</div> <!-- /container -->
+		<?php include('footer.php'); ?>
+	</div> <!-- /.container -->
 </body>
 </html>
