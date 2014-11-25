@@ -98,7 +98,9 @@ foreach($tags as $tag => $tagId):
 	</tr>
 
 	<?php
+	$entityNum = 0;
 	foreach($entityIds as $entityId):
+		$entityNum++;
 		$e = $p->getEntityById($entityId);
 		$q = 'SELECT
 				IF(ns_dnssec=ns_total AND mx_dnssec=mx_total AND web_dnssec=web_total, 1, 0) dnssec_ok,
@@ -115,6 +117,15 @@ foreach($tags as $tag => $tagId):
 		if(mb_strlen($title) > 30)
 			$title = mb_substr($title, 0, 30) .'…';
 	?>
+			<?php if($entityNum % 20 === 0): ?>
+			<tr class="collapse out tag<?php echo $tagId ?>">
+				<th>Organisation</th>
+				<th>DNSSEC OK</th>
+				<th>NS DNSSEC</th>
+				<th>MX DNSSEC</th>
+				<th>Webb DNSSEC</th>
+			 </tr>
+			<?php endif; ?>
 			<tr class="collapse out tag<?php echo $tagId ?>">
 				<td><a href="/view.php?domain=<?php echo urlencode($e->domain); ?>"><?php echo htmlspecialchars($title, ENT_NOQUOTES) ?></a></td>
 				<?php

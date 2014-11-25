@@ -96,7 +96,9 @@ foreach($tags as $tag => $tagId):
 	</tr>
 
 	<?php
+	$entityNum = 0;
 	foreach($entityIds as $entityId):
+		$entityNum++;
 		$e = $p->getEntityById($entityId);
 		$q = 'SELECT
 				IF(ns_ipv6>0 AND mx_ipv6>0 AND web_ipv6> 0 AND web_total=web_ipv6, 1, 0) ipv6_ok,
@@ -112,6 +114,15 @@ foreach($tags as $tag => $tagId):
 		if(mb_strlen($title) > 30)
 			$title = mb_substr($title, 0, 30) .'…';
 	?>
+			<?php if($entityNum % 20 === 0): ?>
+			<tr class="collapse out tag<?php echo $tagId ?>">
+				<th>Organisation</th>
+				<th>IPv6 OK</th>
+				<th>NS IPv6</th>
+				<th>MX IPv6</th>
+				<th>Webb IPv6</th>
+			 </tr>
+			 <?php endif; ?>
 			<tr class="collapse out tag<?php echo $tagId ?>">
 				<td><a href="/view.php?domain=<?php echo urlencode($e->domain); ?>"><?php echo htmlspecialchars($title, ENT_NOQUOTES) ?></a></td>
 				<?php
