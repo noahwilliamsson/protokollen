@@ -73,6 +73,7 @@ $ent = $p->getEntityByDomain($domain);
 
 			$key = "$service->name ($service->type)";
 			$value = 'warning';
+			if(isset($service->tests['se.protokollen.tests.dns.addresses']))
 			foreach($service->tests['se.protokollen.tests.dns.addresses'] as $test) {
 				$addrs = $test->data;
 				switch($service->type) {
@@ -91,6 +92,7 @@ $ent = $p->getEntityByDomain($domain);
 
 			$numTotal = 0; $num = 0;
 			$key = "$service->name ($service->type)";
+			if(isset($service->tests['se.protokollen.tests.dnssec.status']))
 			foreach($service->tests['se.protokollen.tests.dnssec.status'] as $test) {
 				foreach($test->data as $hostname => $dnssec) {
 					$numTotal++;
