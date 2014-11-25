@@ -107,7 +107,7 @@ function svgForDomain($domain) {
 
 		/* Render service group box */
 		$label = array(sprintf('<p0>%s-servers %s', $svc->service_type, $svc->service_name));
-		foreach($grp->json as $svcHost) {
+		foreach($grp->data as $svcHost) {
 			$svcHostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
 			$label[] = sprintf('<%s> %s', $svcHostId, $svcHost->hostname);
 		}
@@ -119,7 +119,7 @@ function svgForDomain($domain) {
 			continue;
 
 		$hostIpMap = array();
-		foreach($addrs->json->records as $hostname => $obj) {
+		foreach($addrs->data->records as $hostname => $obj) {
 			$arr = array();
 			foreach($obj->a as $ip) $arr[] = $ip;
 			foreach($obj->aaaa as $ip) $arr[] = $ip;
@@ -128,12 +128,12 @@ function svgForDomain($domain) {
 
 
 		$seenNodesAll = array();
-		foreach($grp->json as $svcHost) {
+		foreach($grp->data as $svcHost) {
 
 			$label = array(sprintf('<p0>%s-server %s', $svc->service_type, $svcHost->hostname));
 
 			/* Add DNSSEC note in vhost box */
-			if($dnssec !== NULL) foreach($dnssec->json as $hostname => $obj) {
+			if($dnssec !== NULL) foreach($dnssec->data as $hostname => $obj) {
 				$dnssecHostId = preg_replace('@dnssec[^A-Za-z0-9]@', '_', $svcHost->hostname);
 				if($svcHost->hostname === $hostname) {
 					if($obj->secure)
@@ -179,7 +179,7 @@ function svgForDomain($domain) {
 
 		$tlsBoxes = array();
 		$tlsIds = array();
-		foreach($grp->json as $svcHost) {
+		foreach($grp->data as $svcHost) {
 
 			/* Load sslprobe for service host */
 			$sslprobe = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
@@ -187,7 +187,7 @@ function svgForDomain($domain) {
 				continue;
 
 			foreach($hostIpMap[$svcHost->hostname] as $ip) {
-				foreach($sslprobe->json as $probe) {
+				foreach($sslprobe->data as $probe) {
 					$opts = parseProbe($probe);
 					$tlsId = 'tls_'. substr(md5(json_encode($opts)), 0, 8);
 

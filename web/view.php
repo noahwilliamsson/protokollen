@@ -157,7 +157,7 @@ $ent = $p->getEntityByDomain($domain);
 						<?php endif; ?>
 					</ul>
 					<?php
-					$str = json_encode($prefs->json, JSON_PRETTY_PRINT);
+					$str = json_encode($prefs->data, JSON_PRETTY_PRINT);
 					?>
 					<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
 
@@ -165,7 +165,7 @@ $ent = $p->getEntityByDomain($domain);
 
 				<?php
 				if($dnssec !== NULL):
-					$str = json_encode($dnssec->json, JSON_PRETTY_PRINT);
+					$str = json_encode($dnssec->data, JSON_PRETTY_PRINT);
 				?>
 				<h4>DNSSEC</h4>
 				<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
@@ -173,7 +173,7 @@ $ent = $p->getEntityByDomain($domain);
 
 				<?php
 				if($grp !== NULL):
-					$str = json_encode($grp->json, JSON_PRETTY_PRINT);
+					$str = json_encode($grp->data, JSON_PRETTY_PRINT);
 				?>
 				<h4>Service group</h4>
 				<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>

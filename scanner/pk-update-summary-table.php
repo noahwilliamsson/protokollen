@@ -136,8 +136,9 @@ function reportEntityIpv6($entityId) {
 		$grp = $p->getServiceGroup($svc->id);
 		if($grp === NULL)
 			break;
+
 		$item = $testDns->getItem($svc->id, $grp->id);
-		if($item) foreach($item->json->records as $hostname => $obj) {
+		if($item) foreach($item->data->records as $hostname => $obj) {
 			$report->ns->total++;
 			if(count($obj->a))
 				$report->ns->ipv4++;
@@ -146,7 +147,7 @@ function reportEntityIpv6($entityId) {
 		}
 
 		$item = $testDnssec->getItem($svc->id, $grp->id);
-		if($item) foreach($item->json as $hostname => $obj) {
+		if($item) foreach($item->data as $hostname => $obj) {
 			if($obj->secure)
 				$report->ns->dnssec++;
 		}
@@ -158,7 +159,7 @@ function reportEntityIpv6($entityId) {
 			break;
 
 		$item = $testDns->getItem($svc->id, $grp->id);
-		if($item) foreach($item->json->records as $hostname => $obj) {
+		if($item) foreach($item->data->records as $hostname => $obj) {
 			$report->mx->total++;
 			if(count($obj->a))
 				$report->mx->ipv4++;
@@ -167,12 +168,12 @@ function reportEntityIpv6($entityId) {
 		}
 
 		$item = $testDnssec->getItem($svc->id, $grp->id);
-		if($item) foreach($item->json as $hostname => $obj) {
+		if($item) foreach($item->data as $hostname => $obj) {
 			if($obj->secure)
 				$report->mx->dnssec++;
 		}
 
-		foreach($grp->json as $svcHost) {
+		foreach($grp->data as $svcHost) {
 			$numIps = 0;
 			$numIpsWithStarttls = 0;
 
@@ -181,7 +182,7 @@ function reportEntityIpv6($entityId) {
 				continue;
 
 			$numConnections = 0;
-			foreach($item->json as $probe) {
+			foreach($item->data as $probe) {
 				$numIps++;
 				$report->mx->ip->total++;
 				if(strstr($probe->ip, ':')) {
@@ -257,13 +258,13 @@ function reportEntityIpv6($entityId) {
 
 		/* Check DNSSEC status on web service */
 		$item = $testDnssec->getItem($svc->id, $grp->id);
-		if($item) foreach($item->json as $hostname => $obj) {
+		if($item) foreach($item->data as $hostname => $obj) {
 			$webDnssec[$hostname] = $obj->secure;
 		}
 
 		/* Attempt to find www. host */
 		$hasWww = FALSE;
-		foreach($grp->json as $svcHost) {
+		foreach($grp->data as $svcHost) {
 			if(!preg_match('@^www.@', $svcHost->hostname))
 				continue;
 			$hasWww = TRUE;
@@ -277,7 +278,7 @@ function reportEntityIpv6($entityId) {
 		$item = $testWww->getItem($svc->id, $grp->id);
 		if(!$item)
 			continue;
-		$obj = $item->json;
+		$obj = $item->data;
 		if(!isset($obj->preferred))
 			continue;
 		$webUrls[] = $obj->preferred->url;

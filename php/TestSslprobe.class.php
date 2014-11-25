@@ -27,10 +27,10 @@ class TestSslprobe extends ServiceGroup {
 		$arr = array();
 		$r = $st->get_result();
 		while($row = $r->fetch_object()) {
-			$row->json = NULL;
+			$row->data = NULL;
 			$json = $this->getJsonByHash($svcId, $row->json_sha256);
 			if($json !== NULL)
-				$row->json = json_decode($json->json);
+				$row->data = json_decode($json->json);
 			$arr[] = $row;
 		}
 
@@ -75,10 +75,10 @@ class TestSslprobe extends ServiceGroup {
 		$st->close();
 
 		if($row) {
-			$row->json = NULL;
+			$row->data = NULL;
 			$json = $this->getJsonByHash($svcId, $row->json_sha256);
 			if($json !== NULL)
-				$row->json = json_decode($json->json);
+				$row->data = json_decode($json->json);
 		}
 
 		return $row;

@@ -69,13 +69,13 @@ foreach($entities as $entityId) {
 			break;
 		}
 
-		if(($group = $sg->getServiceGroup($svc->id)) === NULL) {
+		if(($grp = $sg->getServiceGroup($svc->id)) === NULL) {
 			/* Empty set */
 			continue;
 		}
 
-		$args = array($entityId, $svc->id, $svc->service_type, $group->id);
-		foreach($group->json as $svcHost) {
+		$args = array($entityId, $svc->id, $svc->service_type, $grp->id);
+		foreach($grp->data as $svcHost) {
 			$args[] = strtolower($svcHost->protocol);
 			$args[] = mb_convert_case($svcHost->hostname, MB_CASE_LOWER);
 			$args[] = $svcHost->port;

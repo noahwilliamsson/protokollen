@@ -98,7 +98,7 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 
 		$group = new stdClass();
 		$group->created = $grp->created;
-		$group->data = $grp->json;
+		$group->data = $grp->data;
 		$group->entryType = $grp->entry_type;
 		$group->id = intval($grp->id);
 		$group->until = $grp->until;
@@ -116,7 +116,7 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 			continue;
 		$test = new stdClass();
 		$test->created = $row->created;
-		$test->data = $row->json;
+		$test->data = $row->data;
 		$test->entryType = $row->entry_type;
 		$test->id = intval($row->id);
 		$test->serviceGroupId = intval($row->svc_group_id);
@@ -132,7 +132,7 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 			continue;
 		$test = new stdClass();
 		$test->created = $row->created;
-		$test->data = $row->json;
+		$test->data = $row->data;
 		$test->entryType = $row->entry_type;
 		$test->id = intval($row->id);
 		$test->serviceGroupId = intval($row->svc_group_id);
@@ -148,7 +148,7 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 			continue;
 		$test = new stdClass();
 		$test->created = $row->created;
-		$test->data = $row->json;
+		$test->data = $row->data;
 		$test->entryType = $row->entry_type;
 		$test->id = intval($row->id);
 		$test->serviceGroupId = intval($row->svc_group_id);
@@ -165,7 +165,7 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 				continue;
 			$test = new stdClass();
 			$test->created = $row->created;
-			$test->data = $row->json;
+			$test->data = $row->data;
 			$test->entryType = $row->entry_type;
 			$test->id = intval($row->id);
 			$test->hostname = intval($row->hostname);

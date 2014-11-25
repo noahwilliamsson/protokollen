@@ -159,7 +159,7 @@ foreach($tags as $tag => $tagId):
 
 				$sslprobe = NULL;
 				$wwwHostname = parse_url($prefs->url, PHP_URL_HOST);
-				foreach($grp->json as $svcHost) {
+				foreach($grp->data as $svcHost) {
 					if($svcHost->hostname !== $wwwHostname)
 						continue;
 

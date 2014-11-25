@@ -31,7 +31,7 @@ class ServiceGroup extends ProtokollenBase  {
 		$st->close();
 
 		if($row !== NULL)
-			$row->json = json_decode($row->json);
+			$row->data = json_decode($row->json);
 
 		return $row;
 	}
@@ -55,7 +55,7 @@ class ServiceGroup extends ProtokollenBase  {
 		$st->close();
 
 		if($row !== NULL)
-			$row->json = json_decode($row->json);
+			$row->data = json_decode($row->json);
 
 		return $row;
 	}
@@ -79,7 +79,7 @@ class ServiceGroup extends ProtokollenBase  {
 		$r = $st->get_result();
 		$arr = array();
 		while($row = $r->fetch_object()) {
-			$row->json = json_decode($row->json);
+			$row->data = json_decode($row->json);
 			$arr[] = $row;
 		}
 		$r->close();
@@ -189,7 +189,7 @@ class ServiceGroup extends ProtokollenBase  {
 		if($row !== NULL) {
 			$oldHosts = array();
 			$prev = $this->getServiceGroupById($row->svc_group_id);
-			foreach($prev->json as $svcHost)
+			foreach($prev->data as $svcHost)
 				$oldHots[] = $svcHost->hostname .':'. $svcHost->port;
 
 			$arr = array();

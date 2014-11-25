@@ -34,7 +34,7 @@ function makeFlots($entityIds) {
 			if(!$grp)
 				continue;
 
-			foreach($grp->json as $svcHost) {
+			foreach($grp->data as $svcHost) {
 				$probe = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
 				if(!$probe)
 					continue;
