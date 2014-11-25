@@ -56,7 +56,16 @@ $ent = $p->getEntityByDomain($domain);
 		</div>
 	</div>
 
+<?php if($ent === NULL): ?>
 	<div class="container">
+		<h2>Domänen hittades inte</h2>
+		<p>Den här tjänsten övervarkar ett tusendal domäner som bedömts vara intressanta. Domänen du sökte efter fanns inte med i den listan. I nuläget finns ingen möjlighet att själv lägga till eller testa valfria domäner.</p>
+	</div>
+<?php else: ?>
+	<div class="container">
+		<h2>Rådata</h2>
+		<p>Det aktuella rådatat finns tillgängligt i <a href="json.php?id=<?php echo urlencode($ent->id) ?>">JSON-format</a>.  Här är samma data <a href="json.php?id=<?php echo urlencode($ent->id) ?>&amp;revisions=1">inklusive historiskt data</a>. <strong>OBS!</strong> Datat väger ofta flera megabyte.</p>
+
 		<h2>Graf över internettjänster</h2>
 		<p><strong>TODO</strong> Lägg varje tjänsttyp (DNS, mejl, webb, ..) i egna flikar(?) för att reducera innehållet i grafen. Eller kanske kryssrutor för att välja vad som ska visas i grafen.<br />
 		<strong>TODO</strong> Just nu är grafen en platt bild (PNG) men SVG är ett möjligt alternativ som bl.a. erbjuder klickbara länkar på bildytan. SVG är f.n. avstängt eftersom graphviz/dot ibland producerar trasig markup när det förekommer Unicode text.
@@ -175,6 +184,7 @@ $ent = $p->getEntityByDomain($domain);
 
 		<?php endforeach; // services ?>
 	</div>
+<?php endif; // $ent !== NULL ?>
 
 	<div class="container">
 		<hr/>
