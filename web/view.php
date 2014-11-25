@@ -64,7 +64,7 @@ $ent = $p->getEntityByDomain($domain);
 <?php else: ?>
 	<div class="container">
 		<h2>Rådata</h2>
-		<p>Det aktuella rådatat finns tillgängligt i <a href="json.php?id=<?php echo urlencode($ent->id) ?>">JSON-format</a>.  Här är samma data <a href="json.php?id=<?php echo urlencode($ent->id) ?>&amp;revisions=1">inklusive historiskt data</a>. <strong>OBS!</strong> Datat väger ofta flera megabyte.</p>
+		<p>Det aktuella rådatat finns tillgängligt i <a href="download.php?id=<?php echo urlencode($ent->id) ?>">JSON-format</a>.  Här är samma data <a href="download.php?id=<?php echo urlencode($ent->id) ?>&amp;revisions=1">inklusive historiskt data</a>. <strong>OBS!</strong> Datat väger ofta flera megabyte.</p>
 
 		<h2>Graf över internettjänster</h2>
 		<p><strong>TODO</strong> Lägg varje tjänsttyp (DNS, mejl, webb, ..) i egna flikar(?) för att reducera innehållet i grafen. Eller kanske kryssrutor för att välja vad som ska visas i grafen.<br />
