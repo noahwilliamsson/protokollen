@@ -11,15 +11,15 @@ class TestDnsAddresses extends ServiceGroup {
 		parent::__construct();
 	}
 
-	function listItems($svcId, $svcGrpId) {
+	function listItems($svcId) {
 		$m = $this->getMySQLHandle();
 
 		$st = $m->prepare('SELECT * FROM test_dns_addresses
-					WHERE service_id=? AND svc_group_id=?
+					WHERE service_id=?
 					ORDER BY entry_type, created DESC');
-		$st->bind_param('ii', $svcId, $svcGrpId);
+		$st->bind_param('i', $svcId);
 		if(!$st->execute()) {
-			$err = "DNS address lookup ($svcId, $svcGrpId) failed:"
+			$err = "DNS address list ($svcId) failed:"
 				." $m->error";
 			throw new Exception($err);
 		}

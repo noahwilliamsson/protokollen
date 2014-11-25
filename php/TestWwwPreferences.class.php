@@ -11,20 +11,20 @@ class TestWwwPreferences extends ServiceGroup {
 		parent::__construct();
 	}
 
-	function listItems($svcId, $svcGrpId) {
+	function listItems($svcId) {
 		$m = $this->getMySQLHandle();
 
 		$q = 'SELECT * FROM test_www_prefs
-			WHERE service_id=? AND svc_group_id=?
+			WHERE service_id=?
 			ORDER BY entry_type, created DESC';
 		if(($st = $m->prepare($q)) === FALSE) {
 			$err = "WWW prefs lookup ($svcId, $svcGrpId) failed:"
 				." $m->error";
 			throw new Exception($err);
 		}
-		$st->bind_param('ii', $svcId, $svcGrpId);
+		$st->bind_param('i', $svcId);
 		if($st->execute() === FALSE) {
-			$err = "WWW prefs lookup ($svcId, $svcGrpId) failed:"
+			$err = "WWW prefs list ($svcId) failed:"
 				." $m->error";
 			throw new Exception($err);
 		}

@@ -11,15 +11,15 @@ class TestDnssecStatus extends ServiceGroup {
 		parent::__construct();
 	}
 
-	function listItems($svcId, $svcGrpId) {
+	function listItems($svcId) {
 		$m = $this->getMySQLHandle();
 
 		$st = $m->prepare('SELECT * FROM test_dnssec_statuses
-					WHERE service_id=? AND svc_group_id=?
+					WHERE service_id=?
 					ORDER BY entry_type, created DESC');
-		$st->bind_param('ii', $svcId, $svcGrpId);
+		$st->bind_param('i', $svcId);
 		if(!$st->execute()) {
-			$err = "DNSSEC status lookup ($svcId, $svcGrpId) failed:"
+			$err = "DNSSEC status list ($svcId) failed:"
 				." $m->error";
 			throw new Exception($err);
 		}
