@@ -36,7 +36,7 @@ $sslprobeTest = new TestSslprobe();
 	<h2>STARTTLS-stöd på mejlservrar (<?php echo strftime('%F') ?>)</h2>
 
 	<p><a href="https://en.wikipedia.org/wiki/STARTTLS">STARTTLS</a> ger möjlighet till krypterad leverans av mejl, förutsatt att både sändande och mottagande mejlserver stöder det. Det förhindrar passiv massövervakning av elektronisk post.</p>
-	<p>För att få <em>STARTTLS OK</em> krävs att alla mejlservrar har stöd för STARTTLS.</p>
+	<p>För att få <em>STARTTLS OK</em> krävs att alla mejlservrar har stöd för STARTTLS. Siffrorna nedan avser hur många IP-adresser det handlar om. En domän kan ha flera mejlservrar och varje mejlserver kan ha flera IP-adresser.</p>
 	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
 
 	<table class="table table-condensed table-striped" id="starttls">
@@ -172,11 +172,15 @@ foreach($tags as $tag => $tagId):
 					if(in_array($key, array('mx_ip_country_se', 'mx_ip_starttls', 'mx_ip_starttls_pfs', 'mx_ip_starttls_sslv3', 'mx_ip_starttls_tlsv1', 'mx_ip_starttls_tlsv1_1', 'mx_ip_starttls_tlsv1_2', 'mx_ip_starttls_pfs'))) {
 						if($value === $row->mx_ip_total)
 							$class = 'success';
-						else
+						else {
 							$class = 'warning';
+						}
 
-						if(!$value)
-							$value = 'inga';
+						if(!$value) {
+							// $value = 'inga';
+							if($key === 'mx_ip_starttls')
+								$class = 'danger';
+						}
 						else if($value === $row->mx_ip_total)
 							$value = 'alla';
 						else
@@ -184,8 +188,11 @@ foreach($tags as $tag => $tagId):
 					}
 
 					if(in_array($key, array('mx_ip_country_other', 'mx_ip_starttls_sslv2'))) {
-						if($value > 0)
+						if($value > 0) {
 							$class = 'warning';
+							if($key === 'mx_ip_starttls_sslv2')
+								$class = 'danger';
+						}
 						else
 							$class = 'success';
 
