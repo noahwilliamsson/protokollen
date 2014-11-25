@@ -180,24 +180,60 @@ class ProtokollenBase {
 	}
 
 	/**
+	 * Add tag
+	 * @param $tag Tag name
+	 * @return Tag ID
+	 */
+	function addTag($tag) {
+		$row = $this->getTag($tag);
+		if($row !== NULL)
+			return $row->id;
+
+		$q = 'INSERT INTO tags SET tag=?, created=NOW()';
+		$st = $this->m->prepare($q);
+		$st->bind_param('s', $tag);
+		$st->execute();
+		$id = $st->insert_id;
+		$st->close();
+
+		return $id;
+	}
+
+	/**
+	 * Get entity tags
+	 * @returns Array of tags, throws on error
+	 */
+	function getEntityTags($entityId) {
+		$m = $this->m;
+		$q = 'SELECT tag FROM entity_tags et
+				LEFT JOIN tags t ON et.tag_id=t.id
+				WHERE et.entity_id=?
+				ORDER BY tag';
+		$st = $m->prepare($q);
+		$st->bind_param('i', $entityId);
+		if(!$st->execute()) {
+			$err = "List entity tags failed: $m->error";
+			throw new Exception($err);
+		}
+
+		$r = $st->get_result();
+		$arr = array();
+		while($row = $r->fetch_object())
+			$arr[] = $row->tag;
+		$r->close();
+		$st->close();
+
+		return $arr;
+	}
+
+	/**
 	 * Add entity tag
 	 * @param $entityId Entity ID
 	 * @param $tag Tag name
 	 * @returns ID of entity tag mapping row, throws on error
 	 */
 	function addEntityTag($entityId, $tag) {
-		$row = $this->getTag($tag);
-		if($row === NULL) {
-			$q = 'INSERT INTO tags SET tag=?, created=NOW()';
-			$st = $this->m->prepare($q);
-			$st->bind_param('s', $tag);
-			$st->execute();
-			$tagId = $st->insert_id;
-			$st->close();
-		}
-		else {
-			$tagId = $row->id;
-		}
+		$tagId = $this->addTag($tag);
 
 		$q = 'SELECT * FROM entity_tags WHERE entity_id=? AND tag_id=?';
 		$st = $this->m->prepare($q);
