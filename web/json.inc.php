@@ -1,27 +1,10 @@
 <?php
-/**
- * Output entity data as JSON
- */
-
 require_once('../php/ServiceGroup.class.php');
 require_once('../php/TestWwwPreferences.class.php');
 require_once('../php/TestSslprobe.class.php');
 require_once('../php/TestDnsAddresses.class.php');
 require_once('../php/TestDnssecStatus.class.php');
 
-if(!isset($_GET['id']))
-	die("Parameter id does not contain an entity ID\n");
-
-$id = intval($_GET['id']);
-$withRevisions = FALSE;
-if(isset($_GET['revisions']) && !empty($_GET['revisions']))
-	$withRevisions = TRUE;
-
-$filename = 'protokollen-entity-'. $id .'-'. strftime('%Y%m%d_%H%m') .'.json';
-header('Content-Type: application/json; charset=utf-8');
-header('Content-Disposition: attachment; filename='. $filename);
-
-echo json_encode(entityToObject($id, $withRevisions), JSON_PRETTY_PRINT);
 
 /**
  * Produce JSON tree of entity
@@ -111,6 +94,7 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 	$testProbes = new TestSslprobe();
 	$testWww = new TestWwwPreferences();
 
+	$key = 'se.protokollen.tests.dns.addresses';
 	foreach($testDnsAddrs->listItems($svc->id) as $row) {
 		if(!$withRevisions && $row->entry_type !== 'current')
 			continue;
@@ -124,9 +108,12 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 		$test->type = 'DNS Addresses';
 		$test->until = $row->until;
 		$test->updated = $row->updated;
-		$service->tests[] = $test;
+		if(!isset($service->tests[$key]))
+			$service->tests[$key] = array();
+		$service->tests[$key][] = $test;
 	}
 
+	$key = 'se.protokollen.tests.dnssec.status';
 	foreach($testDnssec->listItems($svc->id) as $row) {
 		if(!$withRevisions && $row->entry_type !== 'current')
 			continue;
@@ -140,9 +127,12 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 		$test->type = 'DNSSEC status';
 		$test->until = $row->until;
 		$test->updated = $row->updated;
-		$service->tests[] = $test;
+		if(!isset($service->tests[$key]))
+			$service->tests[$key] = array();
+		$service->tests[$key][] = $test;
 	}
 
+	$key = 'se.protokollen.tests.web.preferences';
 	foreach($testWww->listItems($svc->id) as $row) {
 		if(!$withRevisions && $row->entry_type !== 'current')
 			continue;
@@ -156,9 +146,12 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 		$test->type = 'Web preferences';
 		$test->until = $row->until;
 		$test->updated = $row->updated;
-		$service->tests[] = $test;
+		if(!isset($service->tests[$key]))
+			$service->tests[$key] = array();
+		$service->tests[$key][] = $test;
 	}
 
+	$key = 'se.protokollen.tests.sslprobe';
 	foreach($service->groups as $grp) {
 		foreach($testProbes->listItems($svc->id, $grp->id) as $row) {
 			if(!$withRevisions && $row->entry_type !== 'current')
@@ -174,7 +167,9 @@ function getServiceObject($svcId, $withRevisions = FALSE) {
 			$test->type = 'Sslprobe';
 			$test->until = $row->until;
 			$test->updated = $row->updated;
-			$service->tests[] = $test;
+			if(!isset($service->tests[$key]))
+				$service->tests[$key] = array();
+			$service->tests[$key][] = $test;
 		}
 	}
 
