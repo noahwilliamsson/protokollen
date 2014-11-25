@@ -26,7 +26,7 @@ while [ $# -ge 3 ]; do
 	port="$3"
 	printf "%5d\t%s\t%s\t%s\n" "$svcId" "$svcType" "$hostname:$port ($protocol)"
 
-	JSON="$protocol.$hostname.$port.$$".json
+	JSON="$entId.$svcId.$svcGrpId.$protocol.$hostname.$port.$$".json
 
 	# Update DNS records regardless of service
 	test "$loop" = "1" && ./check_dns_address_records.py $@ > "$JSON" \
