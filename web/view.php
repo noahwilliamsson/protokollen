@@ -4,6 +4,7 @@ require_once('../php/TestWwwPreferences.class.php');
 require_once('../php/TestSslprobe.class.php');
 require_once('../php/TestDnsAddresses.class.php');
 require_once('../php/TestDnssecStatus.class.php');
+require_once('json.inc.php');
 
 if(!isset($_GET['domain'])) {
 	header('Location: /');
@@ -49,7 +50,7 @@ $ent = $p->getEntityByDomain($domain);
 			<form class="form-inline" role="form" method="get" action="/view.php">
 				<div class="form-group">
 					<label for="domain">Domän</label>
-					<input type="text" class="form-control" id="domain" name="domain" placeholder="example.se">
+					<input type="text" class="form-control" id="domain" name="domain" placeholder="example.se" />
 				</div>
 				<button type="submit" class="btn btn-primary">Visa</button>
 			</form>
@@ -62,6 +63,78 @@ $ent = $p->getEntityByDomain($domain);
 		<p>Den här tjänsten övervarkar ett tusendal domäner som bedömts vara intressanta. Domänen du sökte efter fanns inte med i den listan. I nuläget finns ingen möjlighet att själv lägga till eller testa valfria domäner.</p>
 	</div>
 <?php else: ?>
+
+	<div class="container">
+		<h2>Översikt</h2>
+<?php
+$summaryDnssec = array();
+$summaryIpv6 = array();
+foreach($p->listServices($ent->id) as $svc) {
+	$service = getServiceObject($svc->id);
+
+	$key = "$service->name ($service->type)";
+	$value = 'warning';
+	foreach($service->tests['se.protokollen.tests.dns.addresses'] as $test) {
+		$addrs = $test->data;
+		switch($service->type) {
+		case 'DNS':
+		case 'SMTP':
+			if(!empty($addrs->aaaa))
+				$value = 'success';
+			break;
+		default:
+			if($addrs->aaaa === $addrs->hosts)
+				$value = 'success';
+			break;
+		}
+	}
+	$summaryIpv6[$key] = $value;
+
+	$numTotal = 0; $num = 0;
+	$key = "$service->name ($service->type)";
+	foreach($service->tests['se.protokollen.tests.dnssec.status'] as $test) {
+		foreach($test->data as $hostname => $dnssec) {
+			$numTotal++;
+			if($dnssec->secure)
+				$num++;
+		}
+	}
+	$value = 'warning';
+	if($numTotal > 0 && $numTotal === $num)
+		$value = 'success';
+	$summaryDnssec[$key] = $value;
+}
+?>
+	<div class="row">
+		<div class="col-sm-6 col-md-4">
+			<div class="thumbnail">
+				<div class="caption">
+					<h3>DNSSEC</h3>
+					<p>Zoner med DNSSEC</p>
+					<ul class="list-group">
+						<?php foreach($summaryDnssec as $service => $class): ?>
+						<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-6 col-md-4">
+			<div class="thumbnail">
+				<div class="caption">
+					<h3>IPv6</h3>
+					<p>Tjänster med IPv6</p>
+					<ul class="list-group">
+						<?php foreach($summaryIpv6 as $service => $class): ?>
+						<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div> <!-- /.row -->
+	</div> <!-- /.container -->
 	<div class="container">
 		<h2>Rådata</h2>
 		<p>Det aktuella rådatat finns tillgängligt i <a href="download.php?id=<?php echo urlencode($ent->id) ?>">JSON-format</a>.  Här är samma data <a href="download.php?id=<?php echo urlencode($ent->id) ?>&amp;revisions=1">inklusive historiskt data</a>. <strong>OBS!</strong> Datat väger ofta flera megabyte.</p>
