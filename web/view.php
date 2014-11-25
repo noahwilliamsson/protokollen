@@ -65,76 +65,78 @@ $ent = $p->getEntityByDomain($domain);
 <?php else: ?>
 
 	<div class="container">
+		<?php
+		$summaryDnssec = array();
+		$summaryIpv6 = array();
+		foreach($p->listServices($ent->id) as $svc) {
+			$service = getServiceObject($svc->id);
+
+			$key = "$service->name ($service->type)";
+			$value = 'warning';
+			foreach($service->tests['se.protokollen.tests.dns.addresses'] as $test) {
+				$addrs = $test->data;
+				switch($service->type) {
+				case 'DNS':
+				case 'SMTP':
+					if(!empty($addrs->aaaa))
+						$value = 'success';
+					break;
+				default:
+					if($addrs->aaaa === $addrs->hosts)
+						$value = 'success';
+					break;
+				}
+			}
+			$summaryIpv6[$key] = $value;
+
+			$numTotal = 0; $num = 0;
+			$key = "$service->name ($service->type)";
+			foreach($service->tests['se.protokollen.tests.dnssec.status'] as $test) {
+				foreach($test->data as $hostname => $dnssec) {
+					$numTotal++;
+					if($dnssec->secure)
+						$num++;
+				}
+			}
+			$value = 'warning';
+			if($numTotal > 0 && $numTotal === $num)
+				$value = 'success';
+			$summaryDnssec[$key] = $value;
+		}
+		?>
 		<h2>Översikt</h2>
-<?php
-$summaryDnssec = array();
-$summaryIpv6 = array();
-foreach($p->listServices($ent->id) as $svc) {
-	$service = getServiceObject($svc->id);
-
-	$key = "$service->name ($service->type)";
-	$value = 'warning';
-	foreach($service->tests['se.protokollen.tests.dns.addresses'] as $test) {
-		$addrs = $test->data;
-		switch($service->type) {
-		case 'DNS':
-		case 'SMTP':
-			if(!empty($addrs->aaaa))
-				$value = 'success';
-			break;
-		default:
-			if($addrs->aaaa === $addrs->hosts)
-				$value = 'success';
-			break;
-		}
-	}
-	$summaryIpv6[$key] = $value;
-
-	$numTotal = 0; $num = 0;
-	$key = "$service->name ($service->type)";
-	foreach($service->tests['se.protokollen.tests.dnssec.status'] as $test) {
-		foreach($test->data as $hostname => $dnssec) {
-			$numTotal++;
-			if($dnssec->secure)
-				$num++;
-		}
-	}
-	$value = 'warning';
-	if($numTotal > 0 && $numTotal === $num)
-		$value = 'success';
-	$summaryDnssec[$key] = $value;
-}
-?>
-	<div class="row">
-		<div class="col-sm-6 col-md-4">
-			<div class="thumbnail">
-				<div class="caption">
-					<h3>DNSSEC</h3>
-					<p>Zoner med DNSSEC</p>
-					<ul class="list-group">
-						<?php foreach($summaryDnssec as $service => $class): ?>
-						<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
-						<?php endforeach; ?>
-					</ul>
+		<div class="row">
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<div class="caption">
+						<h3>Domänsäkerhet</h3>
+						<p>Tjänster med fullgott stöd för DNSSEC</p>
+						<ul class="list-group">
+							<?php foreach($summaryDnssec as $service => $class): ?>
+							<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-sm-6 col-md-4">
-			<div class="thumbnail">
-				<div class="caption">
-					<h3>IPv6</h3>
-					<p>Tjänster med IPv6</p>
-					<ul class="list-group">
-						<?php foreach($summaryIpv6 as $service => $class): ?>
-						<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
-						<?php endforeach; ?>
-					</ul>
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<div class="caption">
+						<h3>Nåbarhet</h3>
+						<p>Tjänster med tillräckligt stöd för IPv6</p>
+						<ul class="list-group">
+							<?php foreach($summaryIpv6 as $service => $class): ?>
+							<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div> <!-- /.row -->
+		</div> <!-- /.row -->
+
 	</div> <!-- /.container -->
+
 	<div class="container">
 		<h2>Rådata</h2>
 		<p>Det aktuella rådatat finns tillgängligt i <a href="download.php?id=<?php echo urlencode($ent->id) ?>">JSON-format</a>.  Här är samma data <a href="download.php?id=<?php echo urlencode($ent->id) ?>&amp;revisions=1">inklusive historiskt data</a>. <strong>OBS!</strong> Datat väger ofta flera megabyte.</p>
