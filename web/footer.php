@@ -1,3 +1,3 @@
 		<footer>
-			<p>Cykla och vält – Feb, 2014</p>
+			<p>Wx3 Sweden AB – 2013-2014</p>
 		</footer>

@@ -68,6 +68,7 @@ $ent = $p->getEntityByDomain($domain);
 		<?php
 		$summaryDnssec = array();
 		$summaryIpv6 = array();
+		$tags = $p->getEntityTags($ent->id);
 		foreach($p->listServices($ent->id) as $svc) {
 			$service = getServiceObject($svc->id);
 
@@ -108,6 +109,7 @@ $ent = $p->getEntityByDomain($domain);
 		?>
 		<h2>Översikt</h2>
 		<div class="row">
+
 			<div class="col-sm-6 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
@@ -119,6 +121,18 @@ $ent = $p->getEntityByDomain($domain);
 							<?php endforeach; ?>
 						</ul>
 						<p><strong>Placeholder</strong> Din sajt? Klicka här för att läsa mer om hur du <a href="#">kommer igång med DNSSEC</a>.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<div class="caption">
+						<h3>Mejlsäkerhet</h3>
+						<p>Mejlservrar med stöd för kryptering</p>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-info">Placeholder</li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -140,18 +154,6 @@ $ent = $p->getEntityByDomain($domain);
 			<div class="col-sm-6 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
-						<h3>Mejlsäkerhet</h3>
-						<p>Mejlservrar med stöd för kryptering</p>
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-info">Placeholder</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4">
-				<div class="thumbnail">
-					<div class="caption">
 						<h3>Webbsäkerhet</h3>
 						<p>Tjänster med stöd för HTTPS</p>
 						<ul class="list-group">
@@ -161,6 +163,20 @@ $ent = $p->getEntityByDomain($domain);
 					</div>
 				</div>
 			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<div class="caption">
+						<h3>Kategorier</h3>
+						<ul class="list-group">
+							<?php foreach($tags as $tag): ?>
+							<li class="list-group-item list-group-item-info"><?php echo htmlspecialchars($tag, ENT_NOQUOTES) ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				</div>
+			</div>
+
 		</div> <!-- /.row -->
 
 	</div> <!-- /.container -->
@@ -208,6 +224,7 @@ $ent = $p->getEntityByDomain($domain);
 			$testWww = new TestWwwPreferences();
 			$testDnssec = new TestDnssecStatus();
 			$testDnsAddrs = new TestDnsAddresses();
+			$testProbes = new TestSslprobe();
 			$prefs = $testWww->getItem($svc->id, $grp->id);
 			$dnssec = $testDnssec->getItem($svc->id, $grp->id);
 			$addrs = $testDnsAddrs->getItem($svc->id, $grp->id);
@@ -275,12 +292,32 @@ $ent = $p->getEntityByDomain($domain);
 				<?php endif; ?>
 
 				<?php
+				if($addrs !== NULL):
+					$str = json_encode($addrs->data, JSON_PRETTY_PRINT);
+				?>
+				<h4>Service group addresses</h4>
+				<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
+				<?php endif; ?>
+
+				<?php
 				if($grp !== NULL):
 					$str = json_encode($grp->data, JSON_PRETTY_PRINT);
 				?>
 				<h4>Service group</h4>
 				<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
+
+					<?php
+					foreach($grp->data as $svcHost):
+						$probe = $testProbes->getItem($svc->id, $grp->id, $svcHost->hostname);
+						if($probe === NULL)
+							continue;
+						$str = json_encode($probe->data, JSON_PRETTY_PRINT);
+					?>
+					<h4>Sslprobe <?php echo htmlspecialchars($svcHost->protocol .':'. $svcHost->hostname .':'. $svcHost->port, ENT_NOQUOTES) ?></h4>
+					<pre><?php echo htmlspecialchars($str, ENT_NOQUOTES) ?></pre>
+					<?php endforeach; ?>
 				<?php endif; ?>
+
 
 			</div> <!-- /.panel-body -->
 		</div> <!-- /.panel -->
