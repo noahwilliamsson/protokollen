@@ -72,7 +72,7 @@ $ent = $p->getEntityByDomain($domain);
 			$service = getServiceObject($svc->id);
 
 			$key = "$service->name ($service->type)";
-			$value = 'warning';
+			$value = 'danger';
 			if(isset($service->tests['se.protokollen.tests.dns.addresses']))
 			foreach($service->tests['se.protokollen.tests.dns.addresses'] as $test) {
 				$addrs = $test->data;
@@ -100,7 +100,7 @@ $ent = $p->getEntityByDomain($domain);
 						$num++;
 				}
 			}
-			$value = 'warning';
+			$value = 'danger';
 			if($numTotal > 0 && $numTotal === $num)
 				$value = 'success';
 			$summaryDnssec[$key] = $value;
@@ -112,12 +112,13 @@ $ent = $p->getEntityByDomain($domain);
 				<div class="thumbnail">
 					<div class="caption">
 						<h3>Domänsäkerhet</h3>
-						<p>Tjänster med fullgott stöd för DNSSEC</p>
+						<p>Tjänster med stöd för DNSSEC</p>
 						<ul class="list-group">
 							<?php foreach($summaryDnssec as $service => $class): ?>
 							<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
 							<?php endforeach; ?>
 						</ul>
+						<p><strong>Placeholder</strong> Din sajt? Klicka här för att läsa mer om hur du <a href="#">kommer igång med DNSSEC</a>.</p>
 					</div>
 				</div>
 			</div>
@@ -132,6 +133,31 @@ $ent = $p->getEntityByDomain($domain);
 							<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
 							<?php endforeach; ?>
 						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<div class="caption">
+						<h3>Mejlsäkerhet</h3>
+						<p>Mejlservrar med stöd för kryptering</p>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-info">Placeholder</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<div class="caption">
+						<h3>Webbsäkerhet</h3>
+						<p>Tjänster med stöd för HTTPS</p>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-danger">Placeholder</li>
+						</ul>
+						<p><strong>Placeholder</strong> Din sajt? Klicka här för att läsa mer om hur du skaffar ett certifikat och <a href="#">kommer igång med https</a>.</p>
 					</div>
 				</div>
 			</div>
@@ -170,7 +196,7 @@ $ent = $p->getEntityByDomain($domain);
 
 	<div class="container">
 		<h2>Lista över tjänster</h2>
-		<p><strong>TODO</strong> Det här borde grupperas under flikar och presenteras på ett snyggare sätt.</p>
+		<p><strong>TODO</strong> Det här borde grupperas under flikar och presenteras på ett snyggare sätt. Just nu mest data för felsökning.</p>
 		<?php
 		foreach($p->listServices($ent->id) as $svc):
 			/*
