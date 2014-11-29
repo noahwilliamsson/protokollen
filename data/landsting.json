@@ -1,262 +1,388 @@
 [
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Stockholms l\u00e4ns landsting",
-        "url": "http:\/\/www.sll.se\/",
-        "domain": "sll.se",
-        "address": "Box 22550",
-        "zipcode": "104 22",
-        "city": "STOCKHOLM",
-        "phone": "08-737 25 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@sll.se",
-        "maildomain": "sll.se",
-        "countyCodes": "AB"
+        "name": "Stockholms l\u00e4ns landsting",
+        "organization": null,
+        "private": {
+            "address": "Box 22550",
+            "city": "STOCKHOLM",
+            "zipcode": "104 22",
+            "phone": "08-737 25 00",
+            "countyCodes": "AB"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.sll.se\/",
+        "zone": "sll.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget i Uppsala l\u00e4n",
-        "url": "http:\/\/www.lul.se\/",
-        "domain": "lul.se",
-        "address": "Box 602",
-        "zipcode": "751 25",
-        "city": "UPPSALA",
-        "phone": "018-611 00 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@lul.se",
-        "maildomain": "lul.se",
-        "countyCodes": "C"
+        "name": "Landstinget i Uppsala l\u00e4n",
+        "organization": null,
+        "private": {
+            "address": "Box 602",
+            "city": "UPPSALA",
+            "zipcode": "751 25",
+            "phone": "018-611 00 00",
+            "countyCodes": "C"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.lul.se\/",
+        "zone": "lul.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget S\u00f6rmland",
-        "url": "http:\/\/www.landstingetsormland.se\/",
-        "domain": "landstingetsormland.se",
-        "zipcode": "611 88",
-        "city": "NYK\u00d6PING",
-        "phone": "0155-24 50 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget.sormland@dll.se",
-        "maildomain": "dll.se",
-        "countyCodes": "D"
+        "name": "Landstinget S\u00f6rmland",
+        "organization": null,
+        "private": {
+            "city": "NYK\u00d6PING",
+            "zipcode": "611 88",
+            "phone": "0155-24 50 00",
+            "countyCodes": "D"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.landstingetsormland.se\/",
+        "zone": "landstingetsormland.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget i \u00d6sterg\u00f6tland",
-        "url": "http:\/\/www.lio.se\/",
-        "domain": "lio.se",
-        "zipcode": "581 91",
-        "city": "LINK\u00d6PING",
-        "phone": "010-103 00 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@lio.se",
-        "maildomain": "lio.se",
-        "countyCodes": "E"
+        "name": "Landstinget i \u00d6sterg\u00f6tland",
+        "organization": null,
+        "private": {
+            "city": "LINK\u00d6PING",
+            "zipcode": "581 91",
+            "phone": "010-103 00 00",
+            "countyCodes": "E"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.lio.se\/",
+        "zone": "lio.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget i J\u00f6nk\u00f6pings l\u00e4n",
-        "url": "http:\/\/www.lj.se\/",
-        "domain": "lj.se",
-        "address": "Box 1024",
-        "zipcode": "551 11",
-        "city": "J\u00d6NK\u00d6PING",
-        "phone": "036-32 40 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@lj.se",
-        "maildomain": "lj.se",
-        "countyCodes": "F"
+        "name": "Landstinget i J\u00f6nk\u00f6pings l\u00e4n",
+        "organization": null,
+        "private": {
+            "address": "Box 1024",
+            "city": "J\u00d6NK\u00d6PING",
+            "zipcode": "551 11",
+            "phone": "036-32 40 00",
+            "countyCodes": "F"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.lj.se\/",
+        "zone": "lj.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget Kronoberg",
-        "url": "http:\/\/www.ltkronoberg.se\/",
-        "domain": "ltkronoberg.se",
-        "zipcode": "351 88",
-        "city": "V\u00c4XJ\u00d6",
-        "phone": "0470-58 80 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@ltkronoberg.se",
-        "maildomain": "ltkronoberg.se",
-        "countyCodes": "G"
+        "name": "Landstinget Kronoberg",
+        "organization": null,
+        "private": {
+            "city": "V\u00c4XJ\u00d6",
+            "zipcode": "351 88",
+            "phone": "0470-58 80 00",
+            "countyCodes": "G"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.ltkronoberg.se\/",
+        "zone": "ltkronoberg.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget i Kalmar l\u00e4n",
-        "url": "http:\/\/www.ltkalmar.se\/",
-        "domain": "ltkalmar.se",
-        "address": "Box 601",
-        "zipcode": "391 26",
-        "city": "KALMAR",
-        "phone": "0480-840 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@ltkalmar.se",
-        "maildomain": "ltkalmar.se",
-        "countyCodes": "H"
+        "name": "Landstinget i Kalmar l\u00e4n",
+        "organization": null,
+        "private": {
+            "address": "Box 601",
+            "city": "KALMAR",
+            "zipcode": "391 26",
+            "phone": "0480-840 00",
+            "countyCodes": "H"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.ltkalmar.se\/",
+        "zone": "ltkalmar.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Region Gotland",
-        "url": "http:\/\/www.gotland.se\/",
-        "domain": "gotland.se",
-        "zipcode": "621 81",
-        "city": "VISBY",
-        "phone": "0498-26 90 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "regiongotland@gotland.se",
-        "maildomain": "gotland.se",
-        "countyCodes": "I"
+        "name": "Region Gotland",
+        "organization": null,
+        "private": {
+            "city": "VISBY",
+            "zipcode": "621 81",
+            "phone": "0498-26 90 00",
+            "countyCodes": "I"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.gotland.se\/",
+        "zone": "gotland.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget Blekinge",
-        "url": "http:\/\/www.ltblekinge.se\/",
-        "domain": "ltblekinge.se",
-        "zipcode": "371 81",
-        "city": "KARLSKRONA",
-        "phone": "0455-73 10 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget.blekinge@ltblekinge.se",
-        "maildomain": "ltblekinge.se",
-        "countyCodes": "K"
+        "name": "Landstinget Blekinge",
+        "organization": null,
+        "private": {
+            "city": "KARLSKRONA",
+            "zipcode": "371 81",
+            "phone": "0455-73 10 00",
+            "countyCodes": "K"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.ltblekinge.se\/",
+        "zone": "ltblekinge.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Region Sk\u00e5ne",
-        "url": "http:\/\/www.skane.se\/",
-        "domain": "skane.se",
-        "zipcode": "291 89",
-        "city": "KRISTIANSTAD",
-        "phone": "044-309 30 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "region@skane.se",
-        "maildomain": "skane.se",
-        "countyCodes": "M"
+        "name": "Region Sk\u00e5ne",
+        "organization": null,
+        "private": {
+            "city": "KRISTIANSTAD",
+            "zipcode": "291 89",
+            "phone": "044-309 30 00",
+            "countyCodes": "M"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.skane.se\/",
+        "zone": "skane.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "categories": [
+            "Landsting"
+        ],
+        "email": "infomaster@regionhalland.se",
         "name": "Region Halland",
+        "organization": null,
+        "private": {
+            "address": "Box 517",
+            "city": "HALMSTAD",
+            "zipcode": "301 80",
+            "phone": "035-13 48 00",
+            "countyCodes": "N"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
         "url": "http:\/\/www.regionhalland.se\/",
-        "domain": "regionhalland.se",
-        "address": "Box 517",
-        "zipcode": "301 80",
-        "city": "HALMSTAD",
-        "phone": "035-13 48 00",
-        "email": "regionen@regionhalland.se",
-        "maildomain": "regionhalland.se",
-        "countyCodes": "N"
+        "zone": "regionhalland.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "V\u00e4stra G\u00f6talandsregionen",
-        "url": "http:\/\/www.vgregion.se\/",
-        "domain": "vgregion.se",
-        "zipcode": "462 80",
-        "city": "V\u00e4nersborg",
-        "phone": "010-441 00 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "info@vgregion.se",
-        "maildomain": "vgregion.se",
-        "countyCodes": "O"
+        "name": "V\u00e4stra G\u00f6talandsregionen",
+        "organization": null,
+        "private": {
+            "city": "V\u00e4nersborg",
+            "zipcode": "462 80",
+            "phone": "010-441 00 00",
+            "countyCodes": "O"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.vgregion.se\/",
+        "zone": "vgregion.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget i V\u00e4rmland",
-        "url": "http:\/\/www.liv.se\/",
-        "domain": "liv.se",
-        "zipcode": "651 82",
-        "city": "KARLSTAD",
-        "phone": "054-61 50 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "info@liv.se",
-        "maildomain": "liv.se",
-        "countyCodes": "S"
+        "name": "Landstinget i V\u00e4rmland",
+        "organization": null,
+        "private": {
+            "city": "KARLSTAD",
+            "zipcode": "651 82",
+            "phone": "054-61 50 00",
+            "countyCodes": "S"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.liv.se\/",
+        "zone": "liv.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "\u00d6rebro l\u00e4ns landsting",
-        "url": "http:\/\/www.orebroll.se\/",
-        "domain": "orebroll.se",
-        "address": "Box 1613",
-        "zipcode": "701 16",
-        "city": "\u00d6REBRO",
-        "phone": "019-602 70 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "orebroll@orebroll.se",
-        "maildomain": "orebroll.se",
-        "countyCodes": "T"
+        "name": "\u00d6rebro l\u00e4ns landsting",
+        "organization": null,
+        "private": {
+            "address": "Box 1613",
+            "city": "\u00d6REBRO",
+            "zipcode": "701 16",
+            "phone": "019-602 70 00",
+            "countyCodes": "T"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.orebroll.se\/",
+        "zone": "orebroll.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "categories": [
+            "Landsting"
+        ],
+        "email": "landstinget@ltv.se",
         "name": "Landstinget V\u00e4stmanland",
+        "organization": null,
+        "private": {
+            "city": "V\u00c4STER\u00c5S",
+            "zipcode": "721 89",
+            "phone": "021-17 30 00",
+            "countyCodes": "U"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
         "url": "http:\/\/www.ltv.se\/",
-        "domain": "ltv.se",
-        "zipcode": "721 89",
-        "city": "V\u00c4STER\u00c5S",
-        "phone": "021-17 30 00",
-        "email": "ltv.se",
-        "maildomain": "ltv.se",
-        "countyCodes": "U"
+        "zone": "ltv.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget Dalarna",
-        "url": "http:\/\/www.ltdalarna.se\/",
-        "domain": "ltdalarna.se",
-        "address": "Box 712",
-        "zipcode": "791 29",
-        "city": "FALUN",
-        "phone": "023-49 00 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget.dalarna@ltdalarna.se",
-        "maildomain": "ltdalarna.se",
-        "countyCodes": "W"
+        "name": "Landstinget Dalarna",
+        "organization": null,
+        "private": {
+            "address": "Box 712",
+            "city": "FALUN",
+            "zipcode": "791 29",
+            "phone": "023-49 00 00",
+            "countyCodes": "W"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.ltdalarna.se\/",
+        "zone": "ltdalarna.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget G\u00e4vleborg",
-        "url": "http:\/\/www.lg.se\/",
-        "domain": "lg.se",
-        "zipcode": "801 88",
-        "city": "G\u00c4VLE",
-        "phone": "026-15 40 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "lg@lg.se",
-        "maildomain": "lg.se",
-        "countyCodes": "X"
+        "name": "Landstinget G\u00e4vleborg",
+        "organization": null,
+        "private": {
+            "city": "G\u00c4VLE",
+            "zipcode": "801 88",
+            "phone": "026-15 40 00",
+            "countyCodes": "X"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.lg.se\/",
+        "zone": "lg.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Landstinget V\u00e4sternorrland",
-        "url": "http:\/\/www.lvn.se\/",
-        "domain": "lvn.se",
-        "zipcode": "871 85",
-        "city": "H\u00c4RN\u00d6SAND",
-        "phone": "0611-800 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget.vasternorrland@lvn.se",
-        "maildomain": "lvn.se",
-        "countyCodes": "Y"
+        "name": "Landstinget V\u00e4sternorrland",
+        "organization": null,
+        "private": {
+            "city": "H\u00c4RN\u00d6SAND",
+            "zipcode": "871 85",
+            "phone": "0611-800 00",
+            "countyCodes": "Y"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.lvn.se\/",
+        "zone": "lvn.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "J\u00e4mtlands l\u00e4ns landsting",
-        "url": "http:\/\/www.jll.se\/",
-        "domain": "jll.se",
-        "address": "Box 654",
-        "zipcode": "831 27",
-        "city": "\u00d6STERSUND",
-        "phone": "063-15 30 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "jamtlands.lans.landsting@jll.se",
-        "maildomain": "jll.se",
-        "countyCodes": "Z"
+        "name": "J\u00e4mtlands l\u00e4ns landsting",
+        "organization": null,
+        "private": {
+            "address": "Box 654",
+            "city": "\u00d6STERSUND",
+            "zipcode": "831 27",
+            "phone": "063-15 30 00",
+            "countyCodes": "Z"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.jll.se\/",
+        "zone": "jll.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "V\u00e4sterbottens l\u00e4ns landsting",
-        "url": "http:\/\/www.vll.se\/",
-        "domain": "vll.se",
-        "zipcode": "901 89",
-        "city": "UME\u00c5",
-        "phone": "090-785 70 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "landstinget@vll.se",
-        "maildomain": "vll.se",
-        "countyCodes": "AC"
+        "name": "V\u00e4sterbottens l\u00e4ns landsting",
+        "organization": null,
+        "private": {
+            "city": "UME\u00c5",
+            "zipcode": "901 89",
+            "phone": "090-785 70 00",
+            "countyCodes": "AC"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.vll.se\/",
+        "zone": "vll.se"
     },
     {
-        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
-        "name": "Norrbottens l\u00e4ns landsting",
-        "url": "http:\/\/www.nll.se\/",
-        "domain": "nll.se",
-        "zipcode": "971 89",
-        "city": "LULE\u00c5",
-        "phone": "0920-28 40 00",
+        "categories": [
+            "Landsting"
+        ],
         "email": "norrbottens.lans.landsting@nll.se",
-        "maildomain": "nll.se",
-        "countyCodes": "BD"
+        "name": "Norrbottens l\u00e4ns landsting",
+        "organization": null,
+        "private": {
+            "city": "LULE\u00c5",
+            "zipcode": "971 89",
+            "phone": "0920-28 40 00",
+            "countyCodes": "BD"
+        },
+        "source": "http:\/\/www.skl.se\/kommuner_och_landsting\/fakta-om-landsting-och-regioner\/adresser_och_lansbokstaver_landsting",
+        "sourceId": null,
+        "url": "http:\/\/www.nll.se\/",
+        "zone": "nll.se"
     }
 ]

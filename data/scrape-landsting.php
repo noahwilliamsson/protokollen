@@ -31,23 +31,29 @@ $result = array();
 foreach($x->query('//*[@class="pagecontent sv-layout"]//*[@class="sv-text-portlet-content"]/p') as $pNode) {
 
 	$obj = new stdClass();
+	$obj->categories = array('Landsting');
+	$obj->email = NULL;
+	$obj->name = NULL;
+	$obj->organization = NULL;
+	$obj->private = new stdClass();
 	$obj->source = SOURCE_URL;
+	$obj->sourceId = NULL;
+	$obj->url = NULL;
+	$obj->zone = NULL;
 	foreach($pNode->childNodes as $node) {
 		if($node->nodeName === 'a') {
 			$href = $node->getAttribute('href');
 			$text = $node->nodeValue;
 
 			if(preg_match('/@/', $href)) {
-				$obj->email = $text;
-				list(,$obj->maildomain) = explode('@', $href);
+				$obj->email = trim(str_replace('mailto:', '', $href));
 				continue;
 			}
 
 			$obj->name = $text;
 			$obj->url = $href;
 			$domain = parse_url($href, PHP_URL_HOST);
-			$domain = str_replace('www.', '', $domain);
-			$obj->domain = $domain;
+			$obj->zone = preg_replace('@^www\.@i', '', $domain);
 			continue;
 		}
 		else if($node->nodeType !== XML_TEXT_NODE) {
@@ -56,21 +62,22 @@ foreach($x->query('//*[@class="pagecontent sv-layout"]//*[@class="sv-text-portle
 
 		$text = trim($node->nodeValue);
 		if(preg_match('@Länsbokstav:\s+(\w+)@', $text, $matches))
-			$obj->countyCodes = $matches[1];
+			$obj->private->countyCodes = $matches[1];
 		else if(preg_match('@^(\d+\s+\d+)\s+(.*)@', $text, $matches)) {
-			$obj->zipcode = $matches[1];
-			$obj->city = $matches[2];
+			$obj->private->city = $matches[2];
+			$obj->private->zipcode = $matches[1];
 		}
 		else if(preg_match('@^[0-9 -]+$@', $text))
-			$obj->phone = $text;
+			$obj->private->phone = $text;
 		else if(!isset($arr['address']))
-			$obj->address = $text;
+			$obj->private->address = $text;
 		else
-			$obj->other = $text;
+			$obj->private->other = $text;
 	}
 
-	if(count(array_keys((array)$obj)) < 7)
+	if(empty($obj->zone))
 		continue;
+
 	$result[] = $obj;
 }
 

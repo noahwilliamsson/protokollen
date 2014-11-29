@@ -16,8 +16,8 @@ curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($c, CURLOPT_TIMEOUT, 10);
 curl_setopt($c, CURLOPT_USERAGENT, 'protokollen/1.0 (scraper)');
 
-$sites = scrapeKiaList(fetch(SOURCE_URL));
-echo json_encode($sites, JSON_PRETTY_PRINT) ."\n";
+$items = scrapeKiaList(fetch(SOURCE_URL));
+echo json_encode($items, JSON_PRETTY_PRINT) ."\n";
 
 
 function fetch($url) {
@@ -71,46 +71,56 @@ function scrapeKiaList($data) {
 
 		$anchor = $nodes->item(0);
 		$obj = new stdClass();
-		$obj->title = $anchor->nodeValue;
-		$obj->domain = NULL;
+		$obj->categories = array();
+		$obj->email = NULL;
+		$obj->name = $anchor->nodeValue;
+		$obj->organization = NULL;
+		$obj->private = new stdClass();
 		$obj->source = $anchor->getAttribute('href');
-		$obj->objectId = NULL;
+		$obj->sourceId = NULL;
+		$obj->url = NULL;
+		$obj->zone = NULL;
 		if(preg_match('@object_id=(\d+)@', $obj->source, $matches))
-			$obj->objectId = intval($matches[1]);
-		$obj->position = 0;
+			$obj->sourceId = intval($matches[1]);
+		$obj->private->position = 0;
 		foreach($x->query('div[contains(@class, "two")]', $row) as $node)
-			$obj->position = intval($node->nodeValue);
-		$obj->unique = 0;
+			$obj->private->position = intval($node->nodeValue);
+		$obj->private->unique = 0;
 		foreach($x->query('div[contains(@class, "four")]', $row) as $node)
-			$obj->unique = intval(str_replace(' ', '', $node->nodeValue));
-		$obj->visits = 0;
+			$obj->private->unique = intval(str_replace(' ', '', $node->nodeValue));
+		$obj->private->visits = 0;
 		foreach($x->query('div[contains(@class, "six")]', $row) as $node)
-			$obj->visits = intval(str_replace(' ', '', $node->nodeValue));
-		$obj->pageviews = 0;
+			$obj->private->visits = intval(str_replace(' ', '', $node->nodeValue));
+		$obj->private->pageviews = 0;
 		foreach($x->query('div[contains(@class, "eight")]', $row) as $node)
-			$obj->pageviews = intval(str_replace(' ', '', $node->nodeValue));
+			$obj->private->pageviews = intval(str_replace(' ', '', $node->nodeValue));
 
-		$url = 'http://www.kiaindex.se/?object_id='. $obj->objectId;
+		$url = 'http://www.kiaindex.se/?object_id='. $obj->sourceId;
 		$details = scrapeKiaObject(fetch($url));
 		if($details !== NULL) {
-			$obj->categories = $details->categories;
-			if($details->url !== NULL)
-				$obj->domain = parse_url($details->url, PHP_URL_HOST);
+			$obj->categories = array_merge(array('KIAindex.se'), $details->categories);
+			sort($obj->categories);
+			if($details->url !== NULL) {
+				$domain = parse_url($details->url, PHP_URL_HOST);
+				$obj->zone = preg_replace('@^www\.@i', '', $domain);
+			}
 		}
-		foreach(dns_get_record($obj->title, DNS_ANY) as $rr) {
+
+		foreach(dns_get_record($obj->name, DNS_ANY) as $rr) {
 			if(isset($rr['host'])) {
-				$obj->domain = strtolower($rr['host']);
+				$domain = strtolower($rr['host']);
+				$obj->zone = preg_replace('@^www\.@i', '', $domain);
 				break;
 			}
 		}
 
-		if($obj->domain !== NULL) {
+		if($obj->zone !== NULL) {
 			/* KIA does this on new sites .. */
-			$obj->domain = preg_replace('@\.new$@', '', $obj->domain);
-			$obj->domain = str_replace(' ', '', $obj->domain);
+			$obj->zone = preg_replace('@\.new$@', '', $obj->zone);
+			$obj->zone = str_replace(' ', '', $obj->zone);
 		}
 
-		if(!$obj->domain)
+		if(!$obj->zone)
 			continue;
 
 		$arr[] = $obj;
