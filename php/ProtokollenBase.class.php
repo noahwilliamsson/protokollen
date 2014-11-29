@@ -129,11 +129,11 @@ class ProtokollenBase {
 	 * @param $emailDomain E-mail domain
 	 * @param $url URL
 	 * @param $org Organization
-	 * @param $orgShort Organization short
 	 * @param $orgGroup Organization group
+	 * @param $orgShort Organization short
 	 * @returns ID of entity, throws on error
 	 */
-	function addEntity($domain, $emailDomain, $url, $org, $orgShort = NULL, $orgGroup = NULL) {
+	function addEntity($domain, $emailDomain, $url, $org, $orgGroup = NULL, $orgShort = NULL) {
 		$e = $this->getEntityByDomain($domain);
 		if($e !== NULL) {
 			return $e->id;
