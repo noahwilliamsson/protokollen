@@ -29,7 +29,7 @@ if($argc > 1) {
 $m = $p->getMySQLHandle();
 $today = strftime('%F');
 foreach($idList as $entityId) {
-	$report = reportEntityIpv6($entityId);
+	$report = summarizeEntityServices($entityId);
 
 	$q = 'SELECT id FROM reports WHERE entity_id=? AND created=?';
 	$st = $m->prepare($q);
@@ -88,7 +88,7 @@ foreach($idList as $entityId) {
 	echo "$e->domain: ". json_encode($report) ."\n";
 }
 
-function reportEntityIpv6($entityId) {
+function summarizeEntityServices($entityId) {
 	$report = (object)array(
 		'ns' => (object)array(
 			'total' => 0,
