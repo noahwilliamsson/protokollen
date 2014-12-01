@@ -70,11 +70,12 @@ $r->close();
 
 foreach($tags as $tag => $tagId):
 	$entityIds = array();
-	$q = 'SELECT entity_id
+	$q = 'SELECT et.entity_id
 			FROM entity_tags et
 			LEFT JOIN entities e ON et.entity_id=e.id
+			LEFT JOIN reports r ON r.entity_id=e.id AND r.created=CURDATE()
 			WHERE tag_id="'. $m->escape_string($tagId) .'"
-			ORDER BY org';
+			ORDER BY IF(mx_ip_starttls=mx_ip_total, 1, 0) DESC, org';
 	$r = $m->query($q) or die($m->error);
 	while($row = $r->fetch_object())
 		$entityIds[] = $row->entity_id;
@@ -107,7 +108,11 @@ foreach($tags as $tag => $tagId):
 			(<?php echo count($entityIds) ?>st)
 		</td>
 		<?php foreach($header as $key => $value): ?>
+		<?php if($key === 'starttls_ok'): ?>
+		<td><?php echo htmlspecialchars(sprintf('%.1f%% (%dst)', 100.0*$value/count($entityIds), $value), ENT_NOQUOTES) ?></td>
+		<?php else: ?>
 		<td><?php echo htmlspecialchars($value, ENT_NOQUOTES) ?></td>
+		<?php endif; ?>
 		<?php endforeach; ?>
 	</tr>
 
