@@ -15,7 +15,7 @@
 				<li	<?php if($_SERVER['PHP_SELF'] === '/dnssec.php') echo 'class="active"' ?>><a href="dnssec.php">Domänsäkerhet (DNSSEC)</a></li>
 				<li	<?php if($_SERVER['PHP_SELF'] === '/ipv6.php') echo 'class="active"' ?>><a href="ipv6.php">Nåbarhet (IPv6)</a></li>
 				<li	<?php if($_SERVER['PHP_SELF'] === '/starttls.php') echo 'class="active"' ?>><a href="starttls.php">Mejlsäkerhet</a></li>
-				<li	<?php if($_SERVER['PHP_SELF'] === '/https.php') echo 'class="active"' ?>><a href="#">Webbsäkerhet</a></li>
+				<li	<?php if($_SERVER['PHP_SELF'] === '/https.php') echo 'class="active"' ?>><a href="https.php">Webbsäkerhet</a></li>
 
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hjälp <span class="caret"></span></a>
