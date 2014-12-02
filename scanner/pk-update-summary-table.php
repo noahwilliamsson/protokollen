@@ -61,9 +61,14 @@ foreach($idList as $entityId) {
 			mx_ip_starttls_tlsv1=?, mx_ip_starttls_tlsv1_1=?,
 			mx_ip_starttls_tlsv1_2=?,
 			web_total=?, web_ipv4=?, web_ipv6=?, web_dnssec=?,
-			https=? WHERE id=?';
+			https=?, https_ip_total=?, https_ip_country_se=?,
+			https_ip_country_other=?, https_ip_country_unknown=?,
+			https_ip_sslv2=?, https_ip_sslv3=?,
+			https_ip_tlsv1=?, https_ip_tlsv1_1=?, https_ip_tlsv1_2=?,
+			https_ip_tls_forward_secrecy=?
+			WHERE id=?';
 	$st = $m->prepare($q) or die("ERROR: $m->error, SQL: $q\n");
-	$st->bind_param('iiiiiiiiiiiiiiiiiiiiiiiisi',
+	$st->bind_param('iiiiiiiiiiiiiiiiiiiiiiiisiiiiiiiiiii',
 					$report->ns->total, $report->ns->ipv4,
 					$report->ns->ipv6, $report->ns->dnssec,
 					$report->mx->total, $report->mx->ipv4,
@@ -80,7 +85,17 @@ foreach($idList as $entityId) {
 					$report->mx->ip->starttls_tlsv1_2,
 					$report->web->total, $report->web->ipv4,
 					$report->web->ipv6, $report->web->dnssec,
-					$report->https, $id);
+					$report->https->status,
+					$report->https->ip->total, $report->https->ip->country_se,
+					$report->https->ip->country_other,
+					$report->https->ip->country_unknown,
+					$report->https->ip->sslv2,
+					$report->https->ip->sslv3,
+					$report->https->ip->tlsv1,
+					$report->https->ip->tlsv1_1,
+					$report->https->ip->tlsv1_2,
+					$report->https->ip->tls_forward_secrecy,
+					$id);
 	$st->execute();
 	$st->close();
 
@@ -103,7 +118,6 @@ function summarizeEntityServices($entityId) {
 			'dnssec' => 0,
 			'starttls' => 0,
 			'ip' => (object)array(
-				'total' => 0,
 				'country_se' => 0,
 				'country_other' => 0,
 				'country_unknown' => 0,
@@ -114,6 +128,7 @@ function summarizeEntityServices($entityId) {
 				'starttls_tlsv1_1' => 0,
 				'starttls_tlsv1_2' => 0,
 				'starttls_pfs' => 0,
+				'total' => 0,
 			)
 		),
 		'web' => (object)array(
@@ -122,7 +137,24 @@ function summarizeEntityServices($entityId) {
 			'ipv6' => 0,
 			'dnssec' => 0,
 		),
-		'https' => 'no',
+		'https' => (object)array(
+			/* Counts for all IPs */
+			'ip' => (object)array(
+				'country_se' => 0,
+				'country_other' => 0,
+				'country_unknown' => 0,
+				'sslv2' => 0,
+				'sslv3' => 0,
+				'tls_forward_secrecy' => 0,
+				'tlsv1' => 0,
+				'tlsv1_1' => 0,
+				'tlsv1_2' => 0,
+				'total' => 0,
+				'transport_security' => 0,
+			),
+			'status' => 'no',
+			'transport_security' => 0,
+		)
 	);
 
 	$p = new ServiceGroup();
@@ -175,7 +207,7 @@ function summarizeEntityServices($entityId) {
 
 		foreach($grp->data as $svcHost) {
 			$numIps = 0;
-			$numIpsWithStarttls = 0;
+			$numIpsWithTLS = 0;
 
 			$item = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
 			if($item === NULL)
@@ -197,8 +229,8 @@ function summarizeEntityServices($entityId) {
 						$report->mx->ip->country_other++;
 				}
 
-				$haveStarttls = FALSE;
-				$havePfs = FALSE;
+				$haveTransportSecurity = FALSE;
+				$haveForwardSecrecy = FALSE;
 				foreach($probe->protocols as $proto) {
 					/* Note that SMTP works */
 					if($proto->establishedConnections > 0)
@@ -222,25 +254,25 @@ function summarizeEntityServices($entityId) {
 
 					foreach($proto->cipherSuites as $cs) {
 						if(strstr($cs->name, 'DHE') || strstr($cs->name, 'EDH')) {
-							$havePfs = TRUE;
+							$haveForwardSecrecy = TRUE;
 							break;
 						}
 					}
 
-					$haveStarttls = TRUE;;
+					$haveTransportSecurity = TRUE;
 				}
 
-				if($haveStarttls) {
+				if($haveTransportSecurity) {
 					$report->mx->ip->starttls++;
-					$numIpsWithStarttls++;
+					$numIpsWithTLS++;
 				}
 
-				if($havePfs)
+				if($haveForwardSecrecy)
 					$report->mx->ip->starttls_pfs++;
 			}
 
 			/* Note that all IP addresses for this hostname support STARTTLS */
-			if($numIps > 0 && $numIps === $numIpsWithStarttls)
+			if($numIps > 0 && $numIps === $numIpsWithTLS)
 				$report->mx->starttls++;
 		}
 	}
@@ -295,7 +327,7 @@ function summarizeEntityServices($entityId) {
 		/**
 		 * Because the above loop consider the final URLs and not
 		 * the actual service hosts, this won't work in the case
-		 * when the service group {exampl.com, www.example.com}
+		 * when the service group {example.com, www.example.com}
 		 * have a final URL of http://some-other-zone.com
 		 */
 		$report->web->total++;
@@ -314,9 +346,106 @@ function summarizeEntityServices($entityId) {
 
 	$schemes = array_unique($schemes);
 	if(count($schemes) === 2)
-		$report->https = 'partial';
+		$report->https->status = 'partial';
 	else if(count($schemes) && $schemes[0] === 'https')
-		$report->https = 'yes';
+		$report->https->status = 'yes';
+
+
+	/* Attempt to find https service */
+	$httpsUrl = NULL;
+	foreach($webUrls as $url) {
+		if(parse_url($url, PHP_URL_SCHEME) !== 'https')
+			continue;
+		$httpsUrl = $url;
+		break;
+	}
+
+	if($httpsUrl !== NULL) foreach($p->listServices($e->id) as $svc) {
+		if($svc->service_type !== ProtokollenBase::SERVICE_TYPE_HTTP
+			&& $svc->service_type !==  ProtokollenBase::SERVICE_TYPE_HTTPS)
+			continue;
+
+		$grp = $p->getServiceGroup($svc->id);
+		if($grp === NULL)
+			continue;
+
+		$hostname = parse_url($httpsUrl, PHP_URL_HOST);
+		foreach($grp->data as $svcHost) {
+			if($svcHost->hostname !== $hostname)
+				continue;
+			else if($svcHost->protocol !== 'https')
+				continue;
+
+			$numIps = 0;
+			$numIpsWithTLS = 0;
+
+			$item = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
+			if($item === NULL)
+				continue;
+
+			$numConnections = 0;
+			foreach($item->data as $probe) {
+				$numIps++;
+				$report->https->ip->total++;
+				if(strstr($probe->ip, ':')) {
+					/* No support for IPv6 addresses yet */
+					$report->https->ip->country_unknown++;
+				}
+				else {
+					$ccTLD = geoip_country_code_by_name($probe->ip);
+					if(!strcmp($ccTLD, 'SE'))
+						$report->https->ip->country_se++;
+					else
+						$report->https->ip->country_other++;
+				}
+
+				$haveTransportSecurity = FALSE;
+				$haveForwardSecrecy = FALSE;
+				foreach($probe->protocols as $proto) {
+					/* Note that SMTP works */
+					if($proto->establishedConnections > 0)
+						$numConnections++;
+
+					/* Ignore probes that produced an error */
+					if($proto->lastError !== NULL)
+						continue;
+
+					if(!$proto->supported)
+						continue;
+
+					switch($proto->version) {
+					case 2: $report->https->ip->sslv2++; break;
+					case 768: $report->https->ip->sslv3++; break;
+					case 769: $report->https->ip->tlsv1++; break;
+					case 770: $report->https->ip->tlsv1_1++; break;
+					case 771: $report->https->ip->tlsv1_2++; break;
+					default: break;
+					}
+
+					foreach($proto->cipherSuites as $cs) {
+						if(strstr($cs->name, 'DHE') || strstr($cs->name, 'EDH')) {
+							$haveForwardSecrecy = TRUE;
+							break;
+						}
+					}
+
+					$haveTransportSecurity = TRUE;
+				}
+
+				if($haveTransportSecurity) {
+					$report->https->ip->transport_security++;
+					$numIpsWithTLS++;
+				}
+
+				if($haveForwardSecrecy)
+					$report->https->ip->tls_forward_secrecy++;
+			}
+
+			/* Note that all IP addresses for this hostname support STARTTLS */
+			if($numIps > 0 && $numIps === $numIpsWithTLS)
+				$report->https->transport_security++;
+		}
+	}
 
 	return $report;
 }
