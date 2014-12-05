@@ -118,7 +118,7 @@ $ent = $p->getEntityByDomain($domain);
 							<li class="list-group-item list-group-item-<?php echo $class ?>"><?php echo htmlspecialchars($service, ENT_NOQUOTES) ?></li>
 							<?php endforeach; ?>
 						</ul>
-						<p><strong>Placeholder</strong> Din sajt? Klicka här för att läsa mer om hur du <a href="#">kommer igång med DNSSEC</a>.</p>
+						<p><strong>WIP: Placeholder</strong> Din sajt? Klicka här för att läsa mer om hur du <a href="#">kommer igång med DNSSEC</a>.</p>
 					</div>
 				</div>
 			</div>
@@ -129,7 +129,7 @@ $ent = $p->getEntityByDomain($domain);
 						<h3>Mejlsäkerhet</h3>
 						<p>Mejlservrar med stöd för kryptering</p>
 						<ul class="list-group">
-							<li class="list-group-item list-group-item-info">Placeholder</li>
+							<li class="list-group-item list-group-item-info">WIP: Placeholder</li>
 						</ul>
 					</div>
 				</div>
@@ -155,7 +155,7 @@ $ent = $p->getEntityByDomain($domain);
 						<h3>Webbsäkerhet</h3>
 						<p>Tjänster med stöd för HTTPS</p>
 						<ul class="list-group">
-							<li class="list-group-item list-group-item-danger">Placeholder</li>
+							<li class="list-group-item list-group-item-danger">WIP: Placeholder</li>
 						</ul>
 						<p><strong>Placeholder</strong> Din sajt? Klicka här för att läsa mer om hur du skaffar ett certifikat och <a href="#">kommer igång med https</a>.</p>
 					</div>
@@ -185,27 +185,27 @@ $ent = $p->getEntityByDomain($domain);
 
 		<h2>Graf över internettjänster</h2>
 		<p><strong>TODO</strong> Lägg varje tjänsttyp (DNS, mejl, webb, ..) i egna flikar(?) för att reducera innehållet i grafen. Eller kanske kryssrutor för att välja vad som ska visas i grafen.<br />
-		<strong>TODO</strong> Just nu är grafen en platt bild (PNG) men SVG är ett möjligt alternativ som bl.a. erbjuder klickbara länkar på bildytan. SVG är f.n. avstängt eftersom graphviz/dot ibland producerar trasig markup när det förekommer Unicode text.
 		</p>
+
+		<?php if(0): ?>
 		<!--
 		This works but gives no clickable links..
 		-->
 		<img src="gv.php?d=<?php echo rawurlencode($domain) ?>" alt="" />
 
 		<?php
+		else:
 		/**
 		 * Using an <object> tag gives clickable links but unfortunately
 		 * dot(1) messes up SVG output if the input text contained
 		 * non-ASCII characters..
+		 * Workaround: prefix non-ASCII labels with a space
 		 */
-		if(0):
 			require_once('gv.php');
 			$svg = svgForDomain($domain);
 		?>
-		<object type="image/svg+xml" data="data:image/svg+xml;base64,<?php echo base64_encode($svg) ?>"></object>
-		<?php
-		endif;
-		?>
+		<object type="image/svg+xml" data="data:image/svg+xml;charset=utf-8;base64,<?php echo base64_encode($svg) ?>" style="width:100%"></object>
+		<?php endif; ?>
 	</div>
 
 	<div class="container">

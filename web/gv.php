@@ -53,7 +53,7 @@ function svgForDomain($domain) {
 	echo "  node [ shape=Mrecord fontsize=8 fontname=\"helvetica\" ];\n";
 
 
-	echo "ent_$e->id [ label=\"$e->org\" ];\n";
+	echo "ent_$e->id [ label=\" $e->org\" ];\n";
 	$testWww = new TestWwwPreferences();
 	$testSslprobe = new TestSslprobe();
 	$testDnsAddrs = new TestDnsAddresses();
@@ -134,7 +134,7 @@ function svgForDomain($domain) {
 
 			/* Add DNSSEC note in vhost box */
 			if($dnssec !== NULL) foreach($dnssec->data as $hostname => $obj) {
-				$dnssecHostId = preg_replace('@dnssec[^A-Za-z0-9]@', '_', $svcHost->hostname);
+				$dnssecHostId = preg_replace('@[^A-Za-z0-9]@', '_', 'dnssec_'. $svcHost->hostname);
 				if($svcHost->hostname === $hostname) {
 					if($obj->secure)
 						$label[] = sprintf('<%s> DNSSEC: OK (%s)', $dnssecHostId, $hostname);
@@ -229,7 +229,7 @@ function svgForDomain($domain) {
 	file_put_contents($filename, $dot);
 
 	/* Generate SVG */
-	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=18,22', '-Tsvg');
+	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=30,39', '-Tsvg');
 	$args[] = escapeshellarg($filename);
 	$command = implode(' ', $args);
 
