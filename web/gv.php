@@ -128,6 +128,8 @@ function svgForDomain($domain) {
 
 
 		$seenNodesAll = array();
+		$tlsBoxes = array();
+		$tlsIds = array();
 		foreach($grp->data as $svcHost) {
 
 			$label = array(sprintf('<p0>%s-server %s', $svc->service_type, $svcHost->hostname));
@@ -154,7 +156,7 @@ function svgForDomain($domain) {
 					if(!isset($seenNodesAll[$ip])) {
 						/* Render node (IP-address) */
 						echo sprintf("%s [ shape=house label=\"%s\" ]\n", $nodeId, $ip);
-						$seenNodes[$ip] = $nodeId;
+						$seenNodesAll[$ip] = $nodeId;
 					}
 			}
 
@@ -168,18 +170,13 @@ function svgForDomain($domain) {
 
 			for($i = 1; $i < $nodeIdx; $i++) {
 					/* Link vhost to node */
-					echo sprintf("%s -> %s\n", $vhostBoxId, $seenNodesSvc[$i]);
+					echo sprintf("%s:p%d -> %s\n", $vhostBoxId, $i, $seenNodesSvc[$i]);
 			}
 
 			/* Link service set host to vhost box */
 			echo sprintf("svc_%d:f1 -> %s\n", $svc->id, $vhostBoxId);
 			echo "\n";
-		}
 
-
-		$tlsBoxes = array();
-		$tlsIds = array();
-		foreach($grp->data as $svcHost) {
 
 			/* Load sslprobe for service host */
 			$sslprobe = $testSslprobe->getItem($svc->id, $grp->id, $svcHost->hostname);
@@ -193,8 +190,15 @@ function svgForDomain($domain) {
 
 					$vhostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
 					$vhostBoxId = sprintf('svc_set_%d_vhosts_%s', $grp->id, $vhostId);
-					/* Link vhost to TLS box (even though TLS box is not yet defined) */
-					echo " $vhostBoxId -> $tlsId \n";
+
+					$nodeId = $seenNodesAll[$probe->ip];
+					foreach($seenNodesSvc as $key => $value) {
+						if($value !== $nodeId)
+							continue;
+						/* Link vhost port to TLS box (even though TLS box is not yet defined) */
+						echo " $vhostBoxId:p${key} -> $tlsId \n";
+						break;
+					}
 
 					if(isset($tlsBoxes[$tlsId]))
 						continue;
@@ -225,20 +229,19 @@ function svgForDomain($domain) {
 	ob_end_clean();
 
 	/* Dump .dot file to temporary file */
-	$filename = tempnam(sys_get_temp_dir(), 'graphviz');
-	file_put_contents($filename, $dot);
+	$dotFilename = tempnam(sys_get_temp_dir(), 'graphviz');
+	file_put_contents($dotFilename, $dot);
 
 	/* Generate SVG */
-	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=30,39', '-Tsvg');
-	$args[] = escapeshellarg($filename);
-	$command = implode(' ', $args);
-
 	ob_start();
+	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=30,39', '-Tsvg');
+	$args[] = escapeshellarg($dotFilename);
+	$command = implode(' ', $args);
 	passthru($command);
 	$svg = ob_get_contents();
 	ob_end_clean();
 
-	unlink($filename);
+	unlink($dotFilename);
 
 	return $svg;
 }
