@@ -18,7 +18,7 @@ require_once('../php/TestWwwPreferences.class.php');
 require_once('../php/TestSslprobe.class.php');
 require_once('../php/TestDnsAddresses.class.php');
 require_once('../php/TestDnssecStatus.class.php');
-require_once(dirname(__FILE__) .'/tlsbox.php');
+require_once('gv-tlsbox.inc.php');
 
 
 if(function_exists('headers_sent') && !headers_sent()) {
@@ -37,9 +37,10 @@ function svgForDomain($domain) {
 	$p = new ServiceGroup();
 	$e = $p->getEntityByDomain($domain);
 
+
 	ob_start();
 
-	echo "digraph g {\n";
+	echo "digraph svggraph {\n";
 	echo "  charset=utf8;\n";
 	/* Go left-right instead of top-down */
 	echo "  rankdir=LR;\n";
@@ -59,18 +60,35 @@ function svgForDomain($domain) {
 	$testDnsAddrs = new TestDnsAddresses();
 	$testDnssec = new TestDnssecStatus();
 	foreach($p->listServices($e->id) as $svc) {
-		$label = array('<f0>'. $svc->service_type, '<f1>'. $svc->service_name);
-		if(!empty($svc->service_desc))
-			$label[] = $svc->service_desc;
-
-		$serviceBox = '';
-		$serviceBox .= sprintf('svc_%d [ label="%s" color=gray style=filled fillcolor=lightgoldenrodyellow ] ', $svc->id, implode('|', $label));
-		$serviceBox .= sprintf("ent_%d -> svc_%d:f1\n", $e->id, $svc->id);
 
 		/* Load service group */
 		$grp = $p->getServiceGroup($svc->id);
 		if(!$grp)
 			continue;
+
+		switch($svc->service_type) {
+		case 'DNS': $header = 'Namnservrar'; break;
+		case 'SMTP': $header = 'Mejlservrar'; break;
+		default: $header = 'Servergrupp'; break;
+		}
+
+		$label = array();
+		if(!empty($svc->service_desc))
+			$label[] = sprintf('<tr><td bgcolor="lightgoldenrodyellow" port="p0">%s<br /><br/><b>%s</b></td></tr>', $svc->service_desc, $header);
+		else
+			$label[] = sprintf('<tr><td bgcolor="lightgoldenrodyellow" port="p0">%s (%s)<br /><br/><b>%s</b></td></tr>', $svc->service_name, $svc->service_type, $header);
+
+
+		$hostIndex = 10;
+		foreach($grp->data as $svcHost) {
+			$hostIndex++;
+			$label[] = sprintf('<tr><td align="right" port="f%d">%s:%d</td></tr>', $hostIndex, $svcHost->hostname, $svcHost->port);
+		}
+
+		$serviceBox = '';
+		// $serviceBox .= sprintf('svc_%d [ label=<<table>%s</table>>  color=gray style=filled fillcolor=lightgoldenrodyellow ] ', $svc->id, implode("\n", $label));
+		$serviceBox .= sprintf('svc_%d [ label=<<table cellborder="1" cellspacing="0" border="0">%s</table>> shape=none ] ', $svc->id, implode("\n", $label));
+		$serviceBox .= sprintf('ent_%d -> svc_%d:p0'."\n", $e->id, $svc->id);
 
 		/* Load DNSSEC status for hostnames in service group */
 		$dnssec = $testDnssec->getItem($svc->id, $grp->id);
@@ -130,7 +148,9 @@ function svgForDomain($domain) {
 		$seenNodesAll = array();
 		$tlsBoxes = array();
 		$tlsIds = array();
+		$hostIndex = 10;
 		foreach($grp->data as $svcHost) {
+			$hostIndex++;
 
 			$label = array(sprintf('<p0>%s-server %s', $svc->service_type, $svcHost->hostname));
 
@@ -162,7 +182,7 @@ function svgForDomain($domain) {
 
 			/* Render vhost box */
 			$vhostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
-			$vhostBoxId = sprintf('svc_set_%d_vhosts_%s', $grp->id, $vhostId);
+			$vhostBoxId = sprintf('svc_grp_%d_vhosts_%s', $grp->id, $vhostId);
 			echo sprintf('%s [ label="%s" fillcolor=aliceblue style=filled ] ',
 							$vhostBoxId,
 							implode('|', $label));
@@ -174,7 +194,7 @@ function svgForDomain($domain) {
 			}
 
 			/* Link service set host to vhost box */
-			echo sprintf("svc_%d:f1 -> %s\n", $svc->id, $vhostBoxId);
+			echo sprintf("svc_%d:f%d -> %s\n", $svc->id, $hostIndex, $vhostBoxId);
 			echo "\n";
 
 
@@ -189,7 +209,12 @@ function svgForDomain($domain) {
 					$tlsId = 'tls_'. substr(md5(json_encode($opts)), 0, 8);
 
 					$vhostId = preg_replace('@[^A-Za-z0-9]@', '_', $svcHost->hostname);
-					$vhostBoxId = sprintf('svc_set_%d_vhosts_%s', $grp->id, $vhostId);
+					$vhostBoxId = sprintf('svc_grp_%d_vhosts_%s', $grp->id, $vhostId);
+
+					if(!isset($seenNodesAll[$probe->ip])) {
+						/* Happens because of inconsistencies in database */
+						continue;
+					}
 
 					$nodeId = $seenNodesAll[$probe->ip];
 					foreach($seenNodesSvc as $key => $value) {
@@ -224,9 +249,9 @@ function svgForDomain($domain) {
 
 	echo "}\n";
 
-
 	$dot = ob_get_contents();
 	ob_end_clean();
+
 
 	/* Dump .dot file to temporary file */
 	$dotFilename = tempnam(sys_get_temp_dir(), 'graphviz');
@@ -234,7 +259,7 @@ function svgForDomain($domain) {
 
 	/* Generate SVG */
 	ob_start();
-	$args = array('dot', '-Gcharset=utf8', '-Gdpi=72', '-Gsize=30,39', '-Tsvg');
+	$args = array('dot', '-Gcharset=utf8', '-Tsvg');
 	$args[] = escapeshellarg($dotFilename);
 	$command = implode(' ', $args);
 	passthru($command);
