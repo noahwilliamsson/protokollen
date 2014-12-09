@@ -52,7 +52,7 @@ $sslprobeTest = new TestSslprobe();
 	<div class="container">
 		<p><strong>TODO</strong> Förklaringar om vad allt är, typ?</p>
 		<p><strong>TODO</strong> Någon slags var-har-jag-hamnat-och-vad-betyder-allt sida hade varit bra.</p>
-		<?php require_once('meta.php'); ?>
+		<?php require_once('summary.inc.php'); ?>
 
 		<hr/>
 		<?php include('footer.php'); ?>
