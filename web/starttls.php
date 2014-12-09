@@ -37,7 +37,7 @@ $sslprobeTest = new TestSslprobe();
 
 	<p><a href="https://en.wikipedia.org/wiki/STARTTLS">STARTTLS</a> ger möjlighet till krypterad leverans av mejl, förutsatt att både sändande och mottagande mejlserver stöder det. Det förhindrar passiv massövervakning av elektronisk post.</p>
 	<p>För att få <em>STARTTLS OK</em> krävs att alla mejlservrar har stöd för STARTTLS. Siffrorna nedan avser hur många IP-adresser det handlar om. En domän kan ha flera mejlservrar och varje mejlserver kan ha flera IP-adresser.</p>
-	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
+	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Tabellen kan laddas ner i <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=UTF-8">CSV-format</a> (UTF-8 eller <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=ISO-8859-1">ISO-8859-1</a> för Excel på Mac).</p>
 
 	<table class="table table-condensed table-striped" id="starttls">
 		<thead>

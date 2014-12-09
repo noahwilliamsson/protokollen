@@ -1,6 +1,6 @@
 	<h2>Användning av moderna protokoll (<?php echo strftime('%F') ?>)</h2>
 
-	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Klicka på en enskild organisation för att se mer detaljer. Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
+	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Klicka på en enskild organisation för att se mer detaljer. Tabellen kan laddas ner i <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=UTF-8">CSV-format</a> (UTF-8 eller <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=ISO-8859-1">ISO-8859-1</a> för Excel på Mac).</p>
 	<table class="table table-condensed table-striped" id="https">
 		<thead>
 			<tr>

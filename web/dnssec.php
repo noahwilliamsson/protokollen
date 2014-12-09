@@ -37,7 +37,7 @@ $sslprobeTest = new TestSslprobe();
 
 	<p><a href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC</a> är viktigt för trovärdigheten eftersom protokollet ger verifierbara svar på DNS-frågor. Det förhindrar att en elak tredje part kan manipulera svar på DNS-uppslag.</p>
 	<p>För att få <em>DNSSEC OK</em> krävs att alla namnservrar (NS) är säkrade med DNSSEC, att alla mejlservrarna (MX) är säkrade med DNSSEC (om man hanterar mejl på domänen) och att de domäner som används för webben är säkrade med DNSSEC.</p>
-	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Det lyser grönt när adresser för tjänsten har stöd för DNSSEC. Siffran inom parantes anger hur många värddatorer som har stöd för DNSSEC. Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
+	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Det lyser grönt när adresser för tjänsten har stöd för DNSSEC. Siffran inom parantes anger hur många värddatorer som har stöd för DNSSEC. Tabellen kan laddas ner i <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=UTF-8">CSV-format</a> (UTF-8 eller <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=ISO-8859-1">ISO-8859-1</a> för Excel på Mac).</p>
 
 	<table class="table table-condensed table-striped" id="dnssec">
 		<thead>

@@ -35,7 +35,7 @@ $sslprobeTest = new TestSslprobe();
 
 	<h2>IPv6-stöd på internettjänster (<?php echo strftime('%F') ?>)</h2>
 	<p>För att få <em>IPv6 OK</em> krävs att minst en namnserver (NS) är nåbar över IPv6, att minst en av mejlservrarna (MX) är nåbar över IPv6 (om man hanterar mejl på domänen) och att alla webbservrarna har stöd för IPv6.</p>
-	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Det lyser grönt om tillräckligt många adresser på tjänsten har stöd för IPv6. Siffran inom parantes anger hur många värddatorer som har stöd för IPv6. Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
+	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Det lyser grönt om tillräckligt många adresser på tjänsten har stöd för IPv6. Siffran inom parantes anger hur många värddatorer som har stöd för IPv6. Tabellen kan laddas ner i <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=UTF-8">CSV-format</a> (UTF-8 eller <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=ISO-8859-1">ISO-8859-1</a> för Excel på Mac).</p>
 	<table class="table table-condensed table-striped" id="ipv6">
 		<thead>
 			<tr>

@@ -37,7 +37,7 @@ $sslprobeTest = new TestSslprobe();
 
 	<p><a href="https://en.wikipedia.org/wiki/HTTP_Secure">HTTPS</a> skyddar datatrafiken mellan webbläsare och webbserver.</p>
 	<p>För att få <em>HTTPS OK</em> krävs att alla certifikatet är giltigt, att HTTPS är påtvingat på sajten, att TLSv1.0 stöds och att det äldre SSLv2 protokollet inte är aktiverat. Siffrorna nedan avser hur många IP-adresser det handlar om. Enbart huvuddomänen (t.ex. <em>www.example.com</em>) har testats här.</p>
-	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Tabellen kan laddas ner i <a href="/reports.php">CSV-format</a> (UTF-8).</p>
+	<p>Klicka på <span class="glyphicon glyphicon-plus"></span> för att fälla ut kategorin (det tar lite tid så håll ut..). Tabellen kan laddas ner i <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=UTF-8">CSV-format</a> (UTF-8 eller <a href="/reports.php?date=<?php echo strftime('%F', strtotime('3 hours ago')) ?>&amp;charset=ISO-8859-1">ISO-8859-1</a> för Excel på Mac).</p>
 
 	<table class="table table-condensed table-striped" id="https">
 		<thead>
