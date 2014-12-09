@@ -149,7 +149,6 @@ foreach($tags as $tag => $tagId):
 				<th>Land (SE)</th>
 				<th>Land (övr)</th>
 				<th>Land (?)</th>
-				<th>HTTPS</th>
 				<th>PFS</th>
 				<th>SSLv2</th>
 				<th>SSLv3</th>
