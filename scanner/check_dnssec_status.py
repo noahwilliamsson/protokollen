@@ -137,15 +137,15 @@ if len(sys.argv) < 4:
 	raise SystemExit
 
 # Build set of hostnames to check
-hostnames = set()
+args = set()
 for i in xrange(1, len(sys.argv), 3):
-	hostnames.add(sys.argv[i+1].lower())
+	args.add((sys.argv[i], sys.argv[i+1].lower(), sys.argv[i+2]))
 
 resolver = dns.resolver.Resolver()
 resolver.timeout = 10
 
 res = {}
-for hostname in hostnames:
+for (protocol, hostname, port) in args:
 	res[hostname] = {
 		'dnskey': False,
 		'ds': False,
@@ -153,6 +153,7 @@ for hostname in hostnames:
 		'ns': [],
 		'parent': None,
 		'secure': False,
+		'tlsa': [],
 		'zone': None,
 	}
 
@@ -260,6 +261,43 @@ for hostname in hostnames:
 	else:
 		res[hostname]['dnskey'] = True
 
+
+	# Do TLSA lookups if protocol is smtp or https
+	if protocol == 'https' or protocol == 'smtp':
+		try:
+			tlsa_hostname = '_{}._tcp.{}'.format(port, hostname)
+			tlsa_domain = dns.name.from_unicode(unicode(tlsa_hostname, 'utf-8'))
+			q = dns.message.make_query(tlsa_domain, dns.rdatatype.TLSA, want_dnssec=True)
+			r = dns.query.tcp(q, ns, timeout=10)
+			for rr in r.answer:
+				if rr.rdtype != dns.rdatatype.TLSA:
+					continue
+				for tlsa in rr.items:
+					res[hostname]['tlsa'].append({
+						'cert': dns.rdata._hexify(tlsa.cert, chunksize=128),
+						'hostname': tlsa_domain.to_unicode(omit_final_dot=True).lower(),
+						'mtype': tlsa.mtype,
+						'selector': tlsa.selector,
+						'usage': tlsa.usage
+					})
+
+			if len(r.answer) >= 2:
+				for rr in r.answer:
+					if rr.rdtype == dns.rdatatype.RRSIG:
+						continue
+					rrset = r.find_rrset(r.answer, rr.name, rr.rdclass, rr.rdtype)
+					rrsig = r.find_rrset(r.answer, rr.name, rr.rdclass, dns.rdatatype.RRSIG, rr.rdtype)
+					dns.dnssec.validate(rrset, rrsig, {zone: zone_dnskeys})
+
+		except dns.exception.Timeout:
+			err = 'Timeout while resolving TLSA hostname'
+			res[hostname]['error'] = err
+		except dns.dnssec.ValidationFailure as e:
+			res[hostname]['error'] = str(e)
+		except EOFError:
+			res[hostname]['error'] = 'Network I/O error'
+
+
 	# Validate DNSKEY against DS
 	if zone_ds_key_tags and zone_key_tags:
 		# Retain key tags present in both parent and child zones
@@ -271,6 +309,7 @@ for hostname in hostnames:
 			continue
 	else:
 		continue
+
 
 	# Attempt to validate the domain too
 	try:

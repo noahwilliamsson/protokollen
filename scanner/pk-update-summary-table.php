@@ -54,26 +54,26 @@ foreach($idList as $entityId) {
 	$q = 'UPDATE reports SET
 			ns_total=?, ns_ipv4=?, ns_ipv6=?, ns_dnssec=?,
 			mx_total=?, mx_ipv4=?, mx_ipv6=?, mx_dnssec=?,
-			mx_starttls=?,
+			mx_starttls=?, mx_tlsa=?,
 			mx_ip_total=?, mx_ip_country_se=?, mx_ip_country_other=?,
 			mx_ip_country_unknown=?, mx_ip_starttls=?, mx_ip_starttls_pfs=?,
 			mx_ip_starttls_sslv2=?, mx_ip_starttls_sslv3=?,
 			mx_ip_starttls_tlsv1=?, mx_ip_starttls_tlsv1_1=?,
 			mx_ip_starttls_tlsv1_2=?,
 			web_total=?, web_ipv4=?, web_ipv6=?, web_dnssec=?,
-			https=?, https_ip_total=?, https_ip_country_se=?,
+			https=?, https_tlsa=?, https_ip_total=?, https_ip_country_se=?,
 			https_ip_country_other=?, https_ip_country_unknown=?,
 			https_ip_sslv2=?, https_ip_sslv3=?,
 			https_ip_tlsv1=?, https_ip_tlsv1_1=?, https_ip_tlsv1_2=?,
 			https_ip_tls_forward_secrecy=?
 			WHERE id=?';
 	$st = $m->prepare($q) or die("ERROR: $m->error, SQL: $q\n");
-	$st->bind_param('iiiiiiiiiiiiiiiiiiiiiiiisiiiiiiiiiii',
+	$st->bind_param('iiiiiiiiiiiiiiiiiiiiiiiiisiiiiiiiiiiii',
 					$report->ns->total, $report->ns->ipv4,
 					$report->ns->ipv6, $report->ns->dnssec,
 					$report->mx->total, $report->mx->ipv4,
 					$report->mx->ipv6, $report->mx->dnssec,
-					$report->mx->starttls,
+					$report->mx->starttls, $report->mx->tlsa,
 					$report->mx->ip->total, $report->mx->ip->country_se,
 					$report->mx->ip->country_other,
 					$report->mx->ip->country_unknown,
@@ -85,7 +85,7 @@ foreach($idList as $entityId) {
 					$report->mx->ip->starttls_tlsv1_2,
 					$report->web->total, $report->web->ipv4,
 					$report->web->ipv6, $report->web->dnssec,
-					$report->https->status,
+					$report->https->status, $report->https->tlsa,
 					$report->https->ip->total, $report->https->ip->country_se,
 					$report->https->ip->country_other,
 					$report->https->ip->country_unknown,
@@ -117,6 +117,7 @@ function summarizeEntityServices($entityId) {
 			'ipv6' => 0,
 			'dnssec' => 0,
 			'starttls' => 0,
+			'tlsa' => 0,
 			'ip' => (object)array(
 				'country_se' => 0,
 				'country_other' => 0,
@@ -153,6 +154,7 @@ function summarizeEntityServices($entityId) {
 				'transport_security' => 0,
 			),
 			'status' => 'no',
+			'tlsa' => 0,
 			'transport_security' => 0,
 		)
 	);
@@ -203,6 +205,10 @@ function summarizeEntityServices($entityId) {
 		if($item) foreach($item->data as $hostname => $obj) {
 			if($obj->secure)
 				$report->mx->dnssec++;
+			if(isset($obj->tlsa) && count($obj->tlsa)) {
+				/* XXX: Verify TLSA records too */
+				$report->mx->tlsa++;
+			}
 		}
 
 		foreach($grp->data as $svcHost) {
@@ -291,7 +297,16 @@ function summarizeEntityServices($entityId) {
 		/* Check DNSSEC status on web service */
 		$item = $testDnssec->getItem($svc->id, $grp->id);
 		if($item) foreach($item->data as $hostname => $obj) {
-			$webDnssec[$hostname] = $obj->secure;
+			/* Cache DNSSEC status for use with HTTPS URL lookup later */
+			$webDnssec[$hostname] = $obj;
+
+			if($svc->service_type !==  ProtokollenBase::SERVICE_TYPE_HTTPS)
+				continue;
+
+			if(isset($obj->tlsa) && count($obj->tlsa)) {
+				/* XXX: Verify TLSA records too */
+				$report->https->tlsa++;
+			}
 		}
 
 		/* Attempt to find www. host */
@@ -332,7 +347,7 @@ function summarizeEntityServices($entityId) {
 		 */
 		$report->web->total++;
 		if(isset($webDnssec[$hostname])) {
-			if($webDnssec[$hostname])
+			if($webDnssec[$hostname]->secure)
 				$report->web->dnssec++;
 		}
 
@@ -371,10 +386,11 @@ function summarizeEntityServices($entityId) {
 
 		$hostname = parse_url($httpsUrl, PHP_URL_HOST);
 		foreach($grp->data as $svcHost) {
-			if($svcHost->hostname !== $hostname)
+			if($svcHost->protocol !== 'https')
 				continue;
-			else if($svcHost->protocol !== 'https')
+			else if($svcHost->hostname !== $hostname)
 				continue;
+
 
 			$numIps = 0;
 			$numIpsWithTLS = 0;

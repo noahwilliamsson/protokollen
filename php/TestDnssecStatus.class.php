@@ -105,11 +105,13 @@ class TestDnssecStatus extends ServiceGroup {
 		$numDnskey = 0;
 		$numDs = 0;
 		$numSecure = 0;
+		$numTlsa = 0;
 		foreach($result as $hostname => $obj) {
 			$numHosts++;
 			if($obj->dnskey) $numDnskey++;
 			if($obj->ds) $numDs++;
 			if($obj->secure) $numSecure++;
+			if(count($obj->tlsa)) $numTlsa++;
 		}
 
 		$q = 'SELECT * FROM test_dnssec_statuses
@@ -136,10 +138,11 @@ class TestDnssecStatus extends ServiceGroup {
 		$q = 'INSERT INTO test_dnssec_statuses
 			SET service_id=?, svc_group_id=?, entry_type="current",
 			json_id=?, json_sha256=?, num_hosts=?, num_dnskey=?,
-			num_ds=?, num_secure=?, created=NOW()';
+			num_ds=?, num_secure=?, num_tlsa=?, created=NOW()';
 		$st = $m->prepare($q);
-		$st->bind_param('iiisiiii', $svc->id, $svcGrpId, $jsonId,
-				$hash, $numHosts, $numDnskey, $numDs, $numSecure);
+		$st->bind_param('iiisiiiii', $svc->id, $svcGrpId, $jsonId,
+				$hash, $numHosts, $numDnskey, $numDs, $numSecure,
+				$numTlsa);
 		if(!$st->execute()) {
 			$err = "DNSSEC status add ($svc->id, $svcGrpId) failed: $m->error";
 			throw new Exception($err);
@@ -164,8 +167,8 @@ class TestDnssecStatus extends ServiceGroup {
 
 		/* Log changes */
 		if($row === NULL) {
-			$log = "DNSSEC status created: Hosts/DNSKEY/DS/Secure"
-				." $numHosts/$numDnskey/$numDs/$numSecure";
+			$log = "DNSSEC status created: Hosts/DNSKEY/DS/Secure/TLSA"
+				." $numHosts/$numDnskey/$numDs/$numSecure/$numTlsa";
 			$this->logEntry($svc->id, $svc->service_name, $log, $jsonId);
 			return $id;
 		}
@@ -179,6 +182,8 @@ class TestDnssecStatus extends ServiceGroup {
 			$changes[] = "DS [$row->num_ds  -> $numDs]";
 		if($row->num_secure != $numSecure)
 			$changes[] = "Secure [$row->num_secure -> $numSecure]";
+		if($row->num_tlsa != $numTlsa)
+			$changes[] = "TLSA [$row->num_tlsa -> $numTlsa]";
 
 		if(!empty($changes)) {
 			$log = 'DNSSEC status changed: '. implode(', ', $changes);
