@@ -313,8 +313,10 @@ $ent = $p->getEntityByDomain($domain);
 							<span class="label label-info"><strong>CA-certifikat</strong></span>
 							<?php endif; ?>
 
-							<?php if($cert->selfSigned): ?>
-							<span class="label label-info"><strong>självsignerat (rotcertifikat)</strong></span>
+							<?php if($cert->selfSigned && isset($cert->constraints->CA) && $cert->constraints->CA): ?>
+							<span class="label label-warning"><strong>rotcertifikat (onödigt att skicka med)</strong></span>
+							<?php elseif($cert->selfSigned): ?>
+							<span class="label label-warning"><strong>självsignerat</strong></span>
 							<?php endif; ?>
 
 							<br />
