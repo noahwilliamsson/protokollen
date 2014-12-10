@@ -251,7 +251,37 @@ $ent = $p->getEntityByDomain($domain);
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="starttls-tab">
-		... Not yet implemented
+		<?php
+			foreach($p->listServices($ent->id, ProtokollenBase::SERVICE_TYPE_SMTP) as $svc):
+				$grp = $p->getServiceGroup($svc->id);
+				if($grp === NULL)
+					continue;
+
+				$uniqueCertChains = array();
+				foreach($grp->data as $svcHost) {
+					$probe = $testProbes->getItem($svc->id, $grp->id, $svcHost->hostname);
+					if($probe === NULL)
+						continue;
+					$chains = getCertificateChainsFromSslprobes($probe->data);
+					if(empty($chains))
+						continue;
+
+					$hostport = $svcHost->hostname .':'. $svcHost->port;
+					foreach($chains as $hash => $chain) {
+						if(!isset($uniqueCertChains[$hash]))
+							$uniqueCertChains[$hash] = (object)array('hosts' => array(), 'chain' => $chain);
+						if(!in_array($hostport, $uniqueCertChains[$hash]->hosts))
+							$uniqueCertChains[$hash]->hosts[] = $hostport;
+					}
+				}
+
+				if(empty($uniqueCertChains))
+					continue;
+
+				include('view-certificates.inc.php');
+		?>
+		<?php endforeach; // services ?>
+		... Work in progress
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="https-tab">
@@ -281,94 +311,11 @@ $ent = $p->getEntityByDomain($domain);
 
 				if(empty($uniqueCertChains))
 					continue;
+
+				include('view-certificates.inc.php');
 		?>
-			<h3>Certifikat</h3>
-			<?php
-			foreach($uniqueCertChains as $hash => $obj):
-			?>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo htmlspecialchars(implode(', ', $obj->hosts), ENT_NOQUOTES) ?></h3>
-				</div>
-				<div class="panel-body">
-					<h4>Certifikatkedja</h4>
-					<?php
-						$arr = array();
-						foreach($chain as $pem)
-							$arr[] = parsePemEncodedCert($pem);
-
-						$i = 0;
-						$n = count($arr);
-						foreach($arr as $cert):
-							$i++;
-					?>
-					<ul>
-						<li>
-							<strong><?php echo htmlspecialchars(implode(', ', $cert->names), ENT_NOQUOTES) ?></strong>
-							<?php if(!empty($cert->altNames)): ?>
-								(alternativa namn: <?php echo htmlspecialchars(implode(', ', $cert->altNames), ENT_NOQUOTES) ?>)
-							<?php endif; ?>
-
-							<?php if(isset($cert->constraints->CA) && $cert->constraints->CA): ?>
-							<span class="label label-info"><strong>CA-certifikat</strong></span>
-							<?php endif; ?>
-
-							<?php if($cert->selfSigned && isset($cert->constraints->CA) && $cert->constraints->CA): ?>
-							<span class="label label-warning"><strong>rotcertifikat (onödigt att skicka med)</strong></span>
-							<?php elseif($cert->selfSigned): ?>
-							<span class="label label-warning"><strong>självsignerat</strong></span>
-							<?php endif; ?>
-
-							<br />
-							<?php
-							$numDays = dateToDays($cert->validTo);
-							if($numDays < 0):
-							?>
-								<strong>Gick ut för <time datetime="<?php echo htmlspecialchars($cert->validTo) ?>"><?php echo $numDays ?></time> dagar sedan</strong>
-							<?php elseif($numDays < 21): ?>
-								<strong>Går ut om <time datetime="<?php echo htmlspecialchars($cert->validTo) ?>"><?php echo $numDays ?></time> dagar</strong>
-							<?php else: ?>
-								Giltigt i <strong><time datetime="<?php echo htmlspecialchars($cert->validTo) ?>"><?php echo $numDays ?></time> dagar till</strong>
-							<?php endif; ?>
-							,
-
-							signaturalgoritm
-							<em><?php echo htmlspecialchars($cert->signatureAlgorithm, ENT_NOQUOTES) ?></em>
-							<?php
-								switch($cert->signatureAlgorithm) {
-								case "md2WithRSAEncryption":
-								case "md5WithRSAEncryption":
-								case "sha1WithRSAEncryption":
-									if($i === 1) {
-										/* Weak algorithms are mostly a problem for leaf certs */
-										echo '<span class="label label-danger">OSÄKERT</span>';
-										break;
-									}
-									/* Fall through */
-								case "sha256WithRSAEncryption":
-								case "sha384WithRSAEncryption":
-								case "sha512WithRSAEncryption":
-								default:
-									echo '<span class="label label-success">OK</span>';
-									break;
-								}
-							?>
-
-							<hr style="margin:0"/>
-					<?php endforeach; // cert ?>
-					<?php for(; $i >= 0; $i--): ?>
-						</li>
-					</ul>
-					<?php endfor; ?>
-				</div>
-			</div>
-			<?php
-			endforeach; // certficate chains
-			?>
-		<?php
-			endforeach; // services
-		?>
-		... Not yet implemented
+		<?php endforeach; // services ?>
+		... Work in progress
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="graph-tab">
