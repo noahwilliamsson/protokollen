@@ -5,7 +5,7 @@ require_once('../php/TestSslprobe.class.php');
 require_once('../php/TestDnsAddresses.class.php');
 require_once('../php/TestDnssecStatus.class.php');
 require_once('json.inc.php');
-require_once('gv.php');
+require_once('x509.inc.php');
 
 if(!isset($_GET['domain'])) {
 	header('Location: /');
@@ -91,7 +91,13 @@ $ent = $p->getEntityByDomain($domain);
 		<p>Den här tjänsten övervarkar ett tusendal domäner som bedömts vara intressanta. Domänen du sökte efter fanns inte med i den listan. I nuläget finns ingen möjlighet att själv lägga till eller testa valfria domäner.</p>
 	</div>
 
-<?php else: ?>
+<?php
+	else:
+		$testWww = new TestWwwPreferences();
+		$testDnssec = new TestDnssecStatus();
+		$testDnsAddrs = new TestDnsAddresses();
+		$testProbes = new TestSslprobe();
+?>
 <div class="container">
 	<p>
 		<strong>TODO</strong> Lägg varje tjänsttyp (DNS, mejl, webb, ..) i egna flikar(?) för att reducera innehållet i grafen. Eller kanske kryssrutor för att välja vad som ska visas i grafen.
@@ -106,7 +112,7 @@ $ent = $p->getEntityByDomain($domain);
 			<li role="presentation"><a href="#dnssec-tab" aria-controls="dnssec-tab" role="tab" data-toggle="tab" style="text-decoration:line-through">Domänsäkerhet</a></li>
 			<li role="presentation"><a href="#starttls-tab" aria-controls="starttls-tab" role="tab" data-toggle="tab" style="text-decoration:line-through">Mejlsäkerhet</a></li>
 			<li role="presentation"><a href="#ipv6-tab" aria-controls="ipv6-tab" role="tab" data-toggle="tab" style="text-decoration:line-through">Nåbarhet</a></li>
-			<li role="presentation"><a href="#https-tab" aria-controls="https-tab" role="tab" data-toggle="tab" style="text-decoration:line-through">Webbsäkerhet</a></li>
+			<li role="presentation"><a href="#https-tab" aria-controls="https-tab" role="tab" data-toggle="tab">Webbsäkerhet</a></li>
 			<li role="presentation"><a href="#data-tab" aria-controls="data-tab" role="tab" data-toggle="tab">Rådata</a></li>
 		</ul>
 
@@ -249,12 +255,123 @@ $ent = $p->getEntityByDomain($domain);
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="https-tab">
+		<?php
+			foreach($p->listServices($ent->id, ProtokollenBase::SERVICE_TYPE_HTTPS) as $svc):
+				$grp = $p->getServiceGroup($svc->id);
+				if($grp === NULL)
+					continue;
+
+				$uniqueCertChains = array();
+				foreach($grp->data as $svcHost) {
+					$probe = $testProbes->getItem($svc->id, $grp->id, $svcHost->hostname);
+					if($probe === NULL)
+						continue;
+					$chains = getCertificateChainsFromSslprobes($probe->data);
+					if(empty($chains))
+						continue;
+
+					$hostport = $svcHost->hostname .':'. $svcHost->port;
+					foreach($chains as $hash => $chain) {
+						if(!isset($uniqueCertChains[$hash]))
+							$uniqueCertChains[$hash] = (object)array('hosts' => array(), 'chain' => $chain);
+						if(!in_array($hostport, $uniqueCertChains[$hash]->hosts))
+							$uniqueCertChains[$hash]->hosts[] = $hostport;
+					}
+				}
+
+				if(empty($uniqueCertChains))
+					continue;
+		?>
+			<h3>Certifikat</h3>
+			<?php
+			foreach($uniqueCertChains as $hash => $obj):
+			?>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo htmlspecialchars(implode(', ', $obj->hosts), ENT_NOQUOTES) ?></h3>
+				</div>
+				<div class="panel-body">
+					<h4>Certifikatkedja</h4>
+					<?php
+						$arr = array();
+						foreach($chain as $pem)
+							$arr[] = parsePemEncodedCert($pem);
+
+						$i = 0;
+						$n = count($arr);
+						foreach($arr as $cert):
+							$i++;
+					?>
+					<ul>
+						<li>
+							<strong><?php echo htmlspecialchars(implode(', ', $cert->names), ENT_NOQUOTES) ?></strong>
+							<?php if(!empty($cert->altNames)): ?>
+								(alternativa namn: <?php echo htmlspecialchars(implode(', ', $cert->altNames), ENT_NOQUOTES) ?>)
+							<?php endif; ?>
+
+							<?php if(isset($cert->constraints->CA) && $cert->constraints->CA): ?>
+							<span class="label label-info"><strong>CA-certifikat</strong></span>
+							<?php endif; ?>
+
+							<?php if($cert->selfSigned): ?>
+							<span class="label label-info"><strong>självsignerat (rotcertifikat)</strong></span>
+							<?php endif; ?>
+
+							<br />
+							<?php
+							$numDays = dateToDays($cert->validTo);
+							if($numDays < 0):
+							?>
+								<strong>Gick ut för <time datetime="<?php echo htmlspecialchars($cert->validTo) ?>"><?php echo $numDays ?></time> dagar sedan</strong>
+							<?php elseif($numDays < 21): ?>
+								<strong>Går ut om <time datetime="<?php echo htmlspecialchars($cert->validTo) ?>"><?php echo $numDays ?></time> dagar</strong>
+							<?php else: ?>
+								Giltigt i <strong><time datetime="<?php echo htmlspecialchars($cert->validTo) ?>"><?php echo $numDays ?></time> dagar till</strong>
+							<?php endif; ?>
+							,
+
+							signaturalgoritm
+							<em><?php echo htmlspecialchars($cert->signatureAlgorithm, ENT_NOQUOTES) ?></em>
+							<?php
+								switch($cert->signatureAlgorithm) {
+								case "md2WithRSAEncryption":
+								case "md5WithRSAEncryption":
+								case "sha1WithRSAEncryption":
+									if($i === 1) {
+										/* Weak algorithms are mostly a problem for leaf certs */
+										echo '<span class="label label-danger">OSÄKERT</span>';
+										break;
+									}
+									/* Fall through */
+								case "sha256WithRSAEncryption":
+								case "sha384WithRSAEncryption":
+								case "sha512WithRSAEncryption":
+								default:
+									echo '<span class="label label-success">OK</span>';
+									break;
+								}
+							?>
+
+							<hr style="margin:0"/>
+					<?php endforeach; // cert ?>
+					<?php for(; $i >= 0; $i--): ?>
+						</li>
+					</ul>
+					<?php endfor; ?>
+				</div>
+			</div>
+			<?php
+			endforeach; // certficate chains
+			?>
+		<?php
+			endforeach; // services
+		?>
 		... Not yet implemented
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="graph-tab">
 			<h2>Graf över internettjänster</h2>
-			<object type="image/svg+xml" data="/gv.php?d=<?php echo rawurlencode($domain) ?>" style="width:100%"></object>
+			<object type="image/svg+xml" data="/graphviz.php?d=<?php echo rawurlencode($domain) ?>" style="width:100%"></object>
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="data-tab">
@@ -266,10 +383,6 @@ $ent = $p->getEntityByDomain($domain);
 			<?php
 			foreach($p->listServices($ent->id) as $svc):
 				$grp = $p->getServiceGroup($svc->id);
-				$testWww = new TestWwwPreferences();
-				$testDnssec = new TestDnssecStatus();
-				$testDnsAddrs = new TestDnsAddresses();
-				$testProbes = new TestSslprobe();
 				$prefs = $testWww->getItem($svc->id, $grp->id);
 				$dnssec = $testDnssec->getItem($svc->id, $grp->id);
 				$addrs = $testDnsAddrs->getItem($svc->id, $grp->id);
