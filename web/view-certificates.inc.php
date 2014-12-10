@@ -62,8 +62,14 @@
 								case "md2WithRSAEncryption":
 								case "md5WithRSAEncryption":
 								case "sha1WithRSAEncryption":
-									if($i === 1) {
-										/* Weak algorithms are mostly a problem for leaf certs */
+									if($i === 1 && $numDays > 3*31) {
+										/**
+										 * Only consider leaf certificates with
+										 * a life-time of more than three months.
+										 * References:
+										 * - http://googleonlinesecurity.blogspot.co.uk/2014/09/gradually-sunsetting-sha-1.html
+										 * - https://technet.microsoft.com/library/security/2880823
+										 */
 										echo '<span class="label label-danger">OSÄKERT</span>';
 										break;
 									}
