@@ -39,6 +39,9 @@ while [ $# -ge 3 ]; do
 		&& rm -f "$JSON"
 
 	case "$protocol" in
+	dns )
+		# Not yet implemented
+		;;
 	http )
 		test "$loop" = "1" && ./check_www_primary.py $@ > "$JSON" \
 			&& ./pk-import-www-primary.php "$svcId" "$svcGrpId" "$JSON" \
@@ -61,9 +64,6 @@ while [ $# -ge 3 ]; do
 		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
 			&& ./pk-import-sslprobe.php "$svcId" "$svcGrpId" "$hostname" "$JSON" \
 			&& rm -f "$JSON"
-		;;
-	dns )
-		# Not yet implemented
 		;;
 	esac
 
