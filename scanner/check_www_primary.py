@@ -77,6 +77,8 @@ def check_url(url, resolve=None):
 			_, _, charset = charset.partition('=')
 			charset = charset.strip().lower()
 			if len(charset):
+				# Workaround for broken MIME configs
+				charset = charset.replace('ansi-8859-1', 'iso-8859-1')
 				http_charset = True
 			else:
 			    charset = 'iso-8859-1'
