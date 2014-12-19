@@ -13,6 +13,7 @@ class ProtokollenBase {
 	const SERVICE_TYPE_WEBMAIL	= 'Webmail';
 	const SERVICE_TYPE_SMTP		= 'SMTP';
 	const SERVICE_TYPE_DNS		= 'DNS';
+	const SERVICE_TYPE_IRCS		= 'IRCS';
 
 	private $m;
 	private static $dbInstance = null;

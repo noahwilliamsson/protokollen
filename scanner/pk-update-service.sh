@@ -52,6 +52,11 @@ while [ $# -ge 3 ]; do
 			&& ./pk-import-sslprobe.php "$svcId" "$svcGrpId" "$hostname" "$JSON" \
 			&& rm -f "$JSON"
 		;;
+	ircs )
+		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
+			&& ./pk-import-sslprobe.php "$svcId" "$svcGrpId" "$hostname" "$JSON" \
+			&& rm -f "$JSON"
+		;;
 	smtp )
 		../bin/sslprobe "$hostname" "$port" > "$JSON" 2>/dev/null \
 			&& ./pk-import-sslprobe.php "$svcId" "$svcGrpId" "$hostname" "$JSON" \

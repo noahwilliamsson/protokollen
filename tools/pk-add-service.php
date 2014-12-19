@@ -8,10 +8,10 @@ require_once('../php/ServiceGroup.class.php');
 mb_internal_encoding('utf-8');
 
 if($argc < 4)
-	die("Usage: ${argv[0]} <base domain> <service type> <service name> [hostname]\n");
+	die("Usage: ${argv[0]} <base domain> <service type> <service name[:port]> [hostname[:port]]\n");
 
 $domain = trim($argv[1], '.');
-$serviceType = trim($argv[2], '.');
+$serviceType = strtoupper($argv[2]);
 $serviceName = trim($argv[3], '.');
 
 $hosts = array();
@@ -27,13 +27,20 @@ for($i = 3; $i < $argc; $i++) {
 	case 'smtp': $obj->port = 25; break;
 	case 'https': $obj->port = 443; break;
 	case 'dns': $obj->port = 53; break;
+	case 'ircs': $obj->port = 6697; break;
 	default: die("Unsupported protocol '$proto'\n"); break;
 	}
 	$obj->prio = 0;
 	$obj->protocol = $proto;
 
+	$arr = explode(':', $obj->hostname);
+	if(count($arr) === 2) {
+		$obj->hostname = $arr[0];
+		$obj->port = intval($arr[1]);
+		if($obj->port <= 0)
+			die("Invalid port: ${arr[1]}\n");
+	}
 	$hostnames[] = $obj->hostname .':'. $obj->port;
-
 	$hosts[] = $obj;
 }
 
