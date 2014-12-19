@@ -72,7 +72,7 @@ def get_zone_dnskeys(zone, ns_ip):
 		rdtype = dns.rdatatype.DNSKEY
 		rdclass = dns.rdataclass.IN
 		q = dns.message.make_query(zone, rdtype, want_dnssec=True)
-		r = dns.query.tcp(q, ns_ip, timeout=10)
+		r = dns.query.tcp(q, ns_ip, timeout=20)
 		if r.rcode() != 0:
 			err = 'DNSKEY query for zone {} failed with rcode: {}'.format(hostname, dns.rcode.to_text(r.rcode()))
 		elif len(r.answer) != 2:
@@ -94,7 +94,7 @@ def get_ds_key_tag_from_ns(zone, ns_ip):
 		rdtype = dns.rdatatype.DS
 		rdclass = dns.rdataclass.IN
 		q = dns.message.make_query(zone, rdtype, want_dnssec=True)
-		r = dns.query.tcp(q, ns_ip, timeout=10)
+		r = dns.query.tcp(q, ns_ip, timeout=20)
 		if r.rcode() != 0:
 			err = 'DS query for zone {} failed with rcode: {}'.format(hostname, dns.rcode.to_text(r.rcode()))
 		elif not r.answer:
@@ -142,7 +142,7 @@ for i in xrange(1, len(sys.argv), 3):
 	args.add((sys.argv[i], sys.argv[i+1].lower(), sys.argv[i+2]))
 
 resolver = dns.resolver.Resolver()
-resolver.timeout = 10
+resolver.timeout = 20
 
 res = {}
 for (protocol, hostname, port) in args:
@@ -268,7 +268,7 @@ for (protocol, hostname, port) in args:
 			tlsa_hostname = '_{}._tcp.{}'.format(port, hostname)
 			tlsa_domain = dns.name.from_unicode(unicode(tlsa_hostname, 'utf-8'))
 			q = dns.message.make_query(tlsa_domain, dns.rdatatype.TLSA, want_dnssec=True)
-			r = dns.query.tcp(q, ns, timeout=10)
+			r = dns.query.tcp(q, ns, timeout=20)
 			for rr in r.answer:
 				if rr.rdtype != dns.rdatatype.TLSA:
 					continue
@@ -314,7 +314,7 @@ for (protocol, hostname, port) in args:
 	# Attempt to validate the domain too
 	try:
 		q = dns.message.make_query(domain, dns.rdatatype.ANY, want_dnssec=True)
-		r = dns.query.tcp(q, ns, timeout=10)
+		r = dns.query.tcp(q, ns, timeout=20)
 		if r.rcode() != 0:
 			name = domain.to_text(omit_final_dot=True)
 			err = 'ANY query for domain {} failed with rcode {}'.format(name, dns.rcode.to_text(r.rcode()))
