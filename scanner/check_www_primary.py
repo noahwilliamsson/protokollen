@@ -30,7 +30,7 @@ from urlparse import urlparse
 userAgentFmt = 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) Safari/534.34 (Protokollen; {0})'
 
 
-def check_url(url, resolve=None):
+def check_url(url, resolve=None, accept_language=None):
 	buf = BytesIO()
 	c = pycurl.Curl()
 	c.setopt(c.URL, url)
@@ -53,6 +53,8 @@ def check_url(url, resolve=None):
 			port = 80
 		elif scheme == "https":
 			port = 443
+	if accept_language:
+		c.setopt(c.HTTPHEADER, ['Accept-Language: ' + accept_language])
 
 	if 'openssl' in pycurl.version.lower():
 		c.setopt(c.OPT_CERTINFO, 1)
@@ -254,7 +256,7 @@ for scheme, hostport in sites:
 			resolve.append(hostname + ':80:' + ip)
 
 		#print "Trying URL '%s' with resolve opts '%s'" % (url, resolve)
-		res = check_url(url, resolve)
+		res = check_url(url, resolve, 'sv-SE,sv;q=0.8,en-US;q=0.6,en;q=0.4')
 		final_res[scheme].append(res)
 
 obj = {}
