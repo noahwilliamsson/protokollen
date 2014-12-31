@@ -265,6 +265,12 @@ for scheme in final_res:
 		if res['error']:
 			continue
 
+		# Replace Java session IDs with something static
+		if res['url']:
+			res['url'] = re.sub(r';jsessionid=[0-9A-F]{32}', r';jsessionid=1234567890ABCDEF1234567890ABCDEF', res['url'])
+		if res['location']:
+			res['location'] = re.sub(r';jsessionid=[0-9A-F]{32}', r';jsessionid=1234567890ABCDEF1234567890ABCDEF', res['location'])
+
 		last_url = res['location']
 		url = res['url']
 		if not obj.has_key(last_url):
