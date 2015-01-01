@@ -129,7 +129,7 @@ def check_url(url, resolve=None, accept_language=None):
 
 		if http_charset is False:
 			# Look for <meta charset=""> tag (HTML5)
-			pattern = re.compile('<meta\s+charset=.([^"\']*)', flags=re.IGNORECASE)
+			pattern = re.compile('<meta\s+charset=["\']*([^"\'> ]*)', flags=re.IGNORECASE)
 			matches = pattern.search(html)
 			if matches:
 				charset = matches.group(1).strip().lower()
